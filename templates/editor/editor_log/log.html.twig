@@ -1,0 +1,68 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Log | {{ title }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block log %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('editor_log') }}">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <p>Log</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-plain" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title mt-0">Log změn v rámci admin rozhraní <small>[ celkem: {{ logs|length }} ]</small></h4>
+                            <p class="card-category">Zde jsou zobrazeny veškeré změny správců v admin rozhraní</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class=" text-primary">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th style="width: 174px;"><input type="text" class="search form-control" placeholder="Provedeno" /></th>
+                                            <th style="min-width: 154px;"><input type="text" class="search form-control" placeholder="Modul" /></th>
+                                            <th style="width: 112px;"><input type="text" class="search form-control" placeholder="Úspěšnost" /></th>
+                                            <th style="width: 160px;"><input type="text" class="search form-control" placeholder="Akce" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Operace" /></th>
+                                            <th style="min-width: 154px;"><input type="text" class="search form-control" placeholder="Uživatel" /></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        {% for key, log in logs %}
+                                            <tr>
+                                                <td>{{ log.id }}</td>
+                                                <td class="val1">{{ log.createdAt|date }}</td>
+                                                <td class="val2">{{ log.module }}</td>
+                                                <td class="val3">{{ log.type }}</td>
+                                                <td class="val4">{{ log.action }}</td>
+                                                <td class="val4">{{ log.operation }}</td>
+                                                <td class="val5" class="text-center">{{ log.user }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

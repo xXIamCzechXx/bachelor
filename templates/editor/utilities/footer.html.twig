@@ -1,0 +1,42 @@
+{% block footer %}
+    <footer class="footer">
+        <div class="container-fluid">
+            <nav class="float-left">
+                <ul>
+                    <li>
+                        <a href="{{ asset('/') }}">
+                            Hlavní stránka
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ asset('produkty') }}">
+                            Produkty
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ asset('onas') }}">
+                            O nás
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ asset('novinky') }}">
+                            Novinky
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ asset('kontakty') }}">
+                            Kontakty
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="copyright float-right">
+                &copy;
+                <script>
+                    document.write(new Date().getFullYear())
+                </script>, vytvořeno s <i class="material-icons">favorite</i> od
+                <a href="https://www.creative-tim.com" target="_blank">Dominik Mach [xXIamCzechXx]</a>, všechna práva vyhrazena.
+            </div>
+        </div>
+    </footer>
+{% endblock %}

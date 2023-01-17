@@ -1,0 +1,38 @@
+/* BLACK */
+$black: rgba(0, 0, 0, 1);
+
+$background_black: #aeafc7;
+$brand_dark: #0f111e;
+$brand_light: #3B3F6D;
+
+/* WHITE */
+$white: rgba(255, 255, 255, 1);
+$background_white: rgba(242, 242, 242, 1);
+$transparent_white: rgba(198, 198, 198, 0.8);
+
+/* TEXT */
+$text_black: #1d1d1f;
+$text_white: #f0f0f0;
+$text_grey: #7e7e7e;
+$text_container: rgba(100, 100, 100, 0.05);
+
+/* ETC */
+$transparent: rgba(0, 0, 0, 0);
+$error_red: rgba(255, 20, 20, 0.8);
+$solid_silver: rgba(192, 192, 192, 1);
+$solid_bronze: rgba(238, 119, 82, 1);
+$solid_blue: rgba(41, 151, 255, 1);
+$solid_green: rgb(138, 201, 2);
+$twitch_color: #6441a5;
+$scoresaber_color: #f9d773;
+$pink: rgba(231, 60, 126, 1);
+$orange: rgba(238, 119, 82, 1);
+
+/* BACKGROUND */
+$brand_dark_rgb: rgba(45, 47, 60, 0.6);
+$pink_rgb: rgba(231, 60, 126, 0.6);
+$orange_rgb: rgba(238, 119, 82, 0.6);
+
+$border_gradient: linear-gradient(90deg, $brand_light 0%, $solid_blue 30%, $pink 100%);
+
+$round_arrow_gradient: linear-gradient(180deg, $brand_light 0%, $brand_light 50%, $background_white 51%, $background_white 100%);

@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" notation="{{ page.keywords|raw }}">
+    <meta name="description" notation="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block aboutUs %}
+            <div class="button-border">
+                <li class="nav-item  active">
+                    <a class="nav-link" href="{{ path('pavlov') }}">
+                        <i class="fas fa-crosshairs"></i>
+                        <p>Pavlov VR</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="homepage-wrapper">
+
+        <div class="full-screen-video-container">
+            <canvas id=c class="particles-canvas" style="min-height: 800px;"></canvas>
+
+            <a href="{{ path('homepage') }}" style="display: block;"><img class="full-wide-logo" src="{{ asset('build/images/logos/full-wide-logo.png') }}" alt="CzechSaber logo"></a>
+            <img draggable="false" src="{{ asset(page.imgPath(page.imgName)) }}" alt="{{ page.alt }}" class="top-foto-logo">
+            <h2 class="hp-title" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">Pavlov VR</h2>
+            <h3 class="hp-undertitle grey-text text-center">VR Eventy a komunita</h3>
+            <img draggable="false" class="hp-image" src="{{ asset('build/images/assets/pavlov-2.jpg') }}">
+            <a data-scroll href="#twitch" style="display: block;">
+                <div class="round-arrow" id="twitch">
+                    <span class="arrow-object arrow-left"></span>
+                    <span class="arrow-object arrow-right"></span>
+                </div>
+            </a>
+        </div>
+
+        {% include 'default/utilities/component/_twitch.html.twig' %}
+
+{% endblock %}

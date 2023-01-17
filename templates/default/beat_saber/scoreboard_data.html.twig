@@ -1,0 +1,79 @@
+<div class="scoreboard-table">
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-sm table-dark">
+                <thead>
+                <tr>
+                    <th scope="col" class="text-center">#</th>
+                    <th scope="col">Nickname</th>
+                    <th scope="col">%</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in 0..11 %}
+                    <tr {% if i < 4 %}style="background: rgba(255,215,0,0.3);"{% elseif i < 8 %}style="background: rgba(192,192,192,0.3);"{% endif %}>
+                        <th scope="row" class="text-center">{{ i+1 }}</th>
+                        <td>
+                            {{ users[i].nickname }}
+                            {% if users[i].birthdate is not null and date("1992-06-25") > users[i].birthdate %} <i class="fas fa-user-tie"></i> &nbsp;{% endif %}
+                            {% if users[i].gender is not null and users[i].gender == 'Žena' %}&nbsp;<i class="fas fa-venus"></i> &nbsp;{% endif %}
+                            {% if users[i].hdm is not null and users[i].hdm.name == 'Nevlastním headset' %}<i class="fas fa-vr-cardboard"></i> {% endif %}
+                        </td>
+                        <td>{{ users[i].avgPercentage|round(2) }} %</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <table class="table table-sm table-dark">
+                <thead>
+                <tr>
+                    <th scope="col" class="text-center">#</th>
+                    <th scope="col">Nickname</th>
+                    <th scope="col">%</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in 12..23 %}
+                    <tr>
+                        <th scope="row" class="text-center">{{ i+1 }}</th>
+                        <td>
+                            {{ users[i].nickname }}
+                            {% if users[i].birthdate is not null and date("1992-06-25") > users[i].birthdate %} <i class="fas fa-user-tie"></i> &nbsp;{% endif %}
+                            {% if users[i].gender is not null and users[i].gender == 'Žena' %}&nbsp;<i class="fas fa-venus"></i> &nbsp;{% endif %}
+                            {% if users[i].hdm is not null and users[i].hdm.name == 'Nevlastním headset' %}<i class="fas fa-vr-cardboard"></i> {% endif %}
+                        </td>
+                        <td>{{ users[i].avgPercentage|round(2) }} %</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <table class="table table-sm table-dark">
+                <thead>
+                <tr>
+                    <th scope="col" class="text-center">#</th>
+                    <th scope="col">Nickname</th>
+                    <th scope="col">%</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in 24..35 %}
+                    <tr>
+                        <th scope="row" class="text-center">{{ i+1 }}</th>
+                        <td>
+                            {{ users[i].nickname }}
+                            {% if users[i].birthdate is not null and date("1992-06-25") > users[i].birthdate %} <i class="fas fa-user-tie"></i> &nbsp;{% endif %}
+                            {% if users[i].gender is not null and users[i].gender == 'Žena' %}&nbsp;<i class="fas fa-venus"></i> &nbsp;{% endif %}
+                            {% if users[i].hdm is not null and users[i].hdm.name == 'Nevlastním headset' %}<i class="fas fa-vr-cardboard"></i> {% endif %}
+                        </td>
+                        <td>{{ users[i].avgPercentage|round(2) }} %</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

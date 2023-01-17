@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" notation="{{ page.keywords|raw }}">
+    <meta name="description" notation="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block news %}
+            <div class="button-border">
+                <li class="nav-item active  ">
+                    <a class="nav-link" href="{{ path('news') }}">
+                        <i class="fas fa-book-open"></i>
+                        <p>Novinky</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% set newsContentLength = 164 %}
+{% set newsTitleLength = 44 %}
+
+{% block body %}
+
+    <div class="wrapper-box">
+        <div class="section">
+            <div class="news-container">
+                <div class="news-section">
+                    <div class="news-left-cont" data-aos="fade-right" data-aos-duration="1000">
+                      {% for news in topNews %}
+                        <a href="{{ path('news_detail', { slug: news.slug}) }}">
+                            <div class="news">
+                              <img src="{{ asset(news.imgPath(news.imgName)) }}" alt="{{ news.alt }}">
+                              {% include('default/news/utilities/labels.html.twig') %}
+                              <button disabled class="c-btn" style="top: 47%;">
+                                <svg width="280px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                                <h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit') }}</h2>
+                              </button>
+                              <div class="news-cont-text">
+                                <h3>{{ news.title|length > news.title|slice(0, newsTitleLength)|length ? news.title|striptags|slice(0, newsTitleLength)~'...' : news.title }}</h3>
+                                <p>{{ news.notation|length > news.notation|slice(0, newsContentLength)|length ? news.notation|striptags|slice(0, newsContentLength)~'...' : news.notation }}</p>
+                              </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% for key, news in secNews %}
+                        <div class="{{ key >= 2 ? 'width50' : 'width40'}} news-right-cont" data-aos="fade-left" data-aos-duration="1000">
+                            <a href="{{ path('news_detail', { slug: news.slug }) }}">
+                                <div class="news">
+                                    <img src="{{ asset(news.imgPath(news.imgName)) }}" alt="{{ news.alt }}">
+                                    {% include('default/news/utilities/labels.html.twig') %}
+                                    <button disabled class="c-btn" style="top: 47%;">
+                                      <svg width="280px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                                      <h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit') }}</h2>
+                                    </button>
+                                    <div class="news-cont-text">
+                                      <h3>{{ news.title|length > news.title|slice(0, newsTitleLength)|length ? news.title|striptags|slice(0, newsTitleLength)~'...' : news.title }}</h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="basic-news-container">
+                    {% for news in news %}
+                        <div class="basic-news-section">
+                            <a href="{{ path('news_detail', { slug: news.slug }) }}">
+                              <div class="basic-news-left-cont" data-aos="fade-right" data-aos-duration="1000">
+                                <img src="{{ asset(news.imgPath(news.imgName)) }}" alt="{{ news.alt }}">
+                                {% include('default/news/utilities/labels.html.twig') %}
+                                <button disabled class="c-btn">
+                                  <svg width="280px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                                  <h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit') }}</h2>
+                                </button>
+                                <div class="news-cont-text">
+                                  <h3>{{ news.title|length > news.title|slice(0, newsTitleLength)|length ? news.title|striptags|slice(0, newsTitleLength)~'...' : news.title }}</h3>
+                                </div>
+                              </div>
+                            </a>
+                            <div class="basic-news-right-cont" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">
+                              <div class="basic-news-text-section">
+                                <p><b>Vydáno: {{ news.addedAt|date("d. m. Y") }}</b> | Autor: {{ news.author }}</p>
+                                <h3>{{ news.title|length > news.title|slice(0, newsTitleLength)|length ? news.title|striptags|slice(0, newsTitleLength)~'...' : news.title }}</h3>
+                                <p class="basic-news-text">{{ news.notation|length > news.notation|slice(0, 244)|length ? news.notation|striptags|slice(0, 244)~'...' : news.notation }}</p>
+                                <div class="button-border button-small" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">
+                                  <a href="{{ path('news_detail', { slug: news.slug }) }}">Prohlédnout celý článek</a>
+                                </div>
+                              </div>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

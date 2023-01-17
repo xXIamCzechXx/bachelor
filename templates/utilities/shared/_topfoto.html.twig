@@ -1,0 +1,12 @@
+{% block topfoto %}
+    <div class="top-foto">
+        <div class="top-foto-section">
+            <h2>{{ title }}</h2>
+            {% if parentPage != '/' %}
+                <h4><a href="{{ path('homepage') }}"> <i class="fas fa-home"></i> </a> <i class="fas fa-long-arrow-alt-right"></i> <a href="/{{ parentPage|lower }}">{{ parentPage }}</a> <i class="fas fa-long-arrow-alt-right"></i> {{ title }}</h4>
+            {% else %}
+                <h4><a href="{{ path('homepage') }}"> <i class="fas fa-home"></i> </a> <i class="fas fa-long-arrow-alt-right"></i> {{ title }}</h4>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

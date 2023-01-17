@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" content="{{ page.keywords|raw }}">
+    <meta name="description" content="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block players %}
+            <div class="button-border">
+                <li class="nav-item active  ">
+                    <a class="nav-link" href="{{ path('users') }}">
+                        <i class="fa-solid fa-users-between-lines"></i>
+                        <p>Hráči</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="wrapper-box" style="overflow: hidden;">
+        <div class="section">
+            <div class="users-container">
+                {% for user in users %}
+                    {# <a href="{{ path("account") }}"> #}
+                    <div class="card-border" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+                        <div class="user-card-cont" data-user-id="{{ user.id() }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="{{ user.color is not empty and user.color != "#ffffff" ? "background:"~user.color : '' }}">
+                            <div class="user-picture" {% if user.getTournaments[0] is defined %}style="background: green;"{% endif %}>
+                                <img src="{{ asset(user.imgPath(user.imgName)) }}" alt="{{ user.nickname }}">
+                            </div>
+                            <div class="user-info">
+                                <h4>{{ user.nickname }}</h4>
+                                <p>{% if usersData[user.id] is defined %}{{ usersData[user.id]["pp"] }}{% endif %} pp</p>
+                            </div>
+                            <div class="user-icons">
+                                {% if user.hdm.imgName is defined and user.hdm.imgName is not null and user.hdm.imgName != '' %}<img class="profile-hdm" src="{{ asset(user.hdm.getImgPath(user.hdm.imgName)) }}" alt="{{ user.hdm.name }}">{% endif %}
+                                <img class="profile-flag" src="{{ asset(user.country.getImgPath(user.country.getImgName)) }}" alt="{{ user.country }}">
+                            </div>
+                        </div>
+                    </div>
+                    {# </a> #}
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable dark">
+                <div class="modal-content">
+                    {# Dinamically rendered from Ajax /detail/users_detail.html.twig #}
+                </div>
+            </div>
+            <div id="overlay">
+                <div class="cv-spinner">
+                    <span class="spinner"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

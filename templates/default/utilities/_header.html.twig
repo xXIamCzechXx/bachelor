@@ -1,0 +1,15 @@
+<div class="top-foto-container">
+    <canvas id=c class="particles-canvas subpage-canvas"></canvas>
+    <a href="{{ path('homepage') }}" style="display: block;"><img class="full-wide-logo" src="{{ asset('build/images/logos/full-wide-logo.png') }}" alt="CzechSaber logo"></a>
+    <div class="top-foto-title-container">
+        {% block topfoto %}
+            <h2 class="top-foto-title">
+                {% if page.title is defined %}
+                    {{ page.title ?: 'Error' }}
+                {% else %}
+                    Undefined
+                {% endif %}
+            </h2>
+        {% endblock %}
+    </div>
+</div>

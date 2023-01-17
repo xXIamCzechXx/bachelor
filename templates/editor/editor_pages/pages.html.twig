@@ -1,0 +1,176 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Stránky | {{ title }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block stranky %}
+            <li class="nav-item active ">
+                <a class="nav-link" href="{{ path('editor_pages') }}">
+                    <i class="material-icons">language</i>
+                    <p>Stránky [ SEO ]</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title ">Stránky <small>[ celkem: {{ pages|length }} ]</small></h4>
+                            <p class="card-category">Nastavení SEO a obsahu stránek</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class=" text-primary">
+                                        <tr>
+                                            <th>Obrázek</th>
+                                            <th><input type="text" class="search form-control" placeholder="Název" /></th>
+                                            {# <th><input type="text" class="search form-control" placeholder="Meta popis" /></th> #}
+                                            <th><input type="text" class="search form-control" placeholder="Nadpis" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Titulek" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Klíčová slova" /></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        {% for key, page in pages %}
+                                            <tr>
+                                                <td style="width: 132px;">
+                                                    {% if page.imgName is not null or page.imgName != '' %}
+                                                        <img class="editor-preview-image" src="{{ asset(page.imgPath(page.imgName)) }}">
+                                                    {% else %}
+                                                        <img class="editor-preview-image" src="{{ asset(page.imgPath()) }}">
+                                                    {% endif %}
+                                                </td>
+                                                <td class="val1">{{ page.name }}</td>
+                                                {# <td class="val2" style="min-width: 430px;">{{ page.metaDescription|length > page.metaDescription|slice(0, 64)|length ? page.metaDescription|striptags|slice(0, 64)~'...' : page.metaDescription }}</td> #}
+                                                <td class="val3" style="min-width: 370px;">{{ page.heading|length > page.heading|slice(0, 64)|length ? page.heading|striptags|slice(0, 64)~'...' : page.heading }}</td>
+                                                <td class="val4" style="min-width: 124px;">{{ page.title }}</td>
+                                                <td class="val5" style="min-width: 420px;">{{ page.keywords|length > page.keywords|slice(0, 64)|length ? page.keywords|striptags|slice(0, 64)~'...' : page.keywords }}</td>
+                                                {# <td>{{ page.url }}</td> #}
+                                                <td style="min-width: 80px;" class="td-actions text-right">
+                                                    <form action="{{ path('editor_edit_page', { id: page.id }) }}" method="POST">
+                                                        <a onclick="showTable({{ page.id }})">
+                                                            <div rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                                <i class="material-icons">edit</i>
+                                                            </div>
+                                                        </a>
+                                                        <a href="{{ page.url }}" target="_blank">
+                                                            <div rel="tooltip" title="Náhled" class="btn btn-default btn-link btn-sm">
+                                                                <i class="fas fa-tv"></i>
+                                                            </div>
+                                                        </a>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for key, page in pages %}
+            <form action="{{ path('editor_edit_page', { id: page.id }) }}" method="POST" enctype="multipart/form-data">
+                <div class="edit-form-bcg {{ page.id }}"></div>
+                <div class="edit-form {{ page.id }}">
+                    <div class="card">
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title">Editace stránky: {{ page.name }}</h4>
+                            <!--<p class="card-category">Complete your profile</p>-->
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Název</label>
+                                        <input type="text" name="page-name" value="{{ page.name }}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Titulek [Nápis v záložce prohlížeče]</label>
+                                        <input type="text" name="page-title" value="{{ page.title }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Nadpis [Není vidět]</label>
+                                        <input type="text" name="page-heading" value="{{ page.heading }}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {#
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">URL</label>
+                                        <input type="text" name="page-url" value="{{ page.url }}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                #}
+                                <div class="col-md-2">
+                                    {% if page.imgName is not null or page.imgName != '' %}
+                                        <img class="editor-preview-image" src="{{ asset(page.imgPath(page.imgName)) }}">
+                                    {% else %}
+                                        <img class="editor-preview-image" src="{{ asset(page.imgPath()) }}">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="validatedCustomMainFile" class="bmd-label-floating"><small>Obrázek ...</small></label>
+                                    <div class="custom-file mb-3">
+                                        <input type="file" class="custom-file-input" name="page-image" id="validatedCustomMainFile" placeholder="Vybrat ...">
+                                        <label class="custom-file-label" for="validatedCustomMainFile">Vybrat ...</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="padding-top: 30px;">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Alternativní popisek</label>
+                                        <input type="text" name="page-alt" value="{{ page.alt }}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Meta popisek</label>
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Jsme parta kluků, co se snaží dostat VR na E-Sport úroveň...</label>
+                                            <textarea name="page-description" class="form-control" rows="3" placeholder="">{{ page.metaDescription }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Klíčová slova</label>
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">VR, Beat Saber, Pavlov VR, HTC, VIVE, HTC Vive, PlayZONE, E-Sport</label>
+                                            <textarea name="page-keywords" class="form-control" rows="3" placeholder="">{{ page.keywords }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" name="page-action" value="edit" class="btn btn-primary pull-right">Uložit novinku</button>
+                            <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% endfor %}
+    </div>
+{% endblock %}

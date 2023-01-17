@@ -1,0 +1,15 @@
+{% if cookie.getCookieForm is defined and cookie.getCookieForm is not null %}
+    <div class="cookie-container" id="cookie-cont" data-aos="fade-right" data-aos-duration="2000">
+        <div class="cookie-section">
+            {% set cookieForm = cookie.getCookieForm %}
+            <form action="" method="post">
+                {{ form_start(cookieForm) }}
+                <h2>Nastavení cookies</h2>
+                <h5 class="mb-2">Jako každý jiný web i ten náš používá soubory cookies. Byla by škoda přijít o tato data, podle kterých měříme Vaši účast na webu a zdokonalujeme podle toho naše akce a turnaje.</h5>
+                {{ form_widget(cookieForm) }}
+                {{ form_end(cookieForm) }}
+            </form>
+            <div class="image-background" style="background-image: url({{ asset('build/images/assets/cookie-image.jpg') }}) "></div>
+        </div>
+    </div>
+{% endif %}

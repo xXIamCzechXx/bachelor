@@ -1,0 +1,208 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Turnaje | {{ title }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block tournamentMaps %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('editor_tournament_maps') }}">
+                    <i class="fa-solid fa-map"></i>
+                    <p>Mapy</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title mt-0">Mapy <small>[ celkem: {{ tournamentsMaps|length }} ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
+                            <p class="card-category"> Zde jsou zobrazeny všechny mapy</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body" id="demo">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="text-primary">
+                                    <tr>
+                                    <tr>
+                                        <th style="min-width: 200px;"><input type="text" class="search form-control" placeholder="Název mapy" /></th>
+                                        <th><input type="text" class="search form-control val1" placeholder="BSR" /></th>
+                                        <th><input type="text" class="search form-control val2" placeholder="Maximální score" /></th>
+                                        <th><input type="text" class="search form-control" placeholder="Obtížnost" /></th>
+                                        <th><input type="text" class="search form-control" placeholder="Pool" /></th>
+                                        <th>Ban/Pick</th>
+                                        <th>Odehráno</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                    {% for key, tournamentsMap in tournamentsMaps %}
+                                        <tr>
+                                            <td class="val1">{{ tournamentsMap.name }}</td>
+                                            <td class="val2" style="min-width: 160px;">{{ tournamentsMap.bsr }}</td>
+                                            <td class="val3" style="max-width: 100px;">{{ tournamentsMap.maxScore }}</td>
+                                            <td class="val4">{{ tournamentsMap.difficulty }}</td>
+                                            <td class="val5">{{ tournamentsMap.pool }}</td>
+                                            <td>
+                                                <select class="custom-select" id="validationCustom04" style="color: white;">
+                                                    <option selected value="" style="color: black;">Vyberte</option>
+                                                    <option style="color: black;">BAN 1</option>
+                                                    <option style="color: black;">BAN 2</option>
+                                                    <option style="color: black;">PICK 1</option>
+                                                    <option style="color: black;">PICK 2</option>
+                                                    <option style="color: black;">PICK 3</option>
+                                                    <option style="color: black;">PICK 4</option>
+                                                    <option style="color: black;">TIE Braker</option>
+                                                </select>
+                                            </td>
+                                            <td class=""><input type="checkbox"></td>
+                                            <td class="td-actions text-right" style="min-width: 100px;">
+                                                <form action="{{ path('editor_edit_tournament_map', { id: tournamentsMap.id }) }}" method="POST">
+                                                    <a onclick="showTable({{ tournamentsMap.id }})">
+                                                        <button type="button" rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                            <i class="material-icons">edit</i>
+                                                        </button>
+                                                    </a>
+                                                    <button name="map-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+                                                        <i class="material-icons">close</i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for key, tournamentsMap in tournamentsMaps %}
+            <form action="{{ path('editor_edit_tournament_map', { id: tournamentsMap.id }) }}" method="POST">
+                <div class="edit-form-bcg {{ tournamentsMap.id }}"></div>
+                <div class="edit-form {{ tournamentsMap.id }}">
+                    <div class="card">
+                        <div class="card-header card-header-success" style="margin: -20px 15px 15px 15px;">
+                            <h4 class="card-title">Změna mapy: {{ tournamentsMap.name }}</h4>
+                        </div>
+                        <div class="card-body" style="padding: 0.9375rem 20px">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Název mapy</label>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Název mapy</label>
+                                        <input type="text" name="map-name" value="{{ tournamentsMap.name }}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="bmd-label-floating">BSR</label>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">BSR Mapy</label>
+                                        <input type="text" name="map-bsr" value="{{ tournamentsMap.bsr }}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="bmd-label-floating">Obtížnost</label>
+                                    <div class="form-group">
+                                        <select name="map-difficulty" id="map-difficulty" class="custom-select">
+                                            <option value="ExpertPlus" {% if tournamentsMap.difficulty == "ExpertPlus" %}selected{% endif %}>ExpertPlus</option>
+                                            <option value="Expert" {% if tournamentsMap.difficulty == "Expert" %}selected{% endif %}>Expert</option>
+                                            <option value="Hard" {% if tournamentsMap.difficulty == "Hard" %}selected{% endif %}>Hard</option>
+                                            <option value="Normal" {% if tournamentsMap.difficulty == "Normal" %}selected{% endif %}>Normal</option>
+                                            <option value="Easy" {% if tournamentsMap.difficulty == "Easy" %}selected{% endif %}>Easy</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="bmd-label-floating">Map Pool</label>
+                                    <div class="form-group">
+                                        <select name="map-pool" id="map-pool" class="custom-select">
+                                            <option value="Kvalifikace" {% if tournamentsMap.pool == "Kvalifikace" %}selected{% endif %}>Kvalifikace</option>
+                                            <option value="Semifinále" {% if tournamentsMap.pool == "Semifinále" %}selected{% endif %}>Semifinále</option>
+                                            <option value="Grandfinále" {% if tournamentsMap.pool == "Grandfinále" %}selected{% endif %}>Grandfinále</option>
+                                            <option value="Minifinále" {% if tournamentsMap.pool == "Minifinále" %}selected{% endif %}>Minifinále</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" name="map-action" value="edit" class="btn btn-primary pull-right">Změnit mapu</button>
+                            <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% endfor %}
+        <form action="{{ path('editor_add_tournament_map') }}" method="POST">
+            <div class="edit-form-bcg add"></div>
+            <div class="edit-form add">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Přidání nové mapy</h4>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Název mapy</label>
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Název mapy</label>
+                                    <input type="text" name="map-name" value="" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="bmd-label-floating">BSR</label>
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">BSR Mapy</label>
+                                    <input type="text" name="map-bsr" value="" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="bmd-label-floating">Obtížnost</label>
+                                <div class="form-group">
+                                    <select name="map-difficulty" id="map-difficulty" class="custom-select">
+                                        <option value="ExpertPlus">ExpertPlus</option>
+                                        <option value="Expert">Expert</option>
+                                        <option value="Hard">Hard</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Easy">Easy</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="bmd-label-floating">Map Pool</label>
+                                <div class="form-group">
+                                    <select name="map-pool" id="map-pool" class="custom-select">
+                                        <option value="Kvalifikace">Kvalifikace</option>
+                                        <option value="Semifinále">Semifinále</option>
+                                        <option value="Grandfinále">Grandfinále</option>
+                                        <option value="Minifinále">Minifinále</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" name="map-action" value="add" class="btn btn-primary pull-right">Přidat mapu</button>
+                        <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

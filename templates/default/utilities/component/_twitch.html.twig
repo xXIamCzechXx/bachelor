@@ -1,0 +1,40 @@
+<div class="twitch-container">
+    <div class="pentagon-relief"></div>
+    <div class="twitch-figure twitch-figure-left-hp" data-aos="fade-right" data-aos-duration="1000">
+        <img draggable="false" src="{{ asset('build/images/assets/char1.png') }}" alt="Modrá VR figurka">
+    </div>
+    <div class="twitch-figure twitch-figure-right-hp" data-aos="fade-left" data-aos-duration="1000">
+        <img draggable="false" src="{{ asset('build/images/assets/char2.png') }}" alt="Červená VR figurka">
+    </div>
+    <div class="twitch-section">
+        <div id="twitch-embed"></div>
+        <script src="https://embed.twitch.tv/embed/v1.js"></script>
+        <script type="text/javascript">
+            /*
+            new Twitch.Embed("twitch-embed", {
+                width: 1064,
+                height: 564,
+                autoplay: true,
+                layout: "video",
+                channel: "czechsaber",
+                parent: ["czechsaber.cz", "localhost"]
+            });
+            */
+            var options = {
+                width: 1064,
+                height: 564,
+                autoplay: true,
+                layout: "video",
+                channel: "czechsaber",
+                parent: ["czechsaber.cz", "localhost"]
+            };
+            setTimeout(() => {
+                var player = new Twitch.Player("twitch-embed", options);
+                player.setVolume(0.5);
+            }, "3000");
+        </script>
+    </div>
+    <div class="button-border twitch-button" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" style="margin-top: 12px;">
+        <a href="https://www.twitch.tv/czechsaber" target="_blank">{{ translator.getValue('HP_TWITCH_LINK', 'Sleduj nás na Twitch.tv')|raw }}</a>
+    </div>
+</div>

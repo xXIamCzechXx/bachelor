@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="wrapper-box">
+        <div class="section">
+            <div class="horizontal-space"></div>
+            <div class="custom-form">
+                <form action="{{ path('send_tournament_request') }}" method="post">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="data">Vložit výsledek z Tournament assistantu [ COPY ]</label>
+                                <textarea class="form-control" id="data" name="data" rows="5" cols="81" placeholder="RESULTS:&#10;1:&#10;2:&#10;3:&#10;4:"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <select name="map" id="map" class="custom-select">
+                                    {% for tournamentsMap in tournamentsMaps %}
+                                        <option value="{{ tournamentsMap.id }}">{{ tournamentsMap.bsr }} - {{ tournamentsMap.name }} - {{ tournamentsMap.difficulty }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="Player1"><small>ID Hráče 1 [ X999 ]</small></label>
+                                <select name="Player1" id="Player1" class="custom-select" style="margin-top: 8px;">
+                                    <option value="0">Není vybráno</option>
+                                    {% for user in users %}
+                                        {% if user.tournaments.count > 0 %}
+                                            <option value="{{ user.id }}">{{ user.uniqueId }} - {{ user.nickname }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="Player2"><small>ID Hráče 2 [ X999 ]</small></label>
+                                <select name="Player2" id="Player2" class="custom-select" style="margin-top: 8px;">
+                                    <option value="0">Není vybráno</option>
+                                    {% for user in users %}
+                                        {% if user.tournaments.count > 0 %}
+                                            <option value="{{ user.id }}">{{ user.uniqueId }} - {{ user.nickname }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="Player3"><small>ID Hráče 3 [ X999 ]</small></label>
+                            <select name="Player3" id="Player3" class="custom-select" style="margin-top: 8px;">
+                                <option value="0">Není vybráno</option>
+                                {% for user in users %}
+                                    {% if user.tournaments.count > 0 %}
+                                        <option value="{{ user.id }}">{{ user.uniqueId }} - {{ user.nickname }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="Player4"><small>ID Hráče 4 [ X999 ]</small></label>
+                                <select name="Player4" id="Player4" class="custom-select" style="margin-top: 8px;">
+                                    <option value="0">Není vybráno</option>
+                                    {% for user in users %}
+                                        {% if user.tournaments.count > 0 %}
+                                            <option value="{{ user.id }}">{{ user.uniqueId }} - {{ user.nickname }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary mb-2" name="submit-data" style="width: 100%;">Potvrdit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

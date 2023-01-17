@@ -1,0 +1,215 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Stránky | {{ title is defined ? title : '' }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block discord %}
+            <li class="nav-item active ">
+                <a class="nav-link" href="{{ path('editor_discord') }}">
+                    <i class="fa-regular fa-images"></i>
+                    <p>Discord</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title ">Discord <small>[ Poslat webhook:  ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
+                            <p class="card-category">Nastavení Discord webhooku</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive table-upgrade">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Webhooky</th>
+                                            <th class="text-center">Název</th>
+                                            <th class="text-center">Platforma</th>
+                                            <th class="text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for webhook in webhooks %}
+                                            <tr>
+                                                <td>{{ webhook.slug }}</td>
+                                                <td class="text-center">{{ webhook.name }}</td>
+                                                <td class="text-center">{{ webhook.platform }}</td>
+                                                <td class="td-actions text-right" style="min-width: 100px;">
+                                                    <form action="{{ path('editor_edit_webhook', { id: webhook.id }) }}" method="POST">
+                                                        <a onclick="showTable({{ webhook.id }})">
+                                                            <button type="button" rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                                <i class="material-icons">edit</i>
+                                                            </button>
+                                                        </a>
+                                                        <button name="webhook-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+                                                            <i class="material-icons">close</i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        <tr>
+                                            <td class="text-center"></td>
+                                            <td class="text-center">
+                                                <a href="#" class="btn btn-round btn-fill btn-default disabled">Není k dispozici</a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a target="_blank" href="http://www.creative-tim.com/product/material-dashboard-pro/?ref=md-free-upgrade-live" class="btn btn-round btn-fill btn-info">Přidat webhook</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% for key, webhook in webhooks %}
+                <form action="{{ path('editor_edit_webhook', { id: webhook.id }) }}" method="POST">
+                    <div class="edit-form-bcg {{ webhook.id }}"></div>
+                    <div class="edit-form {{ webhook.id }}">
+                        <div class="card">
+                            <div class="card-header card-header-success" style="margin: -20px 15px 15px 15px;">
+                                <h4 class="card-title">Změna webhooku: {{ webhook.name }}</h4>
+                            </div>
+                            <div class="card-body" style="padding: 0.9375rem 20px">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Název turnaje</label>
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Název webhooku</label>
+                                            <input type="text" name="webhook-name" value="{{ webhook.name }}" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="bmd-label-floating">Platforma</label>
+                                        <input type="text" name="webhook-platform" value="{{ webhook.platform }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Url webhooku</label>
+                                            <div class="form-group">
+                                                <label class="bmd-label-floating">https://...</label>
+                                                <textarea name="webhook-description" class="form-control" rows="3" placeholder="">{{ webhook.slug }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" name="webhook-action" value="edit" class="btn btn-primary pull-right">Změnit webhook</button>
+                                <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            {% endfor %}
+            <form action="{{ path('editor_send_webhook') }}" method="POST">
+                <div class="edit-form-bcg add"></div>
+                <div class="edit-form add">
+                    <div class="card">
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title">Poslat zprávů</h4>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label>Titulek zprávy</label>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Titulek</label>
+                                        <input type="text" name="message-title" value="" class="form-control" required>
+                                    </div>
+                                </div>
+                                {#
+                                <div class="col-md-8">
+                                    <label class="bmd-label-floating">Datum turnaje</label>
+                                    <div class="form-group">
+                                        <input type="datetime-local" name="tournament-date" value="" class="form-control">
+                                    </div>
+                                </div>
+                                #}
+                                <div class="col-md-4">
+                                    <label class="bmd-label-floating">Typ zprávy</label>
+                                    <div class="form-group">
+                                        <select name="message-type" id="type" class="custom-select" style="color: #ffffff;">
+                                            <option value="Rich" style="color: #000000;" selected>Rich</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="bmd-label-floating">Titulek zprávy</label>
+                                    <div class="form-group">
+                                        <select name="message-url" id="url" class="custom-select" style="color: #ffffff;">
+                                            {% for webhook in webhooks %}
+                                                <option value="{{ webhook.slug }}" style="color: #000000;">{{ webhook.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Zpráva</label>
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Tento turnaj se bude odehrávat na...</label>
+                                            <textarea name="message-content" class="form-control" rows="3" placeholder=""></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="view-discord-container">
+                                <p class="discord-main-title">CzechSaber BOT</p>
+                                <p>@CzechSaber Programmerwergwergwergwergwergwerg</p>
+                                <div class="view-discord-section">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <img class="discord-logo" src="{{ asset('build/images/logos/logo.png') }}">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <strong>xXIamCzechXx</strong>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img class="discord-wide-logo" src="{{ asset('build/images/logos/full-wide-logo.png') }}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="discord-title">Popis contentu zprávy</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="discord-description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <button type="submit" name="message-action" value="send" class="btn btn-primary pull-right">Poslat zprávu</button>
+                            <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

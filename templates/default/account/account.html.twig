@@ -1,0 +1,260 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" content="{{ page.keywords|raw }}">
+    <meta name="description" content="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block account %}
+            <div class="button-border">
+                <li class="nav-item active  ">
+                    <a class="nav-link" href="{{ path('account') }}">
+                        <i class="fas fa-id-card"></i>
+                        <p>Účet</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="edit-form-bcg-fe {{ app.user.id }}"></div>
+    <div class="wrapper-box">
+        <div class="profile-background-set" style="background: {{ app.user.color }};"></div>
+        <div class="section">
+            <div class="profile-wrapper">
+                <h2 class="text-center">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('editor') }}" target="_blank" class="profile-icon"><i class="fas fa-chalkboard-teacher"></i></a>
+                    {% endif %}
+                    <a class="profile-icon"><i onclick="showTable({{ app.user.id }})" class="fas fa-user-cog"></i></a>
+                    {% if app.user.scoresaberLink is not empty %}<a href="{{ app.user.scoresaberLink }}" target="_blank" class="profile-icon" id="scoresaber-color"><i class="fas fa-trophy"></i></a>{% endif %}
+                    {% if app.user.twitchLink is not empty %}<a href="{{ app.user.twitchLink }}" target="_blank" class="profile-icon" id="twitch-color"><i class="fab fa-twitch"></i></a>{% endif %}
+                    <a href="{{ path('app_logout') }}" class="profile-icon"><i id="logout-color" class="fas fa-sign-out-alt"></i></a>
+                </h2>
+                <div class="profile-cont card-border">
+                    <div class="profile-card">
+                        <div class="profile-card-left">
+                            <div class="profile-foto-cont text-center white-text">
+                                <div class="profile-foto-section">
+                                    <img class="profile-img" src="{{ asset(app.user.imgPath(app.user.imgName)) }}" alt="{{ app.user.nickname }} {{ app.user.country }}">
+                                </div>
+                                {% if app.user.hdm.imgName is defined and app.user.hdm.imgName is not null %}<img class="profile-hdm" src="{{ asset(app.user.hdm.getImgPath(app.user.hdm.imgName)) }}" alt="{{ app.user.hdm.name }}">{% endif %}
+                                <h3>{{ app.user.nickname }}</h3>
+                                <h4>Player ID: {{ app.user.uniqueId }}</h4>
+{#                                <h4 class="success" style="padding: 10px 0; color: green;">Přihlášen do turnaje</h4>#}
+                                <h4 class="warning" style="padding: 10px 0;">Turnaj již brzy</h4>
+                            </div>
+                        </div>
+                        <div class="profile-card-right">
+                            <div class="profile-card-title">
+                                <h3><strong>{{ app.user.nickname }} #{{ app.user.uniqueId }}</strong>
+                                    <div class="profile-buttons">
+                                        <button class="btn" onclick="showTable({{ app.user.id }})">Upravit</button>
+                                        <form action="{{ path('account_join_tourney', { id: app.user.id }) }}" method="POST" style="margin: 0 !important;">
+                                            <input type="submit" name="join-tourney" class="btn btn-success" {% if false != true %}disabled value="Turnaj již brzy"{% else %}value="Vstup do turnaje"{% endif %}>
+                                        </form>
+                                    </div>
+                                </h3>
+                                <h5><img class="profile-flag" src="{{ asset(app.user.country.getImgPath(app.user.country.getImgName)) }}" alt="{{ app.user.country }}">{{ app.user.country }}</h5>
+                            </div>
+                            <hr>
+                            <div class="profile-card-text">
+                                <table>
+                                    <tr>
+                                        <td class="profile-table-title" style="min-width: 150px;"><h4>Role</h4></td>
+                                        <td><h5>{% for key, role in app.user.rolesNames %}{{ key != 0 ? ", " }}{{ role }}{% endfor %}</h5></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="profile-table-title"><h4>Rank {{ scoresaberData["country"] }}</h4></td>
+                                        <td><h5>{{ scoresaberData["countryRank"] }}</h5></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="profile-table-title"><h4>Rank SVĚT</h4></td>
+                                        <td><h5>{{ scoresaberData["rank"] }}</h5></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="profile-table-title"><h4>PP</h4></td>
+                                        <td><h5>{{ scoresaberData["pp"] }}</h5></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="profile-table-title"><h4>Discord</h4></td>
+                                        <td><h5>{{ app.user.discordNickname }}</h5></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            {% if app.user.badge is defined and app.user.badge|length > 0 %}
+                                <div class="badge-container">
+                                    <div class="badge-section">
+                                        {% set badgeindex = 0 %}
+                                        {% for key, badge in app.user.badge %}
+                                            {% if badgeindex < 4 %}
+                                                {% if badge.view == 1 %}
+                                                    <img src="{{ asset(badge.imgPath(badge.imgName)) }}">
+                                                    {% set badgeindex = badgeindex+1 %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="profile-desc-container">
+                        <hr>
+                        <h5 class="grey-text">{{ app.user.description }}</h5>
+                    </div>
+                    <div class="image-background" style=""></div>
+                </div>
+            </div>
+            <form action="{{ path('account_edit_user', { id: app.user.id }) }}" method="POST" enctype="multipart/form-data">
+                <div class="edit-form {{ app.user.id }}">
+                    <div class="card">
+                        <div class="card-header card-header-primary " style="margin: -20px 15px 15px 15px;">
+                            <h4 class="card-title">Editace uživatele: {{ app.user.firstName }}</h4>
+                            <p class="card-category">Po této úpravě budete z tohoto účtu odhlášeni</p>
+                        </div>
+                        <div class="card-body" style="padding: 0.9375rem 20px">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Jméno a příjmení</label>
+                                        <input type="text" name="user-name" required value="{{ app.user.firstName }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Přihlašovací jméno</label>
+                                        <input type="text" name="user-nickname" required value="{{ app.user.nickname }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <input type="datetime-local" name="user-birthday" min="" value="{{ app.user.birthdate|date("Y-m-d\\TH:i:s") }}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Země</label>
+                                        <select name="user-country" class="custom-select">
+                                            {% for country in countries %}
+                                                {% if country.id == app.user.country.id %}
+                                                    <option value="{{ country.id }}" selected>{{ country.name }}</option>
+                                                {% else %}
+                                                    <option value="{{ country.id }}">{{ country.name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">E-mail</label>
+                                        <input type="email" name="" value="{{ app.user.email }}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Pohlaví</label>
+                                        <select name="user-gender" class="custom-select">
+                                            <option value="Muž" {% if app.user.gender == "Muž" %}selected{% endif %}>Muž</option>
+                                            <option value="Žena" {% if app.user.gender == "Žena" %}selected{% endif %}>Žena</option>
+                                            <option value="Jiné" {% if app.user.gender == "Jiné" %}selected{% endif %}>Jiné</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="exampleColorInput" class="bmd-label-floating">Barva profilu</label>
+                                        <input type="color" name="user-color" class="form-control form-control-color" id="exampleColorInput" value="{{ app.user.color }}" title="Vyber barvu" style="padding: 0;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Scoresaber ID</label>
+                                        <input type="number" name="scoresaber-id" value="{{ app.user.scoresaberId == 0 ? '' : app.user.scoresaberId }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Twitch Nickname</label>
+                                        <input type="text" name="twitch-nickname" value="{{ app.user.twitchNickname }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Discord Nickname</label>
+                                        <input type="text" name="discord-nickname" value="{{ app.user.discordNickname }}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {% if app.user.imgName is not null and app.user.imgName != '' %}
+                                        <img class="editor-preview-image" style="max-width: 78px;" src="{{ asset(app.user.imgPath(app.user.imgName)) }}">
+                                    {% else %}
+                                        <img class="editor-preview-image" style="max-width: 78px;" src="{{ asset(app.user.imgPath()) }}">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="validatedCustomMainFile" class="bmd-label-floating"><small>Profilový obrázek ...</small></label>
+                                    <div class="custom-file mb-3">
+                                        <input type="file" class="custom-file-input" name="user-image" id="validatedCustomMainFile" placeholder="Vybrat ...">
+                                        <label class="custom-file-label" for="validatedCustomMainFile">Vybrat ...</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="validatedCustomMainFile" class="bmd-label-floating" style="margin-top: 12px;">Headset ...</label>
+                                        <select name="user-hdm" id="views" class="custom-select" style="margin-top: 24px;">
+                                            {% for hdm in hdms %}
+                                                {% if app.user.hdm.name is defined and hdm.name == app.user.hdm.name %}
+                                                    <option value="{{ hdm.name }}" selected>{{ hdm.name }}</option>
+                                                {% else %}
+                                                    <option value="{{ hdm.name }}">{{ hdm.name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Popis uživatele</label>
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Tento popis uvidí všichni ostatní na tvém profilu</label>
+                                            <textarea name="user-description" class="form-control" rows="5">{{ app.user.description }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" name="user-action" value="edit" class="btn btn-primary pull-right">Uložit změny uživatele</button>
+                            <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {#
+            <div class="horizontal-space"></div>
+            <h2 class="text-center">Nadcházející události</h2>
+            #}
+        </div>
+    </div>
+
+{% endblock %}

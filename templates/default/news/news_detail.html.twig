@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" content="{{ page.keywords|raw }}">
+    <meta name="description" content="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block news %}
+            <div class="button-border">
+                <li class="nav-item active  ">
+                    <a class="nav-link" href="{{ path('news') }}">
+                        <i class="fas fa-book-open"></i>
+                        <p>Novinky</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block heading %}
+    {% if news.title %}
+        {{ news.title|raw }}
+    {% else %}
+        {{ page.heading|raw }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="wrapper-box">
+        <div class="section">
+            <div class="news-detail-container">
+                <div class="fg-gallery ns">
+                    <img src="{{ asset(news.imgPath(news.imgName)) }}" alt="{{ news.alt }}">
+                    <button disabled class="c-btn" id="butt-for-gallery">
+                        <svg width="280px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                        <h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit') }}</h2>
+                    </button>
+                </div>
+                <p>{{ news.content|raw }}</p>
+                <div class="button-border twitch-button" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" style="width: 100%;">
+                    <a href="{{ path('news') }}">Zpět na všechny novinky</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var a = new FgGallery('.ns', {
+            cols: 1,
+            style: {
+                border: '0 solid #fff',
+            }
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,319 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Editor{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block prehled %}
+            <li class="nav-item active  ">
+                <a class="nav-link" href="{{ asset('editor') }}">
+                    <i class="material-icons">dashboard</i>
+                    <p>Přehled</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-warning card-header-icon">
+                            <a href="{{ path('editor_tournament') }}" class="card-icon">
+                                <i class="material-icons">content_copy</i>
+                            </a>
+                            <p class="card-category">Celkový počet turnajů</p>
+                            <h3 class="card-title">{{ tournaments|length }}</h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons text-danger">warning</i>
+                                <a href="javascript:;">Aktuální stav : <strong>žádný probíhající turnaj</strong></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-success card-header-icon">
+                            <a href="{{ path('editor_users') }}" class="card-icon">
+                                <i class="material-icons">person</i>
+                            </a>
+                            <p class="card-category">Celkový počet uživatelů</p>
+                            <h3 class="card-title">{{ users|length }}</h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">date_range</i> Za poslední měsíc
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-danger card-header-icon">
+                            <a href="{{ path('editor_news') }}" class="card-icon">
+                                <i class="material-icons">{# info_outline #}content_copy</i>
+                            </a>
+                            <p class="card-category">Počet článků</p>
+                            <h3 class="card-title">{{ news|length }}</h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">local_offer</i> Spravováno adminem - Dominik Mach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-info card-header-icon">
+                            <a href="{{ path('editor_page_gallery') }}" class="card-icon">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                            <p class="card-category">Počet obrázků</p>
+                            <h3 class="card-title">{{ images|length }} / 250</h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">update</i> Počet oobrázků je omezený kvůli velikosti hostingu
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card card-chart">
+                        <div class="card-header card-header-success">
+                            {# <div class="ct-chart" id="dailySalesChart"></div> #}
+                            <h4>Nárůs uživatelů za poslední měsíc</h4>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">Přírust registrovaných uživatelů</h4>
+                            <p class="card-category">
+                            {% if thisMonthUsersCounter == 0 and lastMonthUsersCounter == 0 %}
+                                <span class="text-warning">Žádní uživatelé za poslední 2 měsíce</span></p>
+                            {% elseif thisMonthUsersCounter == 0 %}
+                                <span class="text-danger"><i class="fa fa-long-arrow-down"></i> Žádní uživatelé tento měsíc</span></p>
+                            {% elseif lastMonthUsersCounter == 0 %}
+                                <span class="text-success"><i class="fa fa-long-arrow-up"></i> Žádní uživatelé minulý měsíc</span></p>
+                            {% else %}
+                                {% set usersGrowth = (((thisMonthUsersCounter*100)/lastMonthUsersCounter)-100)|round(2) %}
+                                <span class="text-success"><i class="fa fa-long-arrow-up"></i> {{ usersGrowth }}%</span> za tento měsíc oproti minulému</p>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">access_time</i> aktualizováno právě teď
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-chart">
+                        <div class="card-header card-header-warning">
+                            {# <div class="ct-chart" id="websiteViewsChart"></div> #}
+                            <h4>Počet přihlášených do aktuálního turnaje</h4>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">Turnaj CST S2</h4>
+                            <span class="text-success">54 </span>uživatelů
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">access_time</i> aktualizováno před 10 minutami
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-chart">
+                        <div class="card-header card-header-danger">
+                            {# <div class="ct-chart" id="completedTasksChart"></div> #}
+                            <h4>Obsah v přípravě</h4>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">Právě připravujeme</h4>
+                            <p class="card-category">Žádný náhled není k dispozici</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">access_time</i> není možná aktualizace
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-tabs card-header-primary" style="padding: 19px;">
+                            <div class="nav-tabs-navigation">
+                                <div class="nav-tabs-wrapper">
+                                    <span class="nav-tabs-title">Možnosti:</span>
+                                    <ul class="nav nav-tabs" data-tabs="tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#profile" data-toggle="tab">
+                                                <i class="material-icons">bug_report</i> Odpovědi
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#messages" data-toggle="tab">
+                                                <i class="material-icons">code</i> Log
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                        </li>
+{#                                        <li class="nav-item">#}
+{#                                            <a class="nav-link" href="#settings" data-toggle="tab">#}
+{#                                                <i class="material-icons">cloud</i> Server#}
+{#                                                <div class="ripple-container"></div>#}
+{#                                            </a>#}
+{#                                        </li>#}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" style="overflow: scroll;">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="profile">
+                                    <table class="table">
+                                        <thead class="text-primary">
+                                            <th></th>
+                                            <th>Jméno</th>
+                                            <th>Dotaz</th>
+                                            <th></th>
+                                        </thead>
+                                        <tbody>
+                                            {% for formAnswer in formAnswers %}
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="checkbox" value="" checked style="display: none;">
+                                                                <span class="form-check-sign">
+                                                            <span class="check"></span>
+                                                          </span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ formAnswer.name|length > formAnswer.name|slice(0, 30)|length ? formAnswer.name|striptags|slice(0, 30)~'...' : formAnswer.name }}</td>
+                                                    <td>{{ formAnswer.content|length > formAnswer.content|slice(0, 52)|length ? formAnswer.content|striptags|slice(0, 52)~'...' : formAnswer.content }}</td>
+                                                    <td class="td-actions text-right">
+                                                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                                                            <i class="material-icons">close</i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="messages">
+                                    <table class="table">
+                                        <thead class="text-primary">
+                                            <th></th>
+                                            <th>Jméno</th>
+                                            <th>Module</th>
+                                            <th>Akce</th>
+                                            <th>Operace</th>
+                                        </thead>
+                                        <tbody>
+                                            {% for log in logs %}
+                                                <tr>
+                                                    <td>{% if log.type != "success" %}<i class="fa fa-times" aria-hidden="true" style="color: red;"></i>{% else %}<i class="fa fa-check" aria-hidden="true" style="color: lawngreen;"></i>{% endif %}</td>
+                                                    <td>{{ log.userName }}</td>
+                                                    <td>{{ log.module }}</td>
+                                                    <td>{{ log.action }}</td>
+                                                    <td>{{ log.operation|length > log.operation|slice(0, 30)|length ? log.operation|striptags|slice(0, 30)~'...' : log.operation }}</td>
+                                                    <td class="td-actions text-right">
+                                                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                                                            <i class="material-icons">close</i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="settings">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="checkbox" value="" style="display: none;">
+                                                            <span class="form-check-sign">
+                                                            <span class="check"></span>
+                                                          </span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>Lines From Great Russian Literature? Or E-mails From My Boss?</td>
+                                                <td class="td-actions text-right">
+                                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                                                        <i class="material-icons">edit</i>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                                                        <i class="material-icons">close</i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-warning">
+                            <h4 class="card-title">Noví uživatelé</h4>
+                            <p class="card-category">Nejnověji zarregistrovaní uživatelé</p>
+                        </div>
+                        <div class="card-body" style="overflow: scroll;">
+                            <table class="table table-hover">
+                                <thead class="text-warning">
+                                    <th>Jméno</th>
+                                    <th>Nickname</th>
+                                    <th>Vytvořeno</th>
+                                    <th></th>
+                                </thead>
+                                <tbody>
+                                    {% for key, user in users %}
+                                        {% if key < 10 %}
+                                            <tr>
+                                                <td>{% if user.gender != 'Žena' %}<i class="fa fa-male" aria-hidden="true" style="color: lightblue;"></i>{% else %}<i class="fa fa-female" aria-hidden="true" style="color: pink;"></i>{% endif %}&nbsp;&nbsp;{{ user.firstName }}</td>
+                                                <td>{{ user.nickname }}</td>
+                                                <td>{{ user.createdAt|date("Y-m-d") }}</td>
+                                                <td class="td-actions text-right">
+                                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                                                        <i class="material-icons">edit</i>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                                                        <i class="material-icons">close</i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

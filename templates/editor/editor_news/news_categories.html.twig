@@ -1,0 +1,180 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Stránky | {{ title }}{% endblock %}
+
+{% block sidebar %}
+	{% embed "editor/utilities/sidebar.html.twig" %}
+		{% block novinky %}
+			<li class="nav-item " style="margin-left: 30px;">
+				<div class="menu-arrow menu-arrow-opened" data-value="news-index"></div>
+				<a class="nav-link" href="{{ path('editor_news') }}">
+					<i class="material-icons">library_books</i>
+					<p>Články</p>
+				</a>
+			</li>
+		{% endblock %}
+		{% block kategorieNovinky %}
+			<li class="nav-item active news-index" style="margin-left: 60px;">
+				<a class="nav-link" href="{{ path('editor_news_categories') }}">
+					<i class="far fa-list-alt"></i>
+					<p>Kategorie</p>
+				</a>
+			</li>
+		{% endblock %}
+	{% endembed %}
+{% endblock %}
+
+{% block navbar %}
+	{% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+	<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card" id="myList">
+						<div class="card-header card-header-primary">
+							<h4 class="card-title ">Kategorie Článků <small>[ ktegorií celkem: {{ categories|length }} ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
+							<p class="card-category">Štítky a řazení článků dle těchto kategorií</p>
+							{% include "editor/utilities/paginator/_controls.html.twig" %}
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table">
+									<thead class=" text-primary">
+										<tr>
+											<th><input type="text" class="search form-control" placeholder="Barva štítku" /></th>
+											<th><input type="text" class="search form-control" placeholder="Název kategorie" /></th>
+											<th><input type="text" class="search form-control" placeholder="Popis" /></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody class="list">
+										{% for key, category in categories %}
+											<tr>
+												<td class="val1" style="min-width: 124px; font-weight: 1000; color: black; background-color: {{ category.color }};">{{ category.color }}</td>
+												<td class="val2" style="min-width: 224px;">{{ category.name }}</td>
+												<td class="val3" style="min-width: 224px;">{{ category.description }}</td>
+												<td style="min-width: 132px;" class="td-actions text-right">
+													<form action="{{ path('editor_edit_news_category', { id: category.id }) }}" method="POST" enctype="multipart/form-data">
+														<a onclick="showTable({{ category.id }})">
+															<div rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+																<i class="material-icons">edit</i>
+															</div>
+														</a>
+														{% if category.view == 1 %}
+															<button name="category-action" value="hide" type="submit" rel="tooltip" title="Skrýt" class="btn btn-success btn-link btn-sm">
+																<i class="far fa-eye"></i>
+															</button>
+														{% else %}
+															<button name="category-action" value="show" type="submit" rel="tooltip" title="Zobrazit" class="btn btn-danger btn-link btn-sm">
+																<i class="far fa-eye-slash"></i>
+															</button>
+														{% endif %}
+														<button name="category-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+															<i class="far fa-trash-alt"></i>
+														</button>
+														<a href="{{ path('news') }}" target="_blank">
+															<div rel="tooltip" title="Náhled" class="btn btn-default btn-link btn-sm">
+																<i class="fas fa-tv"></i>
+															</div>
+														</a>
+													</form>
+												</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% for key, category in categories %}
+			<form action="{{ path('editor_edit_news_category', { id: category.id }) }}" method="POST" enctype="multipart/form-data">
+				<div class="edit-form-bcg {{ category.id }}"></div>
+				<div class="edit-form {{ category.id }}">
+					<div class="card">
+						<div class="card-header card-header-success">
+							<h4 class="card-title">Editace kategorie {{ category.name }}</h4>
+							<!--<p class="card-category">Complete your profile</p>-->
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="exampleColorInput" class="bmd-label-floating">Barva kategorie</label>
+										<input type="color" name="category-color" class="form-control form-control-color" id="exampleColorInput" value="{{ category.color }}" title="Vyber barvu" style="padding: 0;">
+									</div>
+								</div>
+								<div class="col-md-10">
+									<div class="form-group">
+										<label class="bmd-label-floating">Název kategorie</label>
+										<input type="text" name="category-name" value="{{ category.name }}" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>Popis kategorie</label>
+										<div class="form-group">
+											<label class="bmd-label-floating">Jsme parta kluků, co se snaží dostat VR na E-Sport úroveň...</label>
+											<textarea name="category-description" class="form-control" rows="3" placeholder="">{{ category.description }}</textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+							<button type="submit" name="category-action" value="edit" class="btn btn-primary pull-right">Upravit kategorii</button>
+							<button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+			</form>
+		{% endfor %}
+		<form action="{{ path('editor_add_news_category') }}" method="POST" enctype="multipart/form-data">
+			<div class="edit-form-bcg add"></div>
+			<div class="edit-form add">
+				<div class="card">
+					<div class="card-header card-header-success">
+						<h4 class="card-title">Přidání nové kategorie</h4>
+						<div class="clearfix"></div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="exampleColorInput" class="bmd-label-floating">Barva kategorie</label>
+									<input type="color" name="category-color" class="form-control form-control-color" id="exampleColorInput" value="#8934A0" title="Vyber barvu" style="padding: 0;">
+								</div>
+							</div>
+							<div class="col-md-10">
+								<div class="form-group">
+									<label class="bmd-label-floating">Název kategorie</label>
+									<input type="text" name="category-name" value="" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label>Popis kategorie</label>
+									<div class="form-group">
+										<label class="bmd-label-floating">Jsme parta kluků, co se snaží dostat VR na E-Sport úroveň...</label>
+										<textarea name="category-description" class="form-control" rows="3" placeholder=""></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<button type="submit" name="category-action" value="add" class="btn btn-primary pull-right">Přidat kategorii</button>
+						<button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}

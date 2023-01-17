@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | Turnaje a VR eventy{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block prehled %}
+            <div class="button-border">
+                <li class="nav-item  active">
+                    <a class="nav-link" href="{{ path('homepage') }}">
+                        <i class="fas fa-map-signs"></i>
+                        <p>Hlavní strana</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="homepage-wrapper">
+
+        <canvas id=c class="particles-canvas" style="min-height: 100vh;"></canvas>
+
+        <div class="full-screen-video-container">
+            <a href="{{ path('homepage') }}" style="display: block;"><img class="full-wide-logo" src="{{ asset('build/images/logos/full-wide-logo.png') }}" alt="CzechSaber logo"></a>
+            <img draggable="false" src="{{ asset('build/images/logos/na.png') }}" alt="3CUP Logo" class="top-foto-logo">
+            <h2 class="hp-title" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">{{ translator.getValue('HP_MOTTO', 'Hrajeme v pohybu')|raw }}</h2>
+            <h3 id="twitch" class="hp-undertitle grey-text text-center">{{ translator.getValue('HP_SEC_MOTTO', 'VR Eventy a komunita')|raw }}</h3>
+            <img style="border-bottom: none;" draggable="false" class="hp-image" src="{{ asset('build/images/assets/divka-mcr.jpg') }}">
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Odpovědi | {{ title }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block odpovedi %}
+            <li class="nav-item active ">
+                <a class="nav-link" href="{{ path('editor_answers') }}">
+                    <i class="fa-solid fa-square-poll-horizontal"></i>
+                    <p>Odpovědi</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-plain" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title mt-0">Odpovědi z formulářů <small>[ celkem: {{ answers|length }} ]</small></h4>
+                            <p class="card-category">Zde jsou zobrazeny veškeré odpovědi anonymních i přihlášených uživatelů</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class=" text-primary">
+                                        <tr>
+                                            <th><input type="text" class="search form-control" placeholder="Téma" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Jméno a příjmení" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="E-mail" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Telefonní číslo" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Obsah zprávy" /></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        {% for key, answer in answers %}
+                                                <tr>
+                                                    <td class="val1">{{ answer.answerTypes }}</td>
+                                                    <td class="val2">{{ answer.name }}</td>
+                                                    <td class="val3">{{ answer.email }}</td>
+                                                    <td class="val4">{{ answer.phone }}</td>
+                                                    <td class="val5">{{ answer.content }}</td>
+                                                    <td class="td-actions text-right">
+                                                        <form action="{{ path('editor_edit_answer', { id: answer.id }) }}" method="POST">
+                                                            <button name="answer-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </button>
+                                                            <a href="#" target="">
+                                                                <div rel="tooltip" title="Náhled" class="btn btn-default btn-link btn-sm">
+                                                                    <i class="fas fa-tv"></i>
+                                                                </div>
+                                                            </a>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

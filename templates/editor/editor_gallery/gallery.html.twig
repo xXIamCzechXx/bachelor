@@ -1,0 +1,279 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Stránky | {{ title }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block galerie %}
+            <li class="nav-item active " style="margin-left: 30px;">
+                <div class="menu-arrow menu-arrow-closed" data-value="gallery-index"></div>
+                <a class="nav-link" href="{{ path('editor_page_gallery') }}">
+                    <i class="fa-regular fa-images"></i>
+                    <p>Galerie</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title ">Galerie <small>[ obrázků celkem: {{ gallery|length }} ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
+                            <p class="card-category">Nastavení SEO a obsahu stránek</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class=" text-primary">
+                                    <tr>
+                                        <th>Obrázek</th>
+                                        <th><input type="text" class="search form-control" placeholder="Název (BETA)" /></th>
+                                        <th><input type="text" class="search form-control" placeholder="Název na serveru" /></th>
+                                        <th><input type="text" class="search form-control" placeholder="Alternativní popisek" /></th>
+                                        <th><input type="text" class="search form-control" placeholder="Kategorie" /></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        {% for key, image in gallery %}
+                                            <tr>
+                                                <td>
+                                                    {% if image.imgName is not null or image.imgName != '' %}
+                                                        <a href="{{ '../../'~image.imgPath(image.imgName) }}" target="_blank">
+                                                            <img class="editor-preview-image" src="{{ asset(image.imgPath(image.imgName)) }}">
+                                                        </a>
+                                                    {% else %}
+                                                        <img class="editor-preview-image" src="{{ asset(image.imgPath()) }}">
+                                                    {% endif %}
+                                                </td>
+                                                <td class="val1" style="min-width: 224px;">{{ image.name }}</td>
+                                                <td class="val2" style="min-width: 124px;">{{ image.imgName }}</td>
+                                                <td class="val3" style="min-width: 224px;">{{ image.alt }}</td>
+                                                <td class="val4">
+                                                    {% set categoryIndex = 0 %}
+                                                    {% for category in categories %}
+                                                        {% for imageCategory in image.galleryCategories %}
+                                                            {% if imageCategory.name == category.name %}
+                                                                {{ category.name }},
+                                                                {% set categoryIndex = 1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                    {% if categoryIndex == 0 %}
+                                                        Žádné kategorie
+                                                    {% endif %}
+                                                </td>
+                                                <td style="min-width: 132px;" class="td-actions text-right">
+                                                    <form action="{{ path('editor_edit_image', { id: image.id }) }}" method="POST" enctype="multipart/form-data">
+                                                        <a onclick="showTable({{ image.id }})">
+                                                            <div rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                                <i class="material-icons">edit</i>
+                                                            </div>
+                                                        </a>
+                                                        {% if image.view == 1 %}
+                                                            <button name="img-action" value="hide" type="submit" rel="tooltip" title="Skrýt" class="btn btn-success btn-link btn-sm">
+                                                                <i class="far fa-eye"></i>
+                                                            </button>
+                                                        {% else %}
+                                                            <button name="img-action" value="show" type="submit" rel="tooltip" title="Zobrazit" class="btn btn-danger btn-link btn-sm">
+                                                                <i class="far fa-eye-slash"></i>
+                                                            </button>
+                                                        {% endif %}
+                                                        <a href="{{ '../../'~image.imgPath(image.imgName) }}" target="_blank">
+                                                            <div rel="tooltip" title="Náhled" class="btn btn-default btn-link btn-sm">
+                                                                <i class="fas fa-tv"></i>
+                                                            </div>
+                                                        </a>
+                                                        <button name="img-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for key, image in gallery %}
+            <form action="{{ path('editor_edit_image', { id: image.id }) }}" method="POST" enctype="multipart/form-data">
+                <div class="edit-form-bcg {{ image.id }}"></div>
+                <div class="edit-form {{ image.id }}">
+                    <div class="card">
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title">Editace obrázku: {{ image.name }}</h4>
+                            <!--<p class="card-category">Complete your profile</p>-->
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {% if image.imgName is not null or image.imgName != '' %}
+                                        <img class="editor-preview-image" src="{{ asset(image.imgPath(image.imgName)) }}">
+                                    {% else %}
+                                        <img class="editor-preview-image" src="{{ asset(image.imgPath()) }}">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="validatedCustomMainFile" class="bmd-label-floating"><small>Obrázek ...</small></label>
+                                    <div class="custom-file mb-3">
+                                        <input type="file" class="custom-file-input" name="image" id="validatedCustomMainFile" placeholder="Vybrat ...">
+                                        <label class="custom-file-label" for="validatedCustomMainFile">Vybrat ...</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="padding-top: 30px;">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Alternativní popisek</label>
+                                        <input type="text" name="img-alt" value="{{ image.alt }}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="col-md-6" style="float:left;">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Název</label>
+                                            <input type="text" name="name" value="{{ image.name }}" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="float: left;">
+                                        <div class="form-group">
+                                            <select name="img-view" id="views" class="custom-select">
+                                                {% if image.view == 1 %}
+                                                    <option value="{{ image.view }}" class="success-link" selected>Viditelná - ANO</option>
+                                                    <option value="0" class="danger-link">Viditelná - NE</option>
+                                                {% else %}
+                                                    <option value="{{ image.view }}" class="danger-link" selected>Viditelná - NE</option>
+                                                    <option value="1" class="success-link">Viditelná - ANO</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Realný název</label>
+                                            <input type="text" name="img-name" value="{{ image.imgName }}" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlSelect2">Kategorie</label>
+                                        <select multiple name="category-action[]" class="form-control" id="exampleFormControlSelect2" style="height: auto; min-height: 90px;">
+                                            {% if categories|length == 0 %}
+                                                <option disabled>Žádné kategorie</option>
+                                            {% else %}
+                                                <option value="0" class="danger-link">Smazat vybrané kategorie</option>
+                                                {% for category in categories %}
+                                                    {% set categoryIndex = 0 %}
+                                                    {% for imageCategory in image.galleryCategories %}
+                                                        {% if imageCategory.name == category.name %}
+                                                            <option selected value="{{ category.id }}">{{ category.name }}</option>
+                                                            {% set categoryIndex = 1 %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if categoryIndex == 0 %}
+                                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" name="img-action" value="edit" class="btn btn-primary pull-right">Uložit obrázek</button>
+                            <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% endfor %}
+        <form action="{{ path('editor_add_image') }}" method="POST" enctype="multipart/form-data">
+            <div class="edit-form-bcg add"></div>
+            <div class="edit-form add">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Přidání nového obrázku</h4>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img class="editor-preview-image" src="{{ asset('build/images/utilities/nocontentyet.jpg') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="validatedCustomMainFile" class="bmd-label-floating"><small>Obrázek ...</small></label>
+                                <div class="custom-file mb-3">
+                                    <input type="file" class="custom-file-input" name="new-image" id="validatedCustomMainFile" placeholder="Vybrat ...">
+                                    <label class="custom-file-label" for="validatedCustomMainFile">Vybrat ...</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding-top: 30px;">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Alternativní popisek</label>
+                                    <input type="text" name="img-alt" value="" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="col-md-6" style="float:left;">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Název</label>
+                                        <input type="text" name="name" value="" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="float: left;">
+                                    <div class="form-group">
+                                        <select name="img-view" id="views" class="custom-select">
+                                            <option value="1" style="color: #4ea752" selected>Viditelný</option>
+                                            <option value="0" style="color: #d22824">Neviditelný</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Realný název</label>
+                                        <input type="text" name="img-name" value="" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Kategorie</label>
+                                    <select multiple name="category-add-action[]" class="form-control" id="exampleFormControlSelect2" style="height: auto; min-height: 90px;">
+                                        {% if categories|length == 0 %}
+                                            <option disabled>Žádné kategorie</option>
+                                        {% else %}
+                                            <option value="0" class="danger-link">Smazat vybrané kategorie</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" name="img-action" value="add" class="btn btn-primary pull-right">Přidat obrázek</button>
+                        <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

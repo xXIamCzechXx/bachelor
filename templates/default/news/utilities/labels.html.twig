@@ -1,0 +1,9 @@
+<div class="label-container">
+  {% for category in news.newsCategories %}
+    <div class="label-section">
+      <div class="label" style="background: {{ category.color }}">
+        {{ category.name }}
+      </div>
+    </div>
+  {% endfor %}
+</div>

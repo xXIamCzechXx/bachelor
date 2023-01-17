@@ -1,0 +1,380 @@
+/* BLACK */
+/* WHITE */
+/* TEXT */
+/* ETC */
+/* BACKGROUND */
+@media screen and (max-width: 1400px) {
+  .twitch-figure-left-hp, .twitch-figure-right-hp, .twitch-figure-left, .twitch-figure-right {
+    display: none;
+  }
+
+  .team-container .team-section img {
+    height: 200px;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .full-wide-logo {
+    height: 144px;
+    margin: 32px 0 0 44px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .basic-news-text {
+    display: none;
+  }
+
+  .width40 {
+    width: 50%;
+  }
+
+  .profile-wrapper .profile-cont .profile-card .profile-card-right .badge-container {
+    width: 100%;
+    padding: 10px 0;
+  }
+  .profile-wrapper .profile-cont .profile-card .profile-card-right .badge-container .badge-section {
+    display: block;
+  }
+
+  .basic-news-container .basic-news-section {
+    height: 300px;
+  }
+  .basic-news-container .basic-news-section a {
+    display: block;
+  }
+  .basic-news-container .basic-news-section a .basic-news-left-cont {
+    width: calc(50% - 10px);
+    height: 300px;
+  }
+  .basic-news-container .basic-news-section .basic-news-right-cont {
+    width: 50%;
+    height: 300px;
+  }
+
+  .news-container .news-section .news-left-cont {
+    width: 100%;
+  }
+
+  .wrapper-box .section {
+    padding: 32px 24px;
+  }
+
+  .team-container .team-section img {
+    height: 150px;
+  }
+
+  .gallery-image-container a:nth-last-child(1) {
+    display: none !important;
+  }
+  .gallery-image-container a:nth-child(1) .gallery-image-section {
+    transform: scale(1) !important;
+  }
+
+  .twitch-container .twitch-section {
+    min-height: 400px;
+    max-height: 400px;
+  }
+
+  .cols-4 .gallery-items {
+    width: calc(50% - 20px);
+    margin: 10px;
+  }
+
+  .cols-3 .gallery-items {
+    width: calc(50% - 20px);
+    margin: 10px;
+    height: 260px !important;
+  }
+  .cols-3 .gallery-items:nth-last-child(1) {
+    display: none;
+  }
+
+  .full-wide-logo {
+    height: 100px;
+    margin: 20px 0 0 32px;
+  }
+
+  .hp-title {
+    font-size: 64px;
+  }
+
+  .gamebox-container .gamebox-section {
+    height: 400px;
+  }
+
+  #instafeed-container {
+    padding: 0;
+  }
+  #instafeed-container a {
+    width: calc(50% - 20px);
+    height: 300px;
+  }
+
+  .gallery-container .gallery-section .gallery-image-container {
+    padding: 0;
+  }
+  .gallery-container .gallery-section .gallery-image-container .gallery-image-section {
+    width: calc(50% - 20px);
+  }
+
+  .cols-4 {
+    margin-top: 0;
+  }
+}
+@media screen and (max-width: 764px) {
+  .gallery-title span {
+    display: none;
+  }
+
+  .scoreboard-wrapper {
+    background: #0f111e;
+  }
+  .scoreboard-wrapper .particles-canvas {
+    position: fixed;
+  }
+  .scoreboard-wrapper .hp-image {
+    display: none;
+  }
+  .scoreboard-wrapper .scoreboard-table {
+    top: 0;
+    transform: translate(-50%, 0);
+  }
+}
+@media screen and (max-width: 750px) {
+  .top-foto-logo {
+    width: 500px;
+  }
+
+  .team-container .team-section img {
+    height: 110px;
+  }
+
+  .news-detail-container .gallery-items {
+    height: 380px;
+  }
+
+  .profile-settings-button, .profile-table-title {
+    display: none;
+  }
+
+  .profile-wrapper .profile-cont .profile-card .profile-card-left {
+    width: 100%;
+  }
+  .profile-wrapper .profile-cont .profile-card .profile-card-left .profile-foto-cont {
+    margin: 0 auto;
+  }
+  .profile-wrapper .profile-cont .profile-card .profile-card-right {
+    width: 100%;
+    padding: 32px 32px 0 32px;
+    margin: 0 auto;
+  }
+
+  .basic-news-container {
+    padding: 0 30px;
+    top: -54px;
+  }
+  .basic-news-container .basic-news-section {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .basic-news-container .basic-news-section a .basic-news-left-cont {
+    width: 100%;
+  }
+  .basic-news-container .basic-news-section a .basic-news-left-cont .news-cont-text {
+    display: block;
+  }
+  .basic-news-container .basic-news-section .basic-news-right-cont {
+    display: none;
+  }
+
+  #instafeed-container a {
+    width: calc(100% - 20px);
+  }
+  #instafeed-container a:nth-child(3), #instafeed-container a:nth-child(4) {
+    display: none;
+  }
+
+  .gallery-container .gallery-section .gallery-image-container .gallery-image-section {
+    width: calc(100% - 20px);
+    height: 300px;
+  }
+
+  .cols-4 .gallery-items {
+    width: calc(100%);
+    margin: 10px 0;
+  }
+
+  .cols-3 .gallery-items {
+    width: calc(100%);
+    margin: 10px 0;
+    display: none;
+  }
+
+  .gallery-container {
+    padding: 10px;
+  }
+
+  .news-container .news-section .news-left-cont, .news-container .news-section .news-right-cont {
+    width: 100%;
+    height: 300px;
+  }
+
+  .news-cont-text p {
+    display: none;
+  }
+}
+@media screen and (max-width: 500px) {
+  .news-detail-container .gallery-items {
+    height: 280px;
+  }
+
+  .basic-news-container .basic-news-section {
+    height: 260px;
+  }
+  .basic-news-container .basic-news-section a .basic-news-left-cont {
+    height: 260px;
+  }
+  .basic-news-container .basic-news-section .basic-news-right-cont {
+    height: 260px;
+  }
+
+  .news-container .news-section .news-left-cont, .news-container .news-section .news-right-cont {
+    height: 280px;
+  }
+
+  #instafeed-container a {
+    height: 280px;
+  }
+
+  .gallery-container .gallery-section .gallery-image-container .gallery-image-section {
+    height: 280px;
+  }
+
+  .cookie-container {
+    bottom: 10px;
+    left: 10px;
+    max-width: calc(100vw - 20px);
+  }
+  .cookie-container .cookie-section form {
+    padding: 16px 16px 0px 16px;
+  }
+
+  .twitch-container .twitch-section {
+    min-height: 280px;
+    height: 280px;
+  }
+  .twitch-container .twitch-section #twitch-embed iframe {
+    height: 270px;
+  }
+
+  .profile-wrapper .profile-cont .profile-desc-container {
+    padding: 12px;
+  }
+  .profile-wrapper .profile-cont .profile-card {
+    text-align: center;
+  }
+  .profile-wrapper .profile-cont .profile-card .profile-card-right {
+    padding: 0 12px;
+  }
+  .profile-wrapper .profile-cont .profile-card .profile-card-right .profile-card-title .profile-buttons {
+    width: 100%;
+    margin: 10px 0;
+    align-items: center;
+    vertical-align: middle;
+    justify-content: center;
+  }
+  .profile-wrapper .profile-cont .profile-card .profile-card-right .profile-card-text {
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+  }
+  .profile-wrapper .profile-cont .profile-desc-container {
+    text-align: center;
+  }
+
+  .width40, .width50 {
+    width: 100%;
+  }
+
+  .news-container .news-section {
+    padding: 0;
+  }
+
+  .gallery-container {
+    padding: 0;
+  }
+
+  .instagram-container {
+    padding: 24px 0 0 0;
+  }
+
+  .basic-news-container {
+    padding: 0 10px;
+  }
+
+  .wrapper-box .section {
+    padding: 24px 12px;
+  }
+
+  .top-foto-logo {
+    width: 360px;
+  }
+
+  .c-btn h2 {
+    min-width: 160px;
+  }
+
+  #paran-logo {
+    display: none;
+  }
+
+  .team-container .team-section img:nth-last-child(1) {
+    display: none;
+  }
+  .team-container .team-section img:nth-last-child(2) {
+    display: none;
+  }
+
+  .full-wide-logo {
+    margin: 80px 0;
+    left: calc(50% - 4px);
+    transform: translate(-50%, 0);
+  }
+
+  .twitch-container {
+    padding: 54px 20px;
+    background: #f2f2f2;
+  }
+
+  .pentagon-relief {
+    margin-top: -64px;
+  }
+
+  .mobile-device {
+    display: none !important;
+  }
+
+  .hp-title {
+    font-size: 48px;
+  }
+
+  .default-form .duo {
+    width: calc(100% - 32px);
+  }
+
+  .gamebox-container .gamebox-section {
+    overflow: visible;
+    display: block;
+  }
+  .gamebox-container .gamebox-section .game-container {
+    width: 100%;
+  }
+  .gamebox-container .gamebox-section .game-container:hover {
+    width: 100% !important;
+  }
+  .gamebox-container .gamebox-section .game-container:hover + #game-container-left, .gamebox-container .gamebox-section .game-container:hover + #game-container-right {
+    width: 100% !important;
+  }
+}
+
+/*# sourceMappingURL=responsivity.css.map */

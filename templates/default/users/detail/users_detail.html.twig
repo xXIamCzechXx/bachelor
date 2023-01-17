@@ -1,0 +1,88 @@
+<div class="modal-header" style="padding: 8px">
+    {#
+        <h5 class="modal-title" id="staticBackdropLabel"></h5>
+        <i class="fa fa-times" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+    #}
+</div>
+<div class="modal-body">
+    <div class="profile-wrapper">
+        <div class="profile-cont card-border">
+            <div class="profile-card">
+                <div class="profile-card-left">
+                    <div class="profile-foto-cont text-center white-text">
+                        <div class="profile-foto-section">
+                            <img class="profile-img" src="{{ asset(user.imgPath(user.imgName)) }}" alt="{{ user.nickname }} {{ user.country }}">
+                        </div>
+                        {% if user.hdm.imgName is defined and user.hdm.imgName is not null %}<img class="profile-hdm" src="{{ asset(user.hdm.getImgPath(user.hdm.imgName)) }}" alt="{{ user.hdm.name }}">{% endif %}
+                        <h3>{{ user.nickname }}</h3>
+                        {% if scoresaberData["inactive"] %}
+                            <h4 class="danger" style="padding: 6px 0; color: red;">Neaktivní hráč</h4>
+                        {% else %}
+                            <h4 class="success" style="padding: 6px 0; color: green;">Aktivní hráč</h4>
+                        {% endif %}
+                        <h4 class="success" style="padding: 6px 0;"><i class="fa fa-globe" aria-hidden="true"></i> - {{ scoresaberData["rank"] }}. | {{ scoresaberData["country"] }} - {{ scoresaberData["countryRank"] }}.</h4>
+                    </div>
+                </div>
+                <div class="profile-card-right">
+                    <div class="profile-card-title">
+                        <h3><strong>{{ user.nickname }} #{{ user.uniqueId }}</strong>
+                            <div class="profile-buttons">
+                                <button class="btn" onclick="showTable({{ user.id }})" disabled>Nahlásit</button>
+                                <form action="{{ path('account_join_tourney', { id: user.id }) }}" method="POST" style="margin: 0 !important;">
+                                    <input type="submit" name="" class="btn btn-success" {% if true %} {# TODO::Change #}disabled value="Pozvat do týmu"{% else %}value="Nedostupné"{% endif %}>
+                                </form>
+                            </div>
+                        </h3>
+                        <h5><img class="profile-flag" src="{{ asset(user.country.getImgPath(user.country.getImgName)) }}" alt="{{ user.country }}">{{ user.country }}</h5>
+                    </div>
+                    <hr>
+                    <div class="profile-card-text">
+                        <table>
+                            <tr>
+                                <td class="profile-table-title" style="min-width: 162px;"><h4>Role</h4></td>
+                                <td><h5>{% for key, role in user.rolesNames %}{{ key != 0 ? ", " }}{{ role }}{% endfor %}</h5></td>
+                            </tr>
+                            <tr>
+                                <td class="profile-table-title"><h4>Odehráno</h4></td>
+                                <td><h5>Celkem {{ scoresaberData["totalPlayCount"] }}, Ranked {{ scoresaberData["rankedPlayCount"] }}</h5></td>
+                            </tr>
+                            <tr>
+                                <td class="profile-table-title"><h4>PP</h4></td>
+                                <td><h5>{{ scoresaberData["pp"] }} pp</h5></td>
+                            </tr>
+                            <tr>
+                                <td class="profile-table-title"><h4>Průměrná acc</h4></td>
+                                <td><h5>{{ scoresaberData["averageRankedAccuracy"] }} %</h5></td>
+                            </tr>
+                            <tr>
+                                <td class="profile-table-title"><h4>Discord</h4></td>
+                                <td><h5>{{ user.discordNickname }}</h5></td>
+                            </tr>
+                        </table>
+                    </div>
+                    {% if user.badge is defined and user.badge|length > 0 %}
+                        <div class="badge-container">
+                            <div class="badge-section">
+                                {% set badgeindex = 0 %}
+                                {% for key, badge in user.badge %}
+                                    {% if badgeindex < 4 %}
+                                        {% if badge.view == 1 %}
+                                            <img src="{{ asset(badge.imgPath(badge.imgName)) }}">
+                                            {% set badgeindex = badgeindex+1 %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="profile-desc-container">
+                <hr>
+                <h5 class="grey-text">{{ user.description }}</h5>
+            </div>
+            <div class="image-background" style=""></div>
+        </div>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Zavřít</button>
+    </div>
+</div>

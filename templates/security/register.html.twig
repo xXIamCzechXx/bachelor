@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" content="{{ page.keywords|raw }}">
+    <meta name="description" content="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block register %}
+            <div class="button-border">
+                <li class="nav-item active  ">
+                    <a class="nav-link" href="{{ path('app_register') }}">
+                        <i class="far fa-newspaper"></i>
+                        <p>Registrace</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="wrapper-box">
+        <div class="section">
+            {{ include('default/utilities/component/_figures.html.twig') }}
+            <div class="default-form">
+                <div class="default-form-background"></div>
+                {{ form_start(registrationForm) }}
+                    <h2 class="text-center">{{ translator.getValue('CONTACTS_TITLE', 'Připoj se do virtuálního světa') }}</h2><hr>
+                    {{ form_widget(registrationForm) }}
+                    <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+                    <div class="col-md-6 button-border duo float-left"><button class="" type="submit">Zaregistrovat se</button></div>
+                    <div class="col-md-6 button-border duo float-left"><a class="" href="{{ path('app_login') }}">Již mám účet</a></div>
+                {{ form_end(registrationForm) }}
+                <script>
+                    grecaptcha.ready(function() {
+                        grecaptcha.execute('{{ translator.getValue('SITE_KEY', '6Lf7_UwaAAAAANAhJ2-ZHDpsGTikaCilEzWhs7Rt') }}', {action: 'app_register'})
+                            .then(function(token) {
+                                document.getElementById('g-recaptcha-response').value=token;
+                            });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

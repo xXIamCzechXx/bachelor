@@ -1,0 +1,163 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Turnaje | {{ title }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block tournament %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('editor_tournament') }}">
+                    <i class="fa-solid fa-chess-king"></i>
+                    <p>Turnaje</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title mt-0">Turnaje <small>[ celkem: {{ tournaments|length }} ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
+                            <p class="card-category"> Zde jsou zobrazeny všechny turnaje</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body" id="demo">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="text-primary">
+                                    <tr>
+                                    <tr>
+                                        <th style="min-width: 200px;"><input type="text" class="search form-control" placeholder="Název" /></th>
+                                        <th><input type="text" class="search form-control" placeholder="Datum" /></th>
+                                        <th><input type="text" class="search form-control" placeholder="Počet hráčů" /></th>
+                                        <th><input type="text" class="search form-control" placeholder="Popis" /></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                    {% for key, tournament in tournaments %}
+                                        <tr>
+                                            <td class="val1">{{ tournament.name }}</td>
+                                            <td class="val2" style="min-width: 160px;">{{ tournament.date|date }}</td>
+                                            <td class="val3" style="max-width: 100px;">{{ tournament.players|length }}</td>
+                                            <td class="val4" style="min-width: 324px;">{{ tournament.description|length > tournament.description|slice(0, 120)|length ? tournament.description|striptags|slice(0, 120)~'...' : tournament.description }}</td>
+                                            <td class="td-actions text-right" style="min-width: 100px;">
+                                                <form action="{{ path('editor_edit_tournament', { id: tournament.id }) }}" method="POST">
+                                                    <a onclick="showTable({{ tournament.id }})">
+                                                        <button type="button" rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                            <i class="material-icons">edit</i>
+                                                        </button>
+                                                    </a>
+                                                    {#
+                                                    <button name="tournament-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+                                                        <i class="material-icons">close</i>
+                                                    </button>
+                                                    #}
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for key, tournament in tournaments %}
+            <form action="{{ path('editor_edit_tournament', { id: tournament.id }) }}" method="POST">
+                <div class="edit-form-bcg {{ tournament.id }}"></div>
+                <div class="edit-form {{ tournament.id }}">
+                    <div class="card">
+                        <div class="card-header card-header-success" style="margin: -20px 15px 15px 15px;">
+                            <h4 class="card-title">Změna turnaje: {{ tournament.name }}</h4>
+                        </div>
+                        <div class="card-body" style="padding: 0.9375rem 20px">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Název turnaje</label>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Název turnaje</label>
+                                        <input type="text" name="tournament-name" value="{{ tournament.name }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="bmd-label-floating">Datum turnaje</label>
+                                    <div class="form-group">
+                                        <input type="datetime-local" name="tournament-date" value="{{ tournament.date|date }}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Popis turnaje - místo použití</label>
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Tento turnaj se bude odehrávat na...</label>
+                                            <textarea name="tournament-description" class="form-control" rows="3" placeholder="">{{ tournament.description }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" name="tournament-action" value="edit" class="btn btn-primary pull-right">Změnit turnaj</button>
+                            <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% endfor %}
+        <form action="{{ path('editor_add_tournament') }}" method="POST">
+            <div class="edit-form-bcg add"></div>
+            <div class="edit-form add">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Přidání nového turnaje</h4>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Název turnaje</label>
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">CST S10</label>
+                                    <input type="text" name="tournament-name" value="" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="bmd-label-floating">Datum turnaje</label>
+                                <div class="form-group">
+                                    <input type="datetime-local" name="tournament-date" value="" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Popis turnaje - místo použití</label>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Tento turnaj se bude odehrávat na...</label>
+                                        <textarea name="tournament-description" class="form-control" rows="3" placeholder=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" name="tournament-action" value="add" class="btn btn-primary pull-right">Přidat turnaj</button>
+                        <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

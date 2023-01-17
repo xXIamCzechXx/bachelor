@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block header %}
+    {% embed "default/utilities/_header.html.twig" %}
+        {% block topfoto %}
+            <h2 class="top-foto-title">500</h2>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="wrapper-box">
+        <div class="section">
+            <h2 class="text-center" style="font-size: 100px;">Error</h2>
+            <h2 class="text-center">Bohužel se stala v tomto virtuálním světě chyba. Zkuste to prosím později...</h2>
+        </div>
+    </div>
+    <div class="horizontal-space" style="height: 32px;"></div>
+
+{% endblock %}

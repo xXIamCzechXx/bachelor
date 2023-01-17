@@ -1,0 +1,421 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Stránky | {{ title }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block novinky %}
+            <li class="nav-item active " style="margin-left: 30px;">
+                <div class="menu-arrow menu-arrow-closed" data-value="news-index"></div>
+                <a class="nav-link" href="{{ path('editor_news') }}">
+                    <i class="material-icons">library_books</i>
+                    <p>Články</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title ">Články <small>[ celkem: {{ newsArray|length }} ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
+                            <p class="card-category"> Všechny články (viditelné | skryté)</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class=" text-primary">
+                                        <tr>
+                                            <th>Obrázek</th>
+                                            <th><input type="text" class="search form-control" placeholder="Název" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Notace" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Autor" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Přidáno" /></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        {% for key, news in newsArray %}
+                                            <tr>
+                                                <td style="width: 132px;">
+                                                    {% if news.imgName is not null or news.imgName != '' %}
+                                                        <img class="editor-preview-image" src="{{ asset(news.imgPath(news.imgName)) }}">
+                                                    {% else %}
+                                                        <img class="editor-preview-image" src="{{ asset(news.imgPath()) }}">
+                                                    {% endif %}
+                                                </td>
+                                                <td class="val1" style="min-width: 180px;">{{ news.title|length > news.title|slice(0, newsTitleLength)|length ? news.title|striptags|slice(0, newsTitleLength)~'...' : news.title }}</td>
+                                                <td class="val2" style="min-width: 340px;">{{ news.notation|length > news.notation|slice(0, newsContentLength)|length ? news.notation|striptags|slice(0, newsContentLength)~'...' : news.notation }}</td>
+                                                <td class="val3" class="text-center">{{ news.author.nickname }}</td>
+                                                <td class="val4" style="min-width: 154px;" class="text-center">{{ news.addedAt|date('d. m. Y H:i:s') }}</td>
+                                                <td style="min-width: 132px;" class="td-actions text-right">
+                                                    <form action="{{ path('editor_edit_news', { slug: news.slug }) }}" method="POST" enctype="multipart/form-data">
+                                                        <a onclick="showTable({{ news.id }})">
+                                                            <div rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                                <i class="material-icons">edit</i>
+                                                            </div>
+                                                        </a>
+                                                        <button name="news-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+                                                            <i class="material-icons">close</i>
+                                                        </button>
+                                                        {% if news.view == 1 %}
+                                                            <button name="news-action" value="hide" type="submit" rel="tooltip" title="Skrýt" class="btn btn-success btn-link btn-sm">
+                                                                <i class="far fa-eye"></i>
+                                                            </button>
+                                                        {% else %}
+                                                            <button name="news-action" value="show" type="submit" rel="tooltip" title="Zobrazit" class="btn btn-danger btn-link btn-sm">
+                                                                <i class="far fa-eye-slash"></i>
+                                                            </button>
+                                                        {% endif %}
+                                                        <a href="{{ path('news_detail', { slug: news.slug }) }}" target="_blank">
+                                                            <div rel="tooltip" title="Náhled" class="btn btn-default btn-link btn-sm">
+                                                                <i class="fas fa-tv"></i>
+                                                            </div>
+                                                        </a>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for key, news in newsArray %}
+            <form action="{{ path('editor_edit_news', { slug: news.slug }) }}" method="POST" enctype="multipart/form-data">
+                <div class="edit-form-bcg {{ news.id }}"></div>
+                <div class="edit-form {{ news.id }}">
+                    <div class="card">
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title">Editace novinky: {{ news.title }}</h4>
+                            <!--<p class="card-category">Complete your profile</p>-->
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Titulek novinky</label>
+                                        <input type="text" name="news-title" value="{{ news.title }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <select name="news-author" id="auth" class="custom-select">
+                                            {% for admin in admins %}
+                                                {% if admin.nickname == app.user.nickname %}
+                                                    <option value="{{ admin.nickname }}" selected>{{ admin.nickname }}</option>
+                                                {% else %}
+                                                    <option value="{{ admin.nickname }}">{{ admin.nickname }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <!--<label class="bmd-label-floating">Datum vydání</label>-->
+                                        <input type="datetime-local" name="news-addedAt" value="{{ news.createdAt|date("Y-m-d\\TH:i:s") }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">URL Článku [/clanek]</label>
+                                        <input type="text" name="news-slug" value="{{ news.slug }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <select name="news-view" id="views" class="custom-select">
+                                            {% if news.view == 1 %}
+                                                <option value="{{ news.view }}" class="success-link" selected>Viditelná - ANO</option>
+                                                <option value="0" class="danger-link">Viditelná - NE</option>
+                                            {% else %}
+                                                <option value="{{ news.view }}" class="danger-link" selected>Viditelná - NE</option>
+                                                <option value="1" class="success-link">Viditelná - ANO</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {% if news.imgName is not null or news.imgName != '' %}
+                                        <img class="editor-preview-image" src="{{ asset(news.imgPath(news.imgName)) }}">
+                                    {% else %}
+                                        <img class="editor-preview-image" src="{{ asset(news.imgPath()) }}">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="validatedCustomMainFile" class="bmd-label-floating"><small>Obrázek ...</small></label>
+                                    <div class="custom-file mb-3">
+                                        <input type="file" class="custom-file-input" name="news-image" id="validatedCustomMainFile" placeholder="Vybrat ...">
+                                        <label class="custom-file-label" for="validatedCustomMainFile">Vybrat ...</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="padding-top: 30px;">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Alternativní popisek</label>
+                                        <input type="text" name="news-alt" value="{{ news.alt }}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label>Notace</label>
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Vytvořili jsme pro Vás zcela nový formát turnaje, který Vás zaručeně posadí do židle...</label>
+                                            <textarea name="news-notation" class="form-control" rows="5">{{ news.notation }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 40px;">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlSelect2">Kategorie</label>
+                                        <select multiple name="category-action[]" class="form-control" id="exampleFormControlSelect2" style="height: auto; min-height: 112px;">
+                                            {% if categories|length == 0 %}
+                                                <option disabled>Žádné kategorie</option>
+                                            {% else %}
+                                                <option value="0" class="danger-link">Smazat vybrané kategorie</option>
+                                                {% for category in categories %}
+                                                    {% set categoryIndex = 0 %}
+                                                    {% for newsCategory in news.newsCategories %}
+                                                        {% if newsCategory.name == category.name %}
+                                                            <option selected value="{{ category.id }}">{{ category.name }}</option>
+                                                            {% set categoryIndex = 1 %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if categoryIndex == 0 %}
+                                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 html-editor">
+                                    <div class="form-group">
+                                        <textarea id="editor{{ key }}" name="news-content">{{ news.content }}</textarea>
+                                        <script>
+                                            ClassicEditor
+                                                .create( document.querySelector( '#editor'+{{ key }} ), {
+                                                    mediaEmbed: {
+                                                        previewsInData:true
+                                                    },
+                                                    removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed'],
+                                                    heading: {
+                                                        options: [
+                                                            { model: 'paragraph', title: 'Normální text', class: 'ck-heading_paragraph' },
+                                                            { model: 'heading2', view: 'h2', title: 'Úvodní nápis', class: 'ck-heading_heading2' },
+                                                            { model: 'heading3', view: 'h3', title: 'Nadpis', class: 'ck-heading_heading3' },
+                                                            { model: 'heading4', view: 'h4', title: 'Podnadpis', class: 'ck-heading_heading4' },
+                                                            { model: 'heading5', view: 'h5', title: 'Větší text', class: 'ck-heading_heading5' },
+                                                        ]
+                                                    }
+                                                } )
+                                                .catch( error => {
+                                                    console.error( error );
+                                                } );
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <br><h4>SEO</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Meta popisek</label>
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Snažíme se dostat VR na E-Sport úroveň...</label>
+                                            <textarea name="news-description" class="form-control" rows="3" placeholder="">{{ news.metaDescription }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Klíčová slova</label>
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">VR, Beat Saber, Pavlov, HTC Vive, PlayZONE, E-Sport</label>
+                                            <textarea name="news-keywords" class="form-control" rows="3" placeholder="">{{ news.keywords }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" name="news-action" value="edit" class="btn btn-primary pull-right">Uložit článek</button>
+                            <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% endfor %}
+        <form action="{{ path('editor_add_news') }}" method="POST" enctype="multipart/form-data">
+            <div class="edit-form-bcg add"></div>
+            <div class="edit-form add">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Přidání nového článku</h4>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Nadpis článku</label>
+                                    <input type="text" name="news-title" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select name="news-author" id="auth" class="custom-select">
+                                        {% for admin in admins %}
+                                            {% if admin.nickname == app.user.nickname %}
+                                                <option value="{{ admin.nickname }}" selected>{{ admin.nickname }}</option>
+                                            {% else %}
+                                                <option value="{{ admin.nickname }}">{{ admin.nickname }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {# <label class="bmd-label-floating">Datum vydání</label> #}
+                                    <input type="datetime-local" name="news-addedAt" min="" value="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">URL Článku [/novinka]</label>
+                                    <input type="text" name="news-slug" value="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select name="news-view" id="views" class="custom-select">
+                                        <option value="1" style="color: #4ea752">Viditelný</option>
+                                        <option value="0" style="color: #d22824" selected>Neviditelný</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img class="editor-preview-image" src="{{ asset('build/images/utilities/nocontentyet.jpg') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="validatedCustomMainFile" class="bmd-label-floating"><small>Obrázek ...</small></label>
+                                <div class="custom-file mb-3">
+                                    <input type="file" class="custom-file-input" name="news-image" id="validatedCustomMainFile" placeholder="Vybrat ...">
+                                    <label class="custom-file-label" for="validatedCustomMainFile">Vybrat ...</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding-top: 30px;">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Alternativní popisek</label>
+                                    <input type="text" name="news-alt" value="" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>Notace</label>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Vytvořili jsme pro Vás zcela nový formát turnaje, který Vás zaručeně posadí do židle...</label>
+                                        <textarea name="news-notation" class="form-control" rows="4"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="margin-top: 40px;">
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">Kategorie</label>
+                                    <select multiple name="category-action[]" class="form-control" id="exampleFormControlSelect2" style="height: auto; min-height: 112px;">
+                                        {% if categories|length == 0 %}
+                                            <option disabled>Žádné kategorie</option>
+                                        {% else %}
+                                            <option value="0" class="danger-link">Smazat vybrané kategorie</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 html-editor">
+                                <div class="form-group">
+                                    {# TODO:: Delete, this is old rich-text editor that I found out sooner than CKE5
+                                        <textarea class="area" name="news-content" style="width: 760px; min-height: 300px; height: 300px;" id="area"></textarea>
+                                        <br />
+                                        <a onClick="toggleArea();">HTML</a>
+                                    #}
+                                    <textarea id="editor" name="news-content">Tady je nějaký text</textarea>
+                                    <script>
+                                        ClassicEditor
+                                            .create( document.querySelector( '#editor' ) )
+                                            .catch( error => {
+                                                console.error( error );
+                                            } );
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <br><h4>SEO</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Meta popisek</label>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Snažíme se dostat VR na E-Sport úroveň...</label>
+                                        <textarea name="news-description" class="form-control" rows="3" placeholder=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Klíčová slova</label>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">VR, Beat Saber, Pavlov, HTC Vive, PlayZONE, E-Sport</label>
+                                        <textarea name="news-keywords" class="form-control" rows="3" placeholder=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" name="news-action" value="add" class="btn btn-primary pull-right">Přidat článek</button>
+                        <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

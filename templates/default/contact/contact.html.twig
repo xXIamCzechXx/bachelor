@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" content="{{ page.keywords|raw }}">
+    <meta name="description" content="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block contact %}
+            <div class="button-border">
+                <li class="nav-item active  ">
+                    <a class="nav-link" href="{{ path('account') }}">
+                        <i class="fas fa-headset"></i>
+                        <p>Kontakt</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="wrapper-box" style="overflow: hidden;">
+        <div class="section">
+            {{ include('default/utilities/component/_figures.html.twig') }}
+            <div>
+                <div class="default-form">
+                    <div class="default-form-background"></div>
+                    {{ form_start(form) }}
+
+                    <h2 class="text-center">Kontaktujte nás</h2><hr>
+                    {{ form_widget(form) }}
+                    <div class="col-md-12 button-border float-left full-width-button"><button type="submit">Odeslat zprávu</button></div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

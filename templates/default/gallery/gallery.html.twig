@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" content="{{ page.keywords|raw }}">
+    <meta name="description" content="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block galerie %}
+            <div class="button-border">
+                <li class="nav-item active  ">
+                    <a class="nav-link" href="{{ path('gallery') }}">
+                        <i class="fas fa-photo-video"></i>
+                        <p>Galerie</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper-box">
+        <div class="section">
+            {% for category in categories %}
+                <div class="gallery-container">
+                    <a href="{{ path('gallery_detail', { slug: category.slug }) }}" class="button-border" style="width: 100%;">
+                        <h2 class="text-left gallery-title">{{ category.name }}<span class="text-right">Zobrazit celou galerii</span></h2>
+                    </a>
+                    <div class="fg-gallery additional-class cols-4">
+                        {% set missingSmallImages = 4 %}
+                        {% set skippedImages = 0 %}
+                        {% for key, image in category.galleryImages %}
+                            {% if image.view == 1 and missingSmallImages != 0 %}
+                                <img src="{{ asset(image.imgPath(image.imgName)) }}" alt="{{ image.alt }}">
+                                {% set missingSmallImages = missingSmallImages-1 %}
+                            {% else %}
+                                {% if missingSmallImages != 0 %}
+                                    {% set skippedImages = skippedImages+1 %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if missingSmallImages > 0 %}
+                            {% for i in 0..missingSmallImages-1 %}
+                                <img src="{{ asset('build/images/utilities/pripravujeme-dark.png') }}" alt="Zástupný obrázek CzechSaber">
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="fg-gallery ns cols-3">
+                        {% set missingBigImages = 3 %}
+                        {% for key, image in category.galleryImages|slice(4+skippedImages,3) %}
+                            {% if image.view == 1 and missingBigImages != 0 %}
+                                <img src="{{ asset(image.imgPath(image.imgName)) }}" alt="{{ image.alt }}">
+                                {% set missingBigImages = missingBigImages-1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if missingBigImages > 0 %}
+                            {% for i in 0..missingBigImages-1 %}
+                                <img src="{{ asset('build/images/utilities/pripravujeme-dark.png') }}" alt="Zástupný obrázek CzechSaber">
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <button disabled class="c-btn" id="butt-for-gallery">
+        <svg width="280px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+        <h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit')|raw }}</h2>
+    </button>
+
+    <script>
+        var a = new FgGallery('.fg-gallery', {
+            cols: 4,
+            style: {
+                border: 'none',
+                height: '220px',
+                boxShadow: '0 2px 10px -5px #858585',
+            }
+        });
+
+        var a = new FgGallery('.ns', {
+            cols: 3,
+            style: {
+                border: '0 solid #fff',
+                height: '280px',
+            }
+        });
+    </script>
+
+{% endblock %}

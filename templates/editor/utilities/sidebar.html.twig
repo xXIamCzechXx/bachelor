@@ -1,0 +1,174 @@
+{% block sidebar %}
+    <div class="sidebar" data-color="azure" data-background-color="white" data-image="editor/img/sidebar-1.jpg">
+        <div class="logo">
+            <a href="{{ path('homepage') }}" class="simple-text logo-normal">
+                {{ title is defined ? title : '' }}
+            </a>
+        </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                {% block prehled %}
+                    <li class="nav-item  ">
+                        <a class="nav-link" href="{{ path('editor') }}">
+                            <i class="material-icons">dashboard</i>
+                            <p>Přehled</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block settings %}
+                    <li class="nav-item  ">
+                        <a class="nav-link" href="{{ path('editor') }}">
+                            <i class="fa fa-sliders" aria-hidden="true"></i>
+                            <p>Nastavení</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block uzivatele %}
+                    <li class="nav-item ">
+                        <div class="menu-arrow menu-arrow-closed" data-value="users-index"></div>
+                        <a class="nav-link" href="{{ path('editor_users') }}">
+                            <i class="material-icons">person</i>
+                            <p>Uživatelé</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block badges %}
+                    <li class="nav-item users-index closed" style="margin-left: 30px;">
+                        <a class="nav-link" href="{{ path('editor_users_badges') }}">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                            <p>Badge</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block hdms %}
+                    <li class="nav-item users-index closed" style="margin-left: 30px;">
+                        <a class="nav-link" href="{{ path('editor_users_hdms') }}">
+                            <i class="fa-solid fa-vr-cardboard"></i>
+                            <p>Headsety</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block stranky %}
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{{ path('editor_pages') }}">
+                            <i class="material-icons">language</i>
+                            <p>Stránky [ SEO ]</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block galerie %}
+                    <li class="nav-item" style="margin-left: 30px;">
+                      <div class="menu-arrow menu-arrow-closed" data-value="gallery-index"></div>
+                        <a class="nav-link" href="{{ path('editor_page_gallery') }}">
+                            <i class="fa-regular fa-images"></i>
+                            <p>Galerie</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block kategorieGalerie %}
+                    <li class="nav-item gallery-index closed" style="margin-left: 60px;">
+                        <a class="nav-link" href="{{ path('editor_gallery_categories') }}">
+                            <i class="far fa-list-alt"></i>
+                            <p>Kategorie</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block novinky %}
+                    <li class="nav-item" style="margin-left: 30px;">
+                      <div class="menu-arrow menu-arrow-closed" data-value="news-index"></div>
+                        <a class="nav-link" href="{{ path('editor_news') }}">
+                            <i class="material-icons">library_books</i>
+                            <p>Články</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block kategorieNovinky %}
+                    <li class="nav-item news-index closed" style="margin-left: 60px;">
+                        <a class="nav-link" href="{{ path('editor_news_categories') }}">
+                            <i class="far fa-list-alt"></i>
+                            <p>Kategorie</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block constants %}
+                    <li class="nav-item" style="margin-left: 30px;">
+                        <a class="nav-link" href="{{ path('editor_constants') }}">
+                            <i class="material-icons">language</i>
+                            <p>Konstanty</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block tournament %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('editor_tournament') }}">
+                            <i class="fa-solid fa-chess-king"></i>
+                            <p>Turnaje</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block tournamentMaps %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('editor_tournament_maps') }}">
+                            <i class="fa-solid fa-map"></i>
+                            <p>Mapy</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block tournamentScores %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('editor_tournament_scores') }}">
+                            <i class="fa-solid fa-star"></i>
+                            <p>Skóre</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block discord %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('editor_discord') }}">
+                            <i class="fa-brands fa-discord"></i>
+                            <p>Discord</p>
+                        </a>
+                    </li>
+                {% endblock %}
+              <hr>
+                {% block odpovedi %}
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{{ path('editor_answers') }}">
+                            <i class="fa-solid fa-square-poll-horizontal"></i>
+                            <p>Odpovědi</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block log %}
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{{ path('editor_log') }}">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <p>Log</p>
+                        </a>
+                    </li>
+                {% endblock %}
+
+                <!--
+                <li class="nav-item ">
+                    <a class="nav-link" href="./notifications.html">
+                        <i class="material-icons">notifications</i>
+                        <p>Notifications</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="./rtl.html">
+                        <i class="material-icons">language</i>
+                        <p>RTL Support</p>
+                    </a>
+                </li>
+                <li class="nav-item active-pro ">
+                    <a class="nav-link" href="./upgrade.html">
+                        <i class="material-icons">unarchive</i>
+                        <p>Upgrade to PRO</p>
+                    </a>
+                </li>
+                -->
+            </ul>
+        </div>
+    </div>
+{% endblock %}

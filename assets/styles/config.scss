@@ -1,0 +1,237 @@
+
+@import "colors";
+@import "keyframes";
+
+.visuallyHidden {
+  display: none;
+}
+
+.desktop-device {
+  display: none;
+}
+
+.mobile-device {
+  display: block;
+}
+
+@media screen and (max-width: 1024px) {
+  .mobile-device {
+    display: none;
+  }
+}
+
+.right {
+  right: 0;
+}
+
+.left {
+  left: 0;
+}
+
+.float-left {
+  float: left;
+}
+
+.flex {
+  display: flex !important;
+}
+
+.width10 {
+  width: 10%;
+}
+.width20 {
+  width: 20%;
+}
+.width30 {
+  width: 30%;
+}
+.width40 {
+  width: 40%;
+}
+.width50 {
+  width: 50%;
+}
+.width60 {
+  width: 60%;
+}
+.width70 {
+  width: 70%;
+}
+.width80 {
+  width: 80%;
+}
+.width90 {
+  width: 90%;
+}
+.width100 {
+  width: 100%;
+}
+
+.slide-from-left, .slide-from-right {
+  opacity: 0;
+}
+
+.form-check-input {
+  position: absolute;
+  margin-top: 0.12rem !important;
+  margin-left: 0.25rem !important;
+}
+
+#contact_form_gdpr {
+  clip-path: unset;
+  position: relative;
+  left: 8px;
+  top: 2px;
+}
+
+.cookie-container {
+  position: fixed;
+  display: block;
+  bottom: 32px;
+  left: 32px;
+  width: 700px;
+  max-width: calc(100vw - 80px);
+  height: auto;
+  z-index: 9995;
+  padding: 3px;
+  background-image: $border_gradient;
+  @include polygon-left(24px);
+
+  .cookie-section {
+    position: relative;
+    @include polygon-left(23px);
+
+    form {
+      padding: 1rem 1.125rem 0.4rem 1.125rem;
+      margin: 0;
+      color: $text_white;
+      #cookie_form {
+        position: relative;
+        height: auto;
+        width: 100%;
+        &::after {
+          clear: both;
+          content: "";
+          display: table;
+        }
+      }
+      h2 {
+        margin: 6px;
+      }
+      button {
+        float: left;
+        margin-right: 8px;
+      }
+      #cookie_form_discard {
+        background: $background_black;
+      }
+    }
+  }
+}
+
+.hidden-label {
+  display: none;
+}
+
+.menu-arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  right: 20px;
+  margin: 10px;
+  z-index: 9999;
+  top: calc(50% - 12px);
+  transform: translate(0, -50%) rotate(45deg);
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
+  cursor: pointer;
+  &:hover {
+    border-bottom: 3px solid grey;
+    border-right: 3px solid grey;
+  }
+}
+.menu-arrow-opened {
+  transform: translate(0, -50%) rotate(225deg);
+  top: calc(50% - 8px);
+}
+
+.nav-item {
+  position: relative;
+}
+.closed {
+  display: none;
+}
+
+blockquote {
+  overflow: hidden;
+  padding-right: 1.5em;
+  padding-left: 1.5em;
+  margin-left: 0;
+  margin-right: 0;
+  font-style: italic;
+  border-left: 5px solid #ccc;
+}
+
+.pagination-container {
+  button {
+    padding: 6px 12px;
+    margin: 4px 1px 0 1px;
+  }
+  .pagination {
+    float: left;
+    margin-bottom: 0;
+    li {
+      padding: 2px 12px;
+      margin: 4px 1px 0 1px;
+      background: grey;
+      border-radius: 5px;
+      &:hover {
+        cursor: pointer;
+        box-shadow: 0 0 4px white;
+        transition: .2s;
+      }
+    }
+    .active {
+      background: dimgrey;
+      &:hover {
+        box-shadow: none;
+        cursor: default;
+      }
+    }
+  }
+}
+
+.edit-form-bcg-fe {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  min-height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.card-header {
+  z-index: 0;
+}
+
+.ct-container {
+  width: 100%;
+  height: 100%;
+  background: black;
+  color: white;
+}
+
+.edit-form {
+  padding-top: 64px;
+}
+.btn-close {
+  margin-right: 6px;
+}
+.form-check {
+  margin: 0;
+}

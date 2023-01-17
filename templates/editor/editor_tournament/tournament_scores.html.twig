@@ -1,0 +1,80 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Turnaje | {{ title }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block tournamentScores %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('editor_tournament_scores') }}">
+                    <i class="fa-solid fa-star"></i>
+                    <p>Skóre</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title mt-0">Log submitů skóre <small>[ celkem: {{ tournamentsScores|length }} ]</small></h4>
+                            <p class="card-category"> Zde jsou zobrazeny všechny pokusy při kvalifikaci</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body" id="demo">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="text-primary">
+                                        <tr>
+                                            <th style="min-width: 200px;"><input type="text" class="search form-control" placeholder="Název turnaje" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Název hráče" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="ID Hráče" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Nickname mapy" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="BSR Mapy" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="%" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Skóre" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Obtížnost" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Zalogováno" /></th>
+                                            <th style="min-width: 40px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        {% for key, tournamentsScore in tournamentsScores %}
+                                            <tr>
+                                                <td class="val1">{{ tournamentsScore.tournament.name }}</td>
+                                                <td class="val2" style="min-width: 160px;">{{ tournamentsScore.user.nickname }}</td>
+                                                <td class="val3" style="max-width: 100px;">{{ tournamentsScore.user.uniqueId }}</td>
+                                                <td class="val4">{{ tournamentsScore.map.name }}</td>
+                                                <td class="val4">{{ tournamentsScore.map.bsr }}</td>
+                                                <td class="val4">{{ tournamentsScore.percentage|round(2) }}</td>
+                                                <td class="val4">{{ tournamentsScore.score }}</td>
+                                                <td class="val4">{{ tournamentsScore.map.difficulty }}</td>
+                                                <td class="val4">{{ tournamentsScore.createdAt|date }}</td>
+                                                <td class="td-actions text-right">
+                                                    <form action="{{ path('editor_edit_score', { id: tournamentsScore.id }) }}" method="post">
+                                                        <button name="score-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

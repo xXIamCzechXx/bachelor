@@ -1,0 +1,199 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" notation="{{ page.keywords|raw }}">
+    <meta name="description" notation="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block prehled %}
+            <div class="button-border">
+                <li class="nav-item  active">
+                    <a class="nav-link" href="{{ path('homepage') }}">
+                        <i class="fas fa-map-signs"></i>
+                        <p>Hlavní strana</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="homepage-wrapper">
+
+        <div class="full-screen-video-container">
+            <canvas id=c class="particles-canvas" style="min-height: 800px;"></canvas>
+
+            <a href="{{ path('homepage') }}" style="display: block;"><img class="full-wide-logo" src="{{ asset('build/images/logos/full-wide-logo.png') }}" alt="CzechSaber logo"></a>
+            <img draggable="false" src="{{ asset(page.imgPath(page.imgName)) }}" alt="{{ page.alt }}" class="top-foto-logo">
+            <h2 class="hp-title" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">{{ translator.getValue('HP_MOTTO', 'Hrajeme v pohybu') }}</h2>
+            <h3 id="twitch" class="hp-undertitle grey-text text-center">{{ translator.getValue('HP_SEC_MOTTO', 'VR Eventy a komunita') }}</h3>
+            <img draggable="false" class="hp-image" src="{{ asset('build/images/assets/divka-mcr.jpg') }}">
+            <div class="button-border twitch-button" style="position: absolute; top: calc(50% + 60px); z-index: 1; min-width: 300px; text-align: center; transform: translateX(-50%); left: 50%;">
+                <a href="{{ path("beatsaber") }}" target="">{{ translator.getValue('HP_TOP_FOTO_BUTTON', 'Připojit se do turnaje') }}</a>
+            </div>
+            {#
+                <video class="homepage-video" loop="true" autoplay="autoplay" muted>
+                    <source src="{{ asset('build/videos/webpage-background-1.9ea613d2.mp4') }}" type="video/mp4">
+                    <source src="{{ asset('build/videos/web-background-video.144d19ab.mp4') }}" type="video/mp4">
+                </video>
+            #}
+            <a data-scroll href="#twitch">
+                <div class="round-arrow">
+                    <span class="arrow-object arrow-left"></span>
+                    <span class="arrow-object arrow-right"></span>
+                </div>
+            </a>
+        </div>
+
+        <div class="gamebox-container">
+            <div class="gamebox-section">
+                <a href="{{ path('pavlov') }}" style="display: contents">
+                    <div class="game-container" id="game-container-left">
+                        <button disabled class="c-btn">
+                            <svg width="264px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                            <h2 class="">{{ translator.getValue('LEFT_GAME_BOX_HP', 'Pavlov VR') }}</h2>
+                        </button>
+                        <img class="banner-img" src="{{ asset('build/images/assets/pavlovSmall.png') }}" alt="Pavlov Banner hover" loading="lazy">
+                        <img class="banner-img banner-img-hover" src="{{ asset('build/images/assets/pavlovBig.png') }}" alt="Pavlov Banner hover" loading="lazy">
+                        <img draggable="false" src="{{ asset('build/images/assets/pavlov-2-blur.jpg') }}" alt="Pavlov VR" class="gamebox-image" loading="lazy">
+                        <div class="active-gamebox-image">
+                            <img draggable="false" src="{{ asset('build/images/assets/pavlov-2.jpg') }}" alt="Pavlov VR" class="" loading="lazy">
+                        </div>
+                    </div>
+                </a>
+                <a href="{{ path('beatsaber') }}" style="display: contents">
+                    <div class="game-container" id="game-container-right">
+                        <button disabled class="c-btn">
+                            <svg width="264px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                            <h2 class="">{{ translator.getValue('RIGHT_GAME_BOX_HP', 'Beat Saber') }}</h2>
+                        </button>
+                        <img class="banner-img" src="{{ asset('build/images/assets/bsSmall.png') }}" alt="Beat Saber Banner" loading="lazy">
+                        <img class="banner-img banner-img-hover" src="{{ asset('build/images/assets/bsBig.png') }}" alt="Beat Saber Banner hover" loading="lazy">
+                        <img draggable="false" src="{{ asset('build/images/assets/beat-saber-2-blur.jpg') }}" alt="Beat Saber" class="gamebox-image" loading="lazy">
+                        <div class="active-gamebox-image">
+                            <img draggable="false" src="{{ asset('build/images/assets/beat-saber-2.jpg') }}" alt="Pavlov VR" class="" loading="lazy">
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        {{ include('default/utilities/component/_twitch.html.twig') }}
+
+        <h2 class="text-center black-text" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">{{ translator.getValue('HP_NEWS_TITLE', 'Články ze světa VR') }}</h2>
+        <div class="news-container">
+            <div class="news-section">
+                <div class="news-left-cont" data-aos="fade-right" data-aos-duration="1000">
+                    {% for news in topNews %}
+                        <a href="{{ path('news_detail', { slug: news.slug }) }}">
+                            <div class="news">
+                                <img src="{{ asset(news.imgPath(news.imgName)) }}" alt="{{ news.alt }}" loading="lazy">
+                                {% include('default/news/utilities/labels.html.twig') %}
+                                <button disabled class="c-btn" style="top: 47%;">
+                                    <svg width="280px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                                    <h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit') }}</h2>
+                                </button>
+                                <div class="news-cont-text">
+                                    <h3>{{ news.title|length > news.title|slice(0, newsTitleLength)|length ? news.title|striptags|slice(0, newsTitleLength)~'...' : news.title }}</h3>
+                                    <p>{{ news.notation|length > news.notation|slice(0, newsContentLength)|length ? news.notation|striptags|slice(0, newsContentLength)~'...' : news.notation }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+                {% for news in newsArray %}
+                    <div class="news-right-cont width40" data-aos="fade-left" data-aos-duration="1000">
+                        <a href="{{ path('news_detail', { slug: news.slug }) }}">
+                            <div class="news">
+                                <img src="{{ asset(news.imgPath(news.imgName)) }}" alt="{{ news.alt }}" loading="lazy">
+                                {% include('default/news/utilities/labels.html.twig') %}
+                                <button disabled class="c-btn" style="top: 47%;">
+                                    <svg width="280px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                                    <h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit') }}</h2>
+                                </button>
+                                <div class="news-cont-text">
+                                    <h3>{{ news.title|length > news.title|slice(0, newsTitleLength)|length ? news.title|striptags|slice(0, newsTitleLength)~'...' : news.title }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+                <div class="news-button-cont">
+                    <div class="button-border" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">
+                        <a href="{{ path('news') }}" style="display: block;">
+                            {{ translator.getValue('HP_SHOW_ALL_NEWS', 'Prohlédnout všechny články') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="image-background" style="background-image: url({{ asset('build/images/assets/divka-mcr.jpg') }}) "></div>
+        </div>
+        <div class="gallery-container" style="top: -42px;">
+            <div class="gallery-section">
+                <h2 class="black-text text-center" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">{{ translator.getValue('HP_GALLERY_TITLE', 'Webová galerie') }}</h2>
+                <div class="gallery-image-container" data-aos="fade-right" data-aos-duration="1000">
+                    <a href="{{ path('gallery') }}" style="display: block;">
+                        <div class="gallery-image-section">
+                            <button disabled class="c-btn">
+                                <svg width="300px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                                <h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit') }}</h2>
+                            </button>
+                            <div class="hover-div">
+                                <img src="{{ asset('build/images/assets/IMG_7703-2.jpg') }}" alt="Obrázek z MČR 2021" loading="lazy">
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{{ path('gallery') }}" style="display: block;">
+                        <div class="gallery-image-section">
+                            <button disabled class="c-btn">
+                                <svg width="300px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                                <h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit') }}</h2>
+                            </button>
+                            <div class="hover-div">
+                                <img src="{{ asset('build/images/assets/IMG_7607-2.jpg') }}" alt="Obrázek z MČR 2021" loading="lazy">
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{{ path('gallery') }}" style="display: block;">
+                        <div class="gallery-image-section">
+                            <button disabled class="c-btn">
+                                <svg width="300px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+                                <h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit') }}</h2>
+                            </button>
+                            <div class="hover-div">
+                                <img src="{{ asset('build/images/assets/IMG_7616-2.jpg') }}" alt="Obrázek z MČR 2021" loading="lazy">
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{ include('default/utilities/component/_instagram.html.twig') }}
+
+        <div class="team-container">
+            <div class="team-section">
+                <h2 class="black-text text-center" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">{{ translator.getValue('TEAM_TITLE_HP', 'Organizační tým') }}</h2>
+                <img data-aos="fade-up" data-aos-offset="250" data-aos-duration="400" draggable="false" src="{{ asset('build/images/assets/tatka-render.png') }}" alt="Jan Mach - organizátor" loading="lazy">
+                <img data-aos="fade-up" data-aos-offset="350" data-aos-duration="500" draggable="false" src="{{ asset('build/images/assets/dominik-render.png') }}" alt="Dominik Mach - organizátor" loading="lazy">
+                <img data-aos="fade-up" data-aos-offset="450" data-aos-duration="600" draggable="false" src="{{ asset('build/images/assets/jirka-render.png') }}" alt="Jiří Tomášek - organizátor" loading="lazy">
+                <img data-aos="fade-up" data-aos-offset="550" data-aos-duration="700" draggable="false" src="{{ asset('build/images/assets/davaay-render.png') }}" alt="Lukáš - organizátor" loading="lazy">
+                <img data-aos="fade-up" data-aos-offset="650" data-aos-duration="800" draggable="false" src="{{ asset('build/images/assets/ari-render.png') }}" alt="Samuel Luxík - organizátor" loading="lazy">
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

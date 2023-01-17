@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+	<meta name="keywords" content="{{ page.keywords|raw }}">
+	<meta name="description" content="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block sidebar %}
+	{% embed "default/utilities/sidebar.html.twig" %}
+		{% block galerie %}
+			<div class="button-border">
+				<li class="nav-item active  ">
+					<a class="nav-link" href="{{ path('gallery') }}">
+						<i class="fas fa-book-open"></i>
+						<p>Galerie</p>
+					</a>
+				</li>
+			</div>
+		{% endblock %}
+	{% endembed %}
+{% endblock %}
+
+{% block navbar %}
+	{% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block header %}
+	{% embed 'default/utilities/shared/_topfoto.html.twig' %}
+		{% block topfoto %}
+			<h2 class="top-foto-title">
+				{{ gallery.name }}
+			</h2>
+		{% endblock %}
+	{% endembed %}
+{% endblock %}
+
+
+{% block body %}
+
+	<div class="wrapper-box">
+		<div class="section">
+			<div class="gallery-container">
+				<a href="{{ path('gallery') }}" class="button-border" style="width: 100%;">
+					<h2 class="text-left gallery-title">Zpět do galerie</h2>
+				</a>
+				<div class="fg-gallery additional-class cols-4">
+					{% set missingSmallImages = 8 %}
+					{% for key, image in gallery.galleryImages %}
+						{% if image.view == 1 %}
+							<img src="{{ asset(image.imgPath(image.imgName)) }}" alt="{{ image.alt }}">
+							{% set missingSmallImages = missingSmallImages-1 %}
+						{% endif %}
+					{% endfor %}
+					{% if missingSmallImages > 0 %}
+						{% for i in 0..missingSmallImages-1 %}
+							<img src="{{ asset('build/images/utilities/pripravujeme-dark.png') }}" alt="Zástupný obrázek CzechSaber">
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<button disabled class="c-btn" id="butt-for-gallery">
+		<svg width="280px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+		<h2>{{ translator.getValue('SHOW_BUTTON', 'Zobrazit')|raw }}</h2>
+	</button>
+
+	<script>
+      var a = new FgGallery('.fg-gallery', {
+          cols: 4,
+          style: {
+              border: 'none',
+              height: '260px',
+              boxShadow: '0 2px 10px -5px #858585',
+          }
+      });
+
+      var a = new FgGallery('.ns', {
+          cols: 3,
+          style: {
+              border: '0 solid #fff',
+              height: '320px',
+          }
+      });
+	</script>
+
+{% endblock %}

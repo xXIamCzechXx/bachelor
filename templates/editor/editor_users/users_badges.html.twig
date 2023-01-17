@@ -1,0 +1,181 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Stránky | {{ title }}{% endblock %}
+
+{% block sidebar %}
+	{% embed "editor/utilities/sidebar.html.twig" %}
+		{% block uzivatele %}
+			<li class="nav-item  ">
+				<div class="menu-arrow menu-arrow-opened" data-value="users-index"></div>
+				<a class="nav-link menu-arrow-closed" href="{{ path('editor_users') }}">
+					<i class="material-icons">person</i>
+					<p>Uživatelé</p>
+				</a>
+			</li>
+		{% endblock %}
+		{% block badges %}
+			<li class="nav-item active" style="margin-left: 30px;">
+				<a class="nav-link" href="{{ path('editor_users_badges') }}">
+					<i class="fa-solid fa-id-card-clip"></i>
+					<p>Badge</p>
+				</a>
+			</li>
+		{% endblock %}
+		{% block hdms %}
+			<li class="nav-item users-index" style="margin-left: 30px;">
+				<a class="nav-link" href="{{ path('editor_users_hdms') }}">
+					<i class="fa-solid fa-vr-cardboard"></i>
+					<p>Headsety</p>
+				</a>
+			</li>
+		{% endblock %}
+	{% endembed %}
+{% endblock %}
+
+{% block navbar %}
+	{% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+	<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card" id="myList">
+						<div class="card-header card-header-primary">
+							<h4 class="card-title ">Badge uživatelů <small>[ celkem: {{ badges|length }} ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
+							<p class="card-category">Badge, které se přiřazují jednotlivým uživatelům a zobrazují se na jejich profilu</p>
+							{% include "editor/utilities/paginator/_controls.html.twig" %}
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table">
+									<thead class=" text-primary">
+										<tr>
+											<th>Obrázek</th>
+											<th><input type="text" class="search form-control" placeholder="Název badge" /></th>
+											<th><input type="text" class="search form-control" placeholder="Název obrázku" /></th>
+											<th><input type="text" class="search form-control" placeholder="Počet uživatelů" /></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody class="list">
+										{% for key, badge in badges %}
+											<tr>
+												<td style="width: 132px;">
+													{% if badge.imgName is not null or badge.imgName != '' %}
+														<img class="editor-preview-image" src="{{ asset(badge.imgPath(badge.imgName)) }}">
+													{% else %}
+														<img class="editor-preview-image" src="{{ asset(badge.imgPath()) }}">
+													{% endif %}
+												</td>
+												<td class="val1" style="min-width: 224px;">{{ badge.name }}</td>
+												<td class="val2" style="min-width: 224px;">{{ badge.imgName }}</td>
+												<td class="val3" style="min-width: 224px;">{{ badge.users|length }}</td>
+												<td style="min-width: 132px;" class="td-actions text-right">
+													<form action="{{ path('editor_edit_user_badge', { id: badge.id }) }}" method="post">
+														<a onclick="showTable({{ badge.id }})">
+															<div rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+																<i class="material-icons">edit</i>
+															</div>
+														</a>
+														{% if badge.view == 1 %}
+															<button name="badge-action" value="hide" type="submit" rel="tooltip" title="Skrýt" class="btn btn-success btn-link btn-sm">
+																<i class="far fa-eye"></i>
+															</button>
+														{% else %}
+															<button name="badge-action" value="show" type="submit" rel="tooltip" title="Zobrazit" class="btn btn-danger btn-link btn-sm">
+																<i class="far fa-eye-slash"></i>
+															</button>
+														{% endif %}
+														<button name="badge-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+															<i class="far fa-trash-alt"></i>
+														</button>
+													</form>
+												</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% for key, badge in badges %}
+			<form action="{{ path('editor_edit_user_badge', { id: badge.id }) }}" method="POST" enctype="multipart/form-data">
+				<div class="edit-form-bcg {{ badge.id }}"></div>
+				<div class="edit-form {{ badge.id }}">
+					<div class="card">
+						<div class="card-header card-header-success">
+							<h4 class="card-title">Editace badge {{ badge.name }}</h4>
+							<!--<p class="card-category">Complete your profile</p>-->
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-2">
+									{% if badge.imgName is not null or badge.imgName != '' %}
+										<img class="editor-preview-image" src="{{ asset(badge.imgPath(badge.imgName)) }}">
+									{% else %}
+										<img class="editor-preview-image" src="{{ asset(badge.imgPath()) }}">
+									{% endif %}
+								</div>
+								<div class="col-md-6">
+									<label for="validatedCustomMainFile" class="bmd-label-floating"><small>Obrázek ...</small></label>
+									<div class="custom-file mb-3">
+										<input type="file" class="custom-file-input" name="badge-image" id="validatedCustomMainFile" placeholder="Vybrat ...">
+										<label class="custom-file-label" for="validatedCustomMainFile">Vybrat ...</label>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group" style="margin-top: 35px;">
+										<label class="bmd-label-floating">Název badge</label>
+										<input type="text" name="badge-name" value="{{ badge.name }}" class="form-control">
+									</div>
+								</div>
+							</div>
+							<button type="submit" name="badge-action" value="edit" class="btn btn-primary pull-right">Upravit badge</button>
+							<button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+			</form>
+		{% endfor %}
+		<form action="{{ path('editor_add_user_badge') }}" method="POST" enctype="multipart/form-data">
+			<div class="edit-form-bcg add"></div>
+			<div class="edit-form add">
+				<div class="card">
+					<div class="card-header card-header-success">
+						<h4 class="card-title">Přidání nového badge</h4>
+						<div class="clearfix"></div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-2">
+								<img class="editor-preview-image" src="{{ asset('build/images/utilities/nocontentyet.jpg') }}">
+							</div>
+							<div class="col-md-6">
+								<label for="validatedCustomMainFile" class="bmd-label-floating"><small>Obrázek ...</small></label>
+								<div class="custom-file mb-3">
+									<input type="file" class="custom-file-input" name="badge-image" id="validatedCustomMainFile" placeholder="Vybrat ...">
+									<label class="custom-file-label" for="validatedCustomMainFile">Vybrat ...</label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group" style="margin-top: 35px;">
+									<label class="bmd-label-floating">Název badge</label>
+									<input type="text" name="badge-name" value="" class="form-control">
+								</div>
+							</div>
+						</div>
+						<button type="submit" name="badge-action" value="add" class="btn btn-primary pull-right">Přidat badge</button>
+						<button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}

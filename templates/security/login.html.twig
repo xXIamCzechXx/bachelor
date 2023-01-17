@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" content="{{ page.keywords|raw }}">
+    <meta name="description" content="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block login %}
+            <div class="button-border">
+                <li class="nav-item active  ">
+                    <a class="nav-link" href="{{ path('app_login') }}">
+                        <i class="far fa-address-card"></i>
+                        <p>Přihlášení</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper-box">
+        <div class="section">
+            {{ include('default/utilities/component/_figures.html.twig') }}
+            <div class="default-form" id="login-form">
+                <form method="post">
+                    <h2 class="text-center">Vstup do virtuálního světa</h2><hr>
+                    <div class="col-md-12 form-group bmd-form-group float-left form-group is-filled">
+                        <input type="text" value="{{ last_username }}" name="login" id="inputEmail" class="form-control" required autofocus placeholder="Váš e-mail...">
+                        <small class="form-text text-muted">E-mailová adresa ...</small>
+                    </div>
+                    <div class="col-md-12 form-group bmd-form-group float-left form-group is-filled">
+                        <input type="password" name="password" id="inputPassword" class="form-control" required placeholder="Vaše heslo...">
+                        <small class="form-text text-muted">Heslo ...</small>
+                    </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    {# <div class="checkbox float-left">
+                        <label><input type="checkbox" name="_remember_me"> Zapamatovat si přihlašovací údaje</label>
+                    </div> #}
+
+                    <div class="col-md-6 button-border duo float-left"><button class="" type="submit">Přihlásit se</button></div>
+                    <div class="col-md-6 button-border duo float-left"><a class="" href="{{ path('app_register') }}">Nemám účet</a></div>
+                </form>
+            </div>
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

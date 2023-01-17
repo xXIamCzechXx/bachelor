@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+    <link rel="icon" type="image/png" href="{{ asset('build/images/logos/logo.5a5bebe3.png') }}">
+    <script src="https://kit.fontawesome.com/05c0bf8e9c.js" crossorigin="anonymous"></script>
+    <!--     Fonts and icons     -->
+    <link rel="stylesheet" href="{{ asset('editor/css/material-dashboard.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <title>{% block title %}Ghi | K&K S Láskou{% endblock %}</title>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!--   Core JS Files   -->
+        <!--  Rich text editor -->
+        <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+        <!--  Other and custom js -->
+        <script src="{{ asset('editor/js/custom.js') }}"></script>
+        <script src="{{ asset('editor/js/core/jquery.min.js') }}"></script>
+        <script src="{{ asset('editor/js/core/popper.min.js') }}"></script>
+        <script src="{{ asset('editor/js/core/bootstrap-material-design.min.js') }}"></script>
+        <script src="{{ asset('editor/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script>
+        <!-- Plugin for the momentJs  -->
+        {# <script src="{{ asset('editor/js/plugins/moment.min.js') }}"></script> #}
+        <!-- Forms Validations Plugin -->
+        {# <script src="{{ asset('editor/js/plugins/jquery.validate.min.js') }}"></script> #}
+        <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
+        {# <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js') }}"></script> #}
+        <!-- Library for adding dinamically elements -->
+        {# <script src="{{ asset('editor/js/plugins/arrive.min.js') }}"></script> #}
+        <!-- Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
+        {# <script src="{{ asset('editor/js/plugins/bootstrap-datetimepicker.min.js') }}"></script> #}
+        <!--  Plugin for Sweet Alert -->
+        {#  <script src="{{ asset('editor/js/plugins/sweetalert2.js') }}"></script> #}
+        <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+        {#  <script src="{{ asset('editor/js/plugins/jquery.bootstrap-wizard.js') }}"></script> #}
+        <!-- Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+        {# <script src="{{ asset('editor/js/plugins/bootstrap-selectpicker.js') }}"></script> #}
+        <!-- DataTables.net Plugin, full documentation here: https://datatables.net/  -->
+        {# <script src="{{ asset('editor/js/plugins/jquery.dataTables.min.js') }}"></script> #}
+        <!-- Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+        {# <script src="{{ asset('editor/js/plugins/bootstrap-tagsinput.js') }}"></script> #}
+        <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+        {# <script src="{{ asset('editor/js/plugins/jasny-bootstrap.min.js') }}"></script> #}
+        <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
+        {# <script src="{{ asset('editor/js/plugins/jquery-jvectormap.js') }}"></script> #}
+        <!-- Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+        {# <script src="{{ asset('editor/js/plugins/nouislider.min.js') }}"></script> #}
+
+        <!-- Chartist JS -->
+        <script src="{{ asset('editor/js/plugins/chartist.min.js') }}"></script>
+        <!-- Notifications Plugin    -->
+        <script src="{{ asset('editor/js/plugins/bootstrap-notify.js') }}"></script>
+        <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+        <script src="{{ asset('editor/js/material-dashboard.js?v=2.1.2') }}" type="text/javascript"></script>
+
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body class="dark-edition">
+    <div class="wrapper">
+
+        {% for key, message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for key, message in app.flashes('danger') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for key, message in app.flashes('warning') %}
+            <div class="alert alert-warning">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="main-panel">
+            {% block sidebar %}{% endblock %}
+            {% block navbar %}{% endblock %}
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,289 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Uživatelé | {{ title }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block uzivatele %}
+            <li class="nav-item active  ">
+                <div class="menu-arrow menu-arrow-closed" data-value="users-index"></div>
+                <a class="nav-link menu-arrow-closed" href="{{ path('editor_users') }}">
+                    <i class="material-icons">person</i>
+                    <p>Uživatelé</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title mt-0"> Uživatelé <small>[ celkem: {{ users|length }} ]</small></h4>
+                            <p class="card-category"> Zde jsou zobrazeni všichni zaregistrovaní uživatelé webu</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class=" text-primary">
+                                        <tr>
+                                            <th><input type="text" class="search form-control" placeholder="Hráčské ID" /></th>
+                                            <th style="min-width: 150px;"><input type="text" class="search form-control" placeholder="Nickname" /></th>
+                                            <th style="min-width: 200px;"><input type="text" class="search form-control" placeholder="Jméno a příjmení" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Headset" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="E-mail" /></th>
+                                            <th style="min-width: 132px;"><input type="text" class="search form-control" placeholder="Datum narození" /></th>
+                                            <th style="min-width: 180px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        {% for key, user in users %}
+                                            <tr>
+                                                <td class="val1"{% if user.getTournaments[0] is defined %}style="color: green;"{% endif %}>{{ user.uniqueId }}</td>
+                                                <td class="val2">{{ user.nickname }}</td>
+                                                <td class="val3">{% if user.gender != 'Žena' %}<i class="fa fa-male" aria-hidden="true"></i>{% else %}<i class="fa fa-female" aria-hidden="true"></i>{% endif %}&nbsp;&nbsp;{{ user.firstName }}</td>
+                                                <td class="val4">{{ user.hdm is not null ? user.hdm.name : 'Bez HDM' }}</td>
+                                                <td class="val5">{{ user.email }}</td>
+                                                <td>{{ user.birthdate|date("Y-m-d") }}</td>
+                                                <td class="td-actions text-right">
+                                                    <form action="{{ path('editor_edit_user', { id: user.id }) }}" method="post">
+                                                        <a onclick="showTable({{ user.id }})">
+                                                            <button type="button" rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                                <i class="material-icons">edit</i>
+                                                            </button>
+                                                        </a>
+                                                        <button name="user-action" value="regenerate-unique-id" type="submit" rel="tooltip" title="Vygenerovat Unique ID" class="btn {{ user.uniqueId == "" ? '' : 'btn-success' }} btn-link btn-sm" {{ user.uniqueId == "" ? '' : 'disabled' }}>
+                                                            <i class="fa fa-id-badge" aria-hidden="true"></i>
+                                                        </button>
+                                                        <button name="user-action" value="recalculate-score" type="submit" rel="tooltip" title="Přepočítat skóre" class="btn" style="background: rgba(0,0,0,0);">
+                                                            <i class="fas fa-star-half-alt"></i>
+                                                        </button>
+                                                        <button name="user-action" value="recalculate-score" type="submit" rel="tooltip" title="Přepočítat skóre" class="btn" style="background: rgba(0,0,0,0);">
+                                                            <i class="fas fa-star-half-alt"></i>
+                                                        </button>
+                                                        {% if user.active == 1 %}
+                                                            <button name="user-action" value="hide" type="submit" rel="tooltip" title="Zneaktivnit" class="btn btn-success btn-link btn-sm">
+                                                                <i class="far fa-eye"></i>
+                                                            </button>
+                                                        {% else %}
+                                                            <button name="user-action" value="show" type="submit" rel="tooltip" title="Zaktivnit" class="btn btn-danger btn-link btn-sm">
+                                                                <i class="far fa-eye-slash"></i>
+                                                            </button>
+                                                        {% endif %}
+                                                        <button name="user-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </button>
+                                                        <a onclick="showTable('user'+{{ user.id }})">
+                                                            <button type="button" rel="tooltip" title="Změnit heslo" class="btn btn-primary btn-link btn-sm">
+                                                                <i class="fas fa-key"></i>
+                                                            </button>
+                                                        </a>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    {% for key, user in users %}
+                                        <form action="{{ path('editor_edit_user', { id: user.id }) }}" method="POST" enctype="multipart/form-data">
+                                            <div class="edit-form-bcg {{ 'user'~user.id }}"></div>
+                                            <div class="edit-form {{ 'user'~user.id }}">
+                                                <div class="card">
+                                                    <div class="card-header card-header-primary" style="margin: -20px 15px 15px 15px;">
+                                                        <h4 class="card-title">Změna hesla uživatele: {{ user.firstName }}</h4>
+                                                        <p class="card-category">Važte zvýšené opatrnosti při změně hesla. Po změně budou všichni uživatelé tohoto účtu odhlášeni</p>
+                                                    </div>
+                                                    <div class="card-body" style="padding: 0.9375rem 20px">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="bmd-label-floating">Nové heslo</label>
+                                                                    <input type="password" name="user-password" value="" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="bmd-label-floating">Nové heslo znovu</label>
+                                                                    <input type="password" name="user-passwordRepeat" value="" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button type="submit" name="user-action" value="password" class="btn btn-primary pull-right">Změnit heslo</button>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="edit-form-bcg {{ user.id }}"></div>
+                                            <div class="edit-form {{ user.id }}">
+                                                <div class="card">
+                                                    <div class="card-header card-header-primary" style="margin: -20px 15px 15px 15px;">
+                                                        <h4 class="card-title">Editace uživatele: {{ user.firstName }}</h4>
+                                                        <p class="card-category">Po této úpravě budou všichni uživatelé z tohoto účtu odhlášeni</p>
+                                                    </div>
+                                                    <div class="card-body" style="padding: 0.9375rem 20px">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="bmd-label-floating">Jméno a příjmení</label>
+                                                                    <input type="text" name="user-name" required value="{{ user.firstName }}" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="bmd-label-floating">Přihlašovací jméno</label>
+                                                                    <input type="text" name="user-nickname" required value="{{ user.nickname }}" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <input type="datetime-local" name="user-birthday" min="" value="{{ user.birthdate|date("Y-m-d\\TH:i:s") }}" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label class="bmd-label-floating">Země</label>
+                                                                    <select name="user-country" class="custom-select">
+                                                                        {% for country in countries %}
+                                                                            {% if country.id == user.country.id %}
+                                                                                <option value="{{ country.id }}" selected>{{ country.name }}</option>
+                                                                            {% else %}
+                                                                                <option value="{{ country.id }}">{{ country.name }}</option>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="bmd-label-floating">E-mail</label>
+                                                                    <input type="email" name="" value="{{ user.email }}" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label class="bmd-label-floating">Pohlaví</label>
+                                                                    <select name="user-gender" class="custom-select">
+                                                                        <option value="Muž" {% if app.user.gender == "Muž" %}selected{% endif %}>Muž</option>
+                                                                        <option value="Žena" {% if app.user.gender == "Žena" %}selected{% endif %}>Žena</option>
+                                                                        <option value="Jiné" {% if app.user.gender == "Jiné" %}selected{% endif %}>Jiné</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <label for="exampleColorInput" class="bmd-label-floating">Barva profilu</label>
+                                                                    <input type="color" name="user-color" class="form-control form-control-color" id="exampleColorInput" value="{{ user.color }}" title="Vyber barvu" style="padding: 0;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="bmd-label-floating">Scoresaber ID</label>
+                                                                    <input type="number" name="scoresaber-id" value="{{ user.scoresaberId == 0 ? '' : user.scoresaberId }}" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="bmd-label-floating">Twitch Nickname</label>
+                                                                    <input type="text" name="twitch-nickname" value="{{ user.twitchNickname }}" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="bmd-label-floating">Discord Nickname</label>
+                                                                    <input type="text" name="discord-nickname" value="{{ user.discordNickname }}" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+                                                                {% if user.imgName is not null and user.imgName != '' %}
+                                                                    <img class="editor-preview-image" style="max-width: 78px;" src="{{ asset(user.imgPath(user.imgName)) }}">
+                                                                {% else %}
+                                                                    <img class="editor-preview-image" style="max-width: 78px;" src="{{ asset(user.imgPath()) }}">
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="validatedCustomMainFile" class="bmd-label-floating"><small>Profilový obrázek ...</small></label>
+                                                                <div class="custom-file mb-3">
+                                                                    <input type="file" class="custom-file-input" name="user-image" id="validatedCustomMainFile" placeholder="Vybrat ...">
+                                                                    <label class="custom-file-label" for="validatedCustomMainFile">Vybrat ...</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="validatedCustomMainFile" class="bmd-label-floating" style="margin-top: 12px;">Headset ...</label>
+                                                                    <select name="user-hdm" id="views" class="custom-select" style="margin-top: 24px;">
+                                                                        {% for hdm in hdms %}
+                                                                            {% if user.hdm.name is defined and hdm.name == user.hdm.name %}
+                                                                                <option value="{{ hdm.name }}" selected>{{ hdm.name }}</option>
+                                                                            {% else %}
+                                                                                <option value="{{ hdm.name }}">{{ hdm.name }}</option>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    <label>Popis uživatele</label>
+                                                                    <div class="form-group">
+                                                                        <label class="bmd-label-floating">Popis uživatele, který si sám nastavuje a mohou ho vidět ostatní uživatelé na tomto profilu...</label>
+                                                                        <textarea name="user-description" class="form-control" rows="5">{{ user.description }}</textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4" style="margin-top: 40px;">
+                                                                <div class="form-group">
+                                                                    <label for="exampleFormControlSelect2">Badge</label>
+                                                                    <select multiple name="badge-action[]" class="form-control" id="exampleFormControlSelect2" style="height: auto; min-height: 112px;">
+                                                                        {% if badges|length == 0 %}
+                                                                            <option disabled>Žádné badge</option>
+                                                                        {% else %}
+                                                                            <option value="0" class="danger-link">Smazat vybrané badge</option>
+                                                                            {% for badge in badges %}
+                                                                                {% set badgeIndex = 0 %}
+                                                                                {% for badgeUser in user.badge %}
+                                                                                    {% if badgeUser.name == badge.name %}
+                                                                                        <option selected value="{{ badgeUser.id }}">{{ badgeUser.name }}</option>
+                                                                                        {% set badgeIndex = 1 %}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                                {% if badgeIndex == 0 %}
+                                                                                    <option value="{{ badge.id }}">{{ badge.name }}</option>
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button type="submit" name="user-action" value="edit" class="btn btn-primary pull-right">Uložit změny uživatele</button>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

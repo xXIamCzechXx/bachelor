@@ -1,0 +1,36 @@
+<footer>
+    <div class="footer">
+        <div class="footer-links-container">
+            <a href="https://www.playzone.cz/" target="_blank" id="playzone-logo"><img src="{{ asset('build/images/admins/playzone_logo_red.png') }}" alt="PlayZONE Logo"</a>
+            <a href="https://www.vive.com/us/" target="_blank" id="vive-logo"><img src="{{ asset('build/images/admins/vive.png') }}" alt="HTC Vive Logo"></a>
+            <a href="https://www.paranskyraj.cz/" target="_blank" id="paran-logo"><img src="{{ asset('build/images/admins/paranskyraj_logo.png') }}" alt="Pařanský ráj Logo"></a>
+        </div>
+        <div class="footer-container">
+            <div class="social-buttons-container">
+                <div class="social-buttons-section">
+                    <a href="https://www.facebook.com/beatsabervcr/" class="social-round-icon" target="_blank"><i class="fab fa-facebook-f" style="margin: 0 auto;"></i></a>
+                    <a href="https://www.twitch.tv/czechsaber" class="social-round-icon" target="_blank"><i class="fab fa-twitch" style="margin: 0 auto;"></i></a>
+                    <a href="https://discord.gg/r42NEPt3w5" class="social-round-icon" target="_blank"><i class="fab fa-discord" style="margin: 0 auto;"></i></a>
+                    <a href="https://www.youtube.com/channel/UCgJaZlXsYYHK4lPkksYwx3A/featured" class="social-round-icon mobile-device" target="_blank"><i class="fab fa-youtube" style="margin: 0 auto;"></i></a>
+                    <a href="https://www.instagram.com/czechsaber/" class="social-round-icon" target="_blank"><i class="fab fa-instagram" style="margin: 0 auto;"></i></a>
+                    <a href="mailto:czechsaber@gmail.com" class="social-round-icon mobile-device" target="_blank"><i class="far fa-envelope" style="margin: 0 auto;"></i></a>
+                </div>
+            </div>
+            <h5 class="white-text">{{ translator.getValue('FOOTER_MAIN_TEXT', 'Vytváříme zde největší VR komunitu v Čechách a na Slovensku. Velmi silně se naše komunita rozrůstá o nové hráče a hráčky. Snažíme se vytvořit příjemné a zábavné prostředí, ve kterém se budete cítit dobře. Naším cílem je lidem pomáhat, radit a pořádat turnaje, kde si můžou poměřit své síly i s těmi nejlepšími!')|raw }}</h5>
+            <hr>
+            <div class="social-buttons-container">
+                <div class="social-buttons-section">
+                    <a href="{{ path('homepage') }}">Hlavní strana</a><span> | </span>
+                    <a href="{{ path('gallery') }}">Galerie</a><span> | </span>
+                    <a href="{{ path('homepage') }}">O Czech Saberu</a><span> | </span>
+                    <a href="{{ path('pavlov') }}">Pavlov VR</a><span> | </span>
+                    <a href="{{ path('beatsaber') }}">Beat Saber</a>
+                </div>
+            </div>
+            <h5 class="">{{ translator.getValue('FOOTER_GREY_TEXT', 'Nebojte se nás kontaktovat ohledně dotazů, informací, nápadů a případných nedostatků.<br>Budeme rádi, za každého nového hráče nebo případnou spolupráci.')|raw }}</h5>
+            <a href="{{ path('homepage') }}"><img class="footer-logo" src="{{ asset('build/images/logos/full-wide-logo.png') }}" alt="Logo Czech Saber"></a>
+            <h6 class="grey-text">©2021-2022 Made by Dominik Mach [ xXIamCzechXx ], All rights reserved (všechna práva vyhrazena)</h6>
+        </div>
+        <div class="image-background" style="background-image: url({{ asset('build/images/assets/IMG_7703-2.jpg') }}) "></div>
+    </div>
+</footer>

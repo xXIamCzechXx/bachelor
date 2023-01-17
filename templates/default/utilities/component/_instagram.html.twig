@@ -1,0 +1,17 @@
+<div class="instagram-container">
+    <div class="instagram-section">
+        <h2 class="white-text text-center" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">{{ translator.getValue('HP_INSTAGRAM_FEED_TITLE', 'Instagram feed')|raw }}</h2>
+        <button disabled class="c-btn" id="butt-for-insta">
+            <svg width="300px" height="120px" viewBox="0 0 180 60"><polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" /><polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" /></svg>
+            <h2>{{ translator.getValue('INSTAGRAM_BUTTON_TEXT', '#czechsaber')|raw }}</h2>
+        </button>
+        <div id="instafeed-container" class="place-for-insta"  data-aos="fade-left" data-aos-duration="1000"></div>
+    </div>
+    <div class="image-background" style="background-image: url({{ asset('build/images/assets/divka-mcr.jpg') }}) "></div>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/stevenschobert/instafeed.js@2.0.0rc1/src/instafeed.min.js"></script>
+{# <script src="{{ asset('editor/js/instafeed.js') }}"></script> #}
+<script type="text/javascript">
+
+</script>
+{# {{ translator.value("INSTAGRAM_FEED_TOKEN", "IGQVJYS0JHa0RZANjVIWG03VEsyQnJCMVVYaVBkUV83X2RDazFyWHR4UHNIbl90bDc0TExyQ1FxcmJkVnFnRlFzU05ZAV3QydjJGQjZAQN3BSTHA3QlAzVGNKRktwVF9uVElJQ3BIVjJZATGNZAd0gxNHhfdQZDZD")|raw }} #}

@@ -1,0 +1,39 @@
+/* BLACK */
+/* WHITE */
+/* TEXT */
+/* ETC */
+/* BACKGROUND */
+.visuallyHidden {
+  display: none;
+}
+
+.desktop-device {
+  display: none;
+}
+
+.mobile-device {
+  display: block;
+}
+
+@media screen and (max-width: 1024px) {
+  .mobile-device {
+    display: none;
+  }
+}
+.right {
+  right: 0;
+}
+
+.left {
+  left: 0;
+}
+
+.float-left {
+  float: left;
+}
+
+.flex {
+  display: flex !important;
+}
+
+/*# sourceMappingURL=config.css.map */
