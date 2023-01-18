@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @IsGranted("ROLE_USER")
  */
-
 class AccountController extends BaseController
 {
     /**

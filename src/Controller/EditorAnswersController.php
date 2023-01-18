@@ -22,7 +22,6 @@ class EditorAnswersController extends BaseEditorController
         $answers = $this->em->getRepository(FormAnswers::class)->findAll();
 
         return $this->render('editor/editor_answers/answers.html.twig', [
-            'title' => EditorController::PAGE_TITLE,
             'answers' => $answers,
         ]);
     }

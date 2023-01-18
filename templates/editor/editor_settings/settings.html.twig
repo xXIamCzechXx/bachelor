@@ -1,0 +1,77 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Stránky | {{ editorTitle }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block settings %}
+            <li class="nav-item active ">
+                <a class="nav-link" href="{{ path('editor_settings') }}">
+                    <i class="fa fa-sliders" aria-hidden="true"></i>
+                    <p>Nastavení</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="horizontal-space" style="height: 10px;"></div>
+            <form action="{{ path('editor_edit_settings', { id: settings.data.id }) }}" method="POST">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Nastavení a konfigurace webu</h4>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <hr>
+                                <h3>Instagram</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Instagram feed token</label>
+                                <div class="form-group">
+                                    <label class="bmd-label-floating"></label>
+                                    <input type="text" name="settings-instagram-feed-token" value="{{ settings.data.instagramFeedToken }}" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <hr>
+                                <h3>Google</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Recaptcha secret key</label>
+                                <div class="form-group">
+                                    <label class="bmd-label-floating"></label>
+                                    <input type="text" name="settings-recaptcha-secret-key" value="{{ settings.data.recaptchaSecretKey }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Recaptcha site key</label>
+                                <div class="form-group">
+                                    <label class="bmd-label-floating"></label>
+                                    <input type="text" name="settings-recaptcha-site-key" value="{{ settings.data.recaptchaSiteKey }}" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" name="settings-action" value="edit" class="btn btn-primary pull-right">Změnit nastavení</button>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

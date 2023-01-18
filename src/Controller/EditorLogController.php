@@ -19,7 +19,6 @@ class EditorLogController extends BaseEditorController
         $logs = $logRepo->findAllOrderBy('id','DESC');
 
         return $this->render('editor/editor_log/log.html.twig', [
-            'title' => EditorController::PAGE_TITLE,
             'logs' => $logs,
         ]);
     }

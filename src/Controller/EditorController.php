@@ -21,10 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class EditorController extends BaseEditorController
 {
-
     use Traits\EditorErrorHandlers;
-
-    const PAGE_TITLE = 'CzechSaber';
 
     /**
      * @Route("/editor-overview", name="editor")
@@ -40,7 +37,6 @@ class EditorController extends BaseEditorController
         $logs = $logRepo->findAllOrderBy('id', 'DESC', 10, 0);
 
         return $this->render('editor/index.html.twig', [
-            'title' => self::PAGE_TITLE,
             'users' => $users,
             'tournaments' => $tournaments,
             'images' => $images,

@@ -25,7 +25,6 @@ class EditorGalleryController extends BaseEditorController
     $categories = $this->em->getRepository(GalleryCategories::class)->findAll();
 
     return $this->render('editor/editor_gallery/gallery.html.twig', [
-      'title' => EditorController::PAGE_TITLE,
       'gallery' => $gallery,
       'categories' => $categories,
       'pagesNameLength' => 100,
@@ -237,7 +236,6 @@ class EditorGalleryController extends BaseEditorController
     $galleryCategories = $this->em->getRepository(GalleryCategories::class)->findAll();
 
     return $this->render('editor/editor_gallery/gallery_categories.html.twig', [
-      'title' => EditorController::PAGE_TITLE,
       'galleryCategories' => $galleryCategories,
     ]);
   }

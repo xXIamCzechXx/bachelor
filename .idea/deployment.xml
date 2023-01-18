@@ -37,17 +37,10 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="czechsaber">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
       <paths name="czechsaber-wedos">
         <serverdata>
           <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$/../czechsaber-wedos" web="/" />
           </mappings>
           <excludedPaths>
             <excludedPath path="/.env.local.php" />
@@ -62,7 +55,7 @@
       <paths name="czechsaber-wedos (1)">
         <serverdata>
           <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$/../czechsaber-wedos" web="/" />
           </mappings>
           <excludedPaths>
             <excludedPath path="/.env.local.php" />
@@ -355,6 +348,13 @@
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="xxiamczechxx">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
