@@ -7,7 +7,7 @@ twig:
         translator: '@app.translator'
         settings: '@app.settings'
         cookie: '@app.cookie'
-        editorTitle: 'Czechsaber'
+        editorTitle: 'Czechsaber e'
 
 when@test:
     twig:
