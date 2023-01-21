@@ -20,7 +20,6 @@ class EditorConstantsController extends BaseEditorController
     {
         $constants = $constantsRepo->findAllOrderBy('name', 'ASC');
         return $this->render('editor/editor_constants/constants.html.twig', [
-            'title' => EditorController::PAGE_TITLE,
             'constants' => $constants,
         ]);
     }

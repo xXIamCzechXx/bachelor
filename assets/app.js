@@ -48,7 +48,7 @@ function getCookie(name) {
 
 $(document).ready(function ()
 {
-    console.log('start');
+    /* Ajax is a little bit too much for getting this kind of information to template
     $.ajax({
         url: '/instagram-token',
         method: 'POST'
@@ -62,7 +62,7 @@ $(document).ready(function ()
         });
         userFeed.run();
     });
-
+    */
 
     //File input js
     $('.custom-file-input').on('change', function(event) {

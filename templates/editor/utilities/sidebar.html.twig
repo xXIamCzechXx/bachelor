@@ -1,9 +1,7 @@
 {% block sidebar %}
     <div class="sidebar" data-color="azure" data-background-color="white" data-image="editor/img/sidebar-1.jpg">
         <div class="logo">
-            <a href="{{ path('homepage') }}" class="simple-text logo-normal">
-                {{ title is defined ? title : '' }}
-            </a>
+            <a href="{{ path('homepage') }}" class="simple-text logo-normal">{{ editorTitle }}</a>
         </div>
         <div class="sidebar-wrapper">
             <ul class="nav">
@@ -17,7 +15,7 @@
                 {% endblock %}
                 {% block settings %}
                     <li class="nav-item  ">
-                        <a class="nav-link" href="{{ path('editor') }}">
+                        <a class="nav-link" href="{{ path('editor_settings') }}">
                             <i class="fa fa-sliders" aria-hidden="true"></i>
                             <p>Nastavení</p>
                         </a>

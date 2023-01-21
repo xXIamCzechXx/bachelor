@@ -24,7 +24,6 @@ class EditorTournamentController extends BaseEditorController
     {
         $tournaments = $this->em->getRepository(Tournaments::class)->findAll();
         return $this->render('editor/editor_tournament/tournament.html.twig', [
-            'title' => EditorController::PAGE_TITLE,
             'tournaments' => $tournaments,
         ]);
     }
@@ -36,7 +35,6 @@ class EditorTournamentController extends BaseEditorController
     {
         $tournamentsScores = $tournamentsScoresRepo->findAllOrderBy('createdAt', 'DESC');
         return $this->render('editor/editor_tournament/tournament_scores.html.twig', [
-            'title' => EditorController::PAGE_TITLE,
             'tournamentsScores' => $tournamentsScores,
         ]);
     }

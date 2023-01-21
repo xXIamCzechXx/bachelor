@@ -26,7 +26,6 @@ class EditorPagesController extends BaseEditorController
         $pages = $this->em->getRepository(Pages::class)->findAll();
 
         return $this->render('editor/editor_pages/pages.html.twig', [
-            'title' => EditorController::PAGE_TITLE,
             'pages' => $pages,
             'pagesNameLength' => 100,
             'pagesDescriptionLength' => 120,

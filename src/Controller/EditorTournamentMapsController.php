@@ -19,7 +19,6 @@ class EditorTournamentMapsController extends BaseEditorController
     {
         $tournamentsMaps = $this->em->getRepository(TournamentsMaps::class)->findAll();
         return $this->render('editor/editor_tournament/tournament_maps.html.twig', [
-            'title' => EditorController::PAGE_TITLE,
             'tournamentsMaps' => $tournamentsMaps,
         ]);
     }

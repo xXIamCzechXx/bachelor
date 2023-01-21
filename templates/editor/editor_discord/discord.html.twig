@@ -1,6 +1,6 @@
 {% extends 'editor.html.twig' %}
 
-{% block title %}Stránky | {{ title is defined ? title : '' }}{% endblock %}
+{% block title %}Stránky | {{ editorTitle }}{% endblock %}
 
 {% block sidebar %}
     {% embed "editor/utilities/sidebar.html.twig" %}

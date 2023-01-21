@@ -36,7 +36,6 @@ class EditorNewsController extends BaseEditorController
       $categories = $this->em->getRepository(NewsCategories::class)->findAll();
 
       return $this->render('editor/editor_news/news.html.twig', [
-        'title' => EditorController::PAGE_TITLE,
         'newsTitleLength' => 44,
         'newsContentLength' => 80,
         'newsArray' => $news,
@@ -294,7 +293,6 @@ class EditorNewsController extends BaseEditorController
     $categories = $categoryRepository->findAll();
 
     return $this->render('editor/editor_news/news_categories.html.twig', [
-      'title' => EditorController::PAGE_TITLE,
       'categories' => $categories,
     ]);
   }

@@ -37,7 +37,6 @@ class EditorUsersController extends BaseEditorController
         $hdms = $this->em->getRepository(Hdm::class)->findBy(['view' => 1]);
 
         return $this->render('editor/editor_users/users.html.twig', [
-            'title' => EditorController::PAGE_TITLE,
             'users' => $users,
             'hdms' => $hdms,
             'countries' => $countries,
@@ -53,7 +52,6 @@ class EditorUsersController extends BaseEditorController
         $badges = $this->em->getRepository(UserBadges::class)->findAll();
 
         return $this->render('editor/editor_users/users_badges.html.twig', [
-                'title' => EditorController::PAGE_TITLE,
                 'badges' => $badges
         ]);
     }
@@ -66,8 +64,7 @@ class EditorUsersController extends BaseEditorController
         $hdms = $this->em->getRepository(Hdm::class)->findAll();
 
         return $this->render('editor/editor_users/users_hdms.html.twig', [
-                'title' => EditorController::PAGE_TITLE,
-                'hdms' => $hdms
+            'hdms' => $hdms
         ]);
     }
 
