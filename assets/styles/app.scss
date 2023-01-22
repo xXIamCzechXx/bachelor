@@ -1447,6 +1447,24 @@ footer {
     padding-bottom: 24px;
   }
 }
+
+.c-btn {
+  svg {
+    position: absolute !important;
+    margin: 0 auto !important;
+    transform: translate(-50%, 0) !important;
+    /* float: left; */
+    /* margin: 6px; */
+    /* font-size: 20px; */
+    top: 0 !important;
+    fill: none !important;
+    stroke: #f2f2f2 !important;
+    stroke-dasharray: 150 480 !important;
+    stroke-dashoffset: 150 !important;
+    transition: 0.9s ease-in-out !important;
+  }
+}
+
 #instafeed-container {
   position: relative;
   width: 100%;
