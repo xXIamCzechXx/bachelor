@@ -7,7 +7,12 @@ twig:
         translator: '@app.translator'
         settings: '@app.settings'
         cookie: '@app.cookie'
+
+        # Editor constants
         editorTitle: 'Czechsaber'
+        editorSaveChanges: 'Uložit změny'
+        editorAdd: 'Přidat'
+        editorClose: 'Zavřít'
 
 when@test:
     twig:

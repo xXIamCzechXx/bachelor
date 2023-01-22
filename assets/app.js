@@ -17,6 +17,7 @@ import './styles/responsivity.scss';
 //import './styles/editor/material-dashboard.css';
 
 import './js/ajax';
+import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting';
 
 // start the Stimulus application
 import './bootstrap';
@@ -30,7 +31,7 @@ import jquery from 'jquery';
 
 // import the function from greet.js (the .js extension is optional)
 // ./ (or ../) means to look for a local file
-import greet from './greet';
+// import greet from './greet';
 
 /* Intervals */
 let move_object_int = 750;
@@ -48,6 +49,17 @@ function getCookie(name) {
 
 $(document).ready(function ()
 {
+    $(document).on('click', '.navbar-toggler, .close-layer', function () {
+        if ($('html').hasClass("nav-open")) {
+            $('.main-panel').css('height', '100vh');
+            $('.main-panel').css('overflow', 'hidden');
+            console.log('Nav opened');
+        } else {
+            $('.main-panel').css('height', '100%');
+            $('.main-panel').css('overflow', 'visible');
+            console.log('Nav closed');
+        }
+    })
     /* Ajax is a little bit too much for getting this kind of information to template
     $.ajax({
         url: '/instagram-token',
@@ -182,44 +194,45 @@ function showObject(element)
 }
  */
 
-var w = c.width = window.innerWidth,
-    h = c.height = window.innerHeight - 14,
-    ctx = c.getContext( '2d' ),
-
-    opts = {
-
-        len: 50,
-        count: 80,
-        baseTime: 10,
-        addedTime: 8,
-        dieChance: .005,
-        spawnChance: 3,
-        sparkChance: .4,
-        sparkDist: 1,
-        sparkSize: 1,
-
-        color: 'hsl(hue,100%,light%)',
-        baseLight: 50,
-        addedLight: 10, // [50-10,50+10]
-        shadowToTimePropMult: 6,
-        baseLightInputMultiplier: .01,
-        addedLightInputMultiplier: .02,
-
-        cx: w / 2,
-        cy: h / 2,
-        repaintAlpha: .04,
-        hueChange: .1
-    },
-
-    tick = 0,
-    lines = [],
-    dieX = w / 2 / opts.len,
-    dieY = h / 2 / opts.len,
-
-    baseRad = Math.PI * 2 / 6;
-
-ctx.fillStyle = 'black';
-ctx.fillRect( 0, 0, w, h );
+// Pro hexagony na HP
+// var w = c.width = window.innerWidth,
+//     h = c.height = window.innerHeight - 14,
+//     ctx = c.getContext( '2d' ),
+//
+//     opts = {
+//
+//         len: 50,
+//         count: 80,
+//         baseTime: 10,
+//         addedTime: 8,
+//         dieChance: .005,
+//         spawnChance: 3,
+//         sparkChance: .4,
+//         sparkDist: 1,
+//         sparkSize: 1,
+//
+//         color: 'hsl(hue,100%,light%)',
+//         baseLight: 50,
+//         addedLight: 10, // [50-10,50+10]
+//         shadowToTimePropMult: 6,
+//         baseLightInputMultiplier: .01,
+//         addedLightInputMultiplier: .02,
+//
+//         cx: w / 2,
+//         cy: h / 2,
+//         repaintAlpha: .04,
+//         hueChange: .1
+//     },
+//
+//     tick = 0,
+//     lines = [],
+//     dieX = w / 2 / opts.len,
+//     dieY = h / 2 / opts.len,
+//
+//     baseRad = Math.PI * 2 / 6;
+//
+// ctx.fillStyle = 'black';
+// ctx.fillRect( 0, 0, w, h );
 
 function loop() {
 
@@ -293,8 +306,9 @@ Line.prototype.step = function(){
     if( Math.random() < opts.sparkChance )
         ctx.fillRect( opts.cx + ( this.x + x ) * opts.len + Math.random() * opts.sparkDist * ( Math.random() < .5 ? 1 : -1 ) - opts.sparkSize / 2, opts.cy + ( this.y + y ) * opts.len + Math.random() * opts.sparkDist * ( Math.random() < .5 ? 1 : -1 ) - opts.sparkSize / 2, opts.sparkSize, opts.sparkSize )
 }
-loop();
+// loop();
 
+/*
 window.addEventListener( 'resize', function(){
 
     w = c.width = window.innerWidth;
@@ -308,6 +322,7 @@ window.addEventListener( 'resize', function(){
     dieX = w / 2 / opts.len;
     dieY = h / 2 / opts.len;
 });
+*/
 
 AOS.init();
 

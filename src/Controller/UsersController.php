@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Pages;
 use App\Entity\User;
 use App\Connector\ScoresaberApi;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +22,7 @@ class UsersController extends DefaultController
         }
 
         $scoresaberApi = new ScoresaberApi();
-        $users = $this->em->getRepository(User::class)->findVisibleUsersWithLimit(100, 0);
+        $users = $this->em->getRepository(User::class)->findVisibleUsersWithLimit(10, 0);
         $usersData = $scoresaberApi->mapScoresaberUsersData($users);
 
         return $this->render('default/users/users.html.twig', [
@@ -29,6 +30,27 @@ class UsersController extends DefaultController
             'users' => $users,
             'usersData' => $usersData,
         ]);
+    }
+
+    /**
+     * @Route("/players-data-ajaxize/{from}/{step}", name="playersDataAjaxize")
+     */
+    public function ajaxizePlayersData(String $from, String $step, Request $request, ScoresaberApi $scoresaberApi)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException();
+        }
+
+        $users = $this->em->getRepository(User::class)->findVisibleUsersWithLimit(10, $from);
+        $usersData = $scoresaberApi->mapScoresaberUsersData($users);
+
+        return $this->render("default/users/components/user_card.html.html.twig",
+            [
+                'users' => $users,
+                'usersData' => $usersData,
+                'hideButton' => (int)$step > count($users),
+            ]
+        );
     }
 
     /**

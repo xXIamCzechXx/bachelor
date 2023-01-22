@@ -26,7 +26,7 @@
                 <div class="col-md-12">
                     <div class="card" id="myList">
                         <div class="card-header card-header-primary">
-                            <h4 class="card-title ">Discord <small>[ Poslat webhook:  ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
+                            <h4 class="card-title ">Discord <small>[ Poslat webhook:  ]</small></h4>
                             <p class="card-category">Nastavení Discord webhooku</p>
                             {% include "editor/utilities/paginator/_controls.html.twig" %}
                         </div>
@@ -64,7 +64,7 @@
                                         <tr>
                                             <td class="text-center"></td>
                                             <td class="text-center">
-                                                <a href="#" class="btn btn-round btn-fill btn-default disabled">Není k dispozici</a>
+                                                <a onclick="showTable('add')" class="btn btn-round btn-fill btn-default">Poslat zprávu</a>
                                             </td>
                                             <td class="text-center">
                                                 <a target="_blank" href="http://www.creative-tim.com/product/material-dashboard-pro/?ref=md-free-upgrade-live" class="btn btn-round btn-fill btn-info">Přidat webhook</a>
@@ -110,8 +110,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" name="webhook-action" value="edit" class="btn btn-primary pull-right">Změnit webhook</button>
-                                <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                                <button type="submit" name="webhook-action" value="edit" class="btn btn-primary pull-right">{{ editorSaveChanges }}</button>
+                                <button type="button" class="btn btn-secondary btn-close pull-right" data-bs-dismiss="modal">{{ editorClose }}</button>
                                 <div class="clearfix"></div>
                             </div>
                         </div>
@@ -204,7 +204,7 @@
                             </div>
                             <br>
                             <button type="submit" name="message-action" value="send" class="btn btn-primary pull-right">Poslat zprávu</button>
-                            <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">Zavřít</button>
+                            <button type="button" class="btn btn-primary btn-close pull-right" data-bs-dismiss="modal">{{ editorClose }}</button>
                             <div class="clearfix"></div>
                         </div>
                     </div>

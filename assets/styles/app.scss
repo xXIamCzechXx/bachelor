@@ -185,7 +185,17 @@ hr {
   overflow: hidden;
   background-size: cover;
   background-position: center;
-  background-image: url("/assets/images/assets/cupa-mcr.jpg");
+
+  .top-foto-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    display: block;
+    transform: translate(-50%, -50%);
+    filter: brightness(50%);
+  }
 }
 
 .top-foto-title-container {
@@ -309,6 +319,13 @@ hr {
     content: "";
     z-index: 1;
   }
+}
+
+.nav-pills {
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
 }
 
 .glob-navbar {
@@ -550,7 +567,7 @@ hr {
     width: 100vw;
     height: 100vh;
     position: relative;
-    filter: brightness(100%);
+    filter: brightness(50%);
     top: 0;
     left: 0;
     border-bottom: solid 14px $brand_light;

@@ -1,0 +1,20 @@
+{% for user in users %}
+    {# <a href="{{ path("account") }}"> #}
+    <div class="card-border" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+        <div class="user-card-cont" data-user-id="{{ user.id() }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="{{ user.color is not empty and user.color != "#ffffff" ? "background:"~user.color : '' }}">
+            <div class="user-picture" {% if user.getTournaments[0] is defined %}style="background: green;"{% endif %}>
+                <img src="{{ asset(user.imgPath(user.imgName)) }}" alt="{{ user.nickname }}">
+            </div>
+            <div class="user-info">
+                <h4>{{ user.nickname }}</h4>
+                <p>{% if usersData[user.id] is defined %}{{ usersData[user.id]["pp"] }}{% endif %} pp</p>
+            </div>
+            <span style="height: 0; width: 0; float: left;"></span>
+            <div class="user-icons">
+                {% if user.hdm.imgName is defined and user.hdm.imgName is not null and user.hdm.imgName != '' %}<img class="profile-hdm" src="{{ asset(user.hdm.getImgPath(user.hdm.imgName)) }}" alt="{{ user.hdm.name }}">{% endif %}
+                <img class="profile-flag" src="{{ asset(user.country.getImgPath(user.country.getImgName)) }}" alt="{{ user.country }}">
+            </div>
+        </div>
+    </div>
+    {# </a> #}
+{% endfor %}

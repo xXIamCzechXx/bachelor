@@ -33,7 +33,7 @@
     <div class="homepage-wrapper">
 
         <div class="full-screen-video-container">
-            <canvas id=c class="particles-canvas" style="min-height: 800px;"></canvas>
+{#            <canvas id=c class="particles-canvas" style="min-height: 800px;"></canvas> Uncomment to run AOS -> Moving hexagons #}
 
             <a href="{{ path('homepage') }}" style="display: block;"><img class="full-wide-logo" src="{{ asset('build/images/logos/full-wide-logo.png') }}" alt="CzechSaber logo"></a>
             <img draggable="false" src="{{ asset('build/images/assets/awbsturnaj_text.png') }}" alt="{{ page.alt }}" class="top-foto-logo">
@@ -124,6 +124,13 @@
                                     <td><a class="link" href="https://bsaber.com/songs/{{ qualMap.bsr }}" target="_blank">Zobrazit</a></td>
                                 </tr>
                             {% endfor %}
+                            {% for i in 0..7-qualMaps|length %}
+                                {% if i > 0 %}
+                                    <tr>
+                                        <td colspan="100%">&nbsp;&nbsp;Volný slot {{ i }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -150,6 +157,13 @@
                                 <td>{{ miniMap.difficulty == "ExpertPlus" ? "Expert+" : miniMap.difficulty }}</td>
                                 <td><a class="link" href="https://bsaber.com/songs/{{ miniMap.bsr }}" target="_blank">Zobrazit</a></td>
                             </tr>
+                        {% endfor %}
+                        {% for i in 0..7-miniMaps|length %}
+                            {% if i > 0 %}
+                                <tr>
+                                    <td colspan="100%">&nbsp;&nbsp;Volný slot {{ i }}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -178,6 +192,13 @@
                                     <td><a class="link" href="https://bsaber.com/songs/{{ semiMap.bsr }}" target="_blank">Zobrazit</a></td>
                                 </tr>
                             {% endfor %}
+                            {% for i in 0..7-semiMaps|length %}
+                                {% if i > 0 %}
+                                    <tr>
+                                        <td colspan="100%">&nbsp;&nbsp;Volný slot {{ i }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -197,13 +218,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for grandMap in grandMaps %}
+                        {% for key, grandMap in grandMaps %}
                             <tr>
                                 <td>&nbsp;&nbsp;{{ grandMap.name }}</td>
                                 <td>{{ grandMap.bsr }}</td>
                                 <td>{{ grandMap.difficulty == "ExpertPlus" ? "Expert+" : grandMap.difficulty }}</td>
                                 <td><a class="link" href="https://bsaber.com/songs/{{ grandMap.bsr }}" target="_blank">Zobrazit</a></td>
                             </tr>
+                        {% endfor %}
+                        {% for i in 0..7-grandMaps|length %}
+                            {% if i > 0 %}
+                                <tr>
+                                    <td colspan="100%">&nbsp;&nbsp;Volný slot {{ i }}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>

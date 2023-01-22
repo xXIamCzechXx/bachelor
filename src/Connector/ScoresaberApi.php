@@ -2,6 +2,8 @@
 
 namespace App\Connector;
 
+use App\Entity\User;
+
 class ScoresaberApi {
 
     /**
@@ -39,20 +41,33 @@ class ScoresaberApi {
         $players = [];
         $playersData = $this->fetchTopFiftyScoresaberData();
 
+        /** @var User $user */
         foreach ($users as $user) {
 
             $players[$user->getId()] = array(
                 "pp" => 0,
                 "country" => 'empty',
+                "rank" => 0,
+                "countryRank" => 0,
+                "inactive" => true,
+                "averageRankedAccuracy" => 0,
+                "totalPlayCount" => 0,
+                "rankedPlayCount" => 0,
+                "replaysWatched" => 0,
             );
 
-            foreach ($playersData as $playerData) {
-                if ($playerData->id == $user->getScoresaberId()) {
-                    $players[$user->getId()] = array(
-                        "pp" => $playerData->pp,
-                        "country" => 'empty',
-                    );
-                }
+            if ($playerData = $this->fetchUserScoresaberData($user->getScoresaberId())) {
+                $players[$user->getId()] = array(
+                    "pp" => (float)$playerData->pp,
+                    "country" => (string)$playerData->country,
+                    "rank" => (int)$playerData->rank,
+                    "countryRank" => (int)$playerData->countryRank,
+                    "inactive" => (bool)$playerData->inactive,
+                    "averageRankedAccuracy" => $playerData->scoreStats !== null ? round((float)$playerData->scoreStats->averageRankedAccuracy, 2) : 0,
+                    "totalPlayCount" => $playerData->scoreStats !== null ? (int)$playerData->scoreStats->totalPlayCount : 0,
+                    "rankedPlayCount" => $playerData->scoreStats !== null ? (int)$playerData->scoreStats->rankedPlayCount : 0,
+                    "replaysWatched" => $playerData->scoreStats !== null ? (int)$playerData->scoreStats->replaysWatched : 0,
+                );
             }
         }
         return $players;

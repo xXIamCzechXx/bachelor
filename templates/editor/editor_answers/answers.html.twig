@@ -50,7 +50,7 @@
                                                     <td class="val2">{{ answer.name }}</td>
                                                     <td class="val3">{{ answer.email }}</td>
                                                     <td class="val4">{{ answer.phone }}</td>
-                                                    <td class="val5">{{ answer.content }}</td>
+                                                    <td class="val5">{{ answer.content|length > answer.content|slice(0, 64)|length ? answer.content|striptags|slice(0, 64)~'...' : answer.content }}</td>
                                                     <td class="td-actions text-right">
                                                         <form action="{{ path('editor_edit_answer', { id: answer.id }) }}" method="POST">
                                                             <button name="answer-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">

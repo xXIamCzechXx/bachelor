@@ -30,26 +30,11 @@
 
     <div class="wrapper-box" style="overflow: hidden;">
         <div class="section">
-            <div class="users-container">
-                {% for user in users %}
-                    {# <a href="{{ path("account") }}"> #}
-                    <div class="card-border" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
-                        <div class="user-card-cont" data-user-id="{{ user.id() }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="{{ user.color is not empty and user.color != "#ffffff" ? "background:"~user.color : '' }}">
-                            <div class="user-picture" {% if user.getTournaments[0] is defined %}style="background: green;"{% endif %}>
-                                <img src="{{ asset(user.imgPath(user.imgName)) }}" alt="{{ user.nickname }}">
-                            </div>
-                            <div class="user-info">
-                                <h4>{{ user.nickname }}</h4>
-                                <p>{% if usersData[user.id] is defined %}{{ usersData[user.id]["pp"] }}{% endif %} pp</p>
-                            </div>
-                            <div class="user-icons">
-                                {% if user.hdm.imgName is defined and user.hdm.imgName is not null and user.hdm.imgName != '' %}<img class="profile-hdm" src="{{ asset(user.hdm.getImgPath(user.hdm.imgName)) }}" alt="{{ user.hdm.name }}">{% endif %}
-                                <img class="profile-flag" src="{{ asset(user.country.getImgPath(user.country.getImgName)) }}" alt="{{ user.country }}">
-                            </div>
-                        </div>
-                    </div>
-                    {# </a> #}
-                {% endfor %}
+            <div id="show-more-users-container" class="users-container">
+                {{ include('default/users/components/user_card.html.html.twig') }}
+            </div>
+            <div id="show-more-users" data-from="10" data-step="10" class="button-border twitch-button" style="position: relative; z-index: 1; max-width: 300px; text-align: center;">
+                {{ translator.getValue('SHOW_MORE', 'Načíst další')|raw }}
             </div>
         </div>
         <!-- Modal -->
@@ -59,10 +44,10 @@
                     {# Dinamically rendered from Ajax /detail/users_detail.html.twig #}
                 </div>
             </div>
-            <div id="overlay">
-                <div class="cv-spinner">
-                    <span class="spinner"></span>
-                </div>
+        </div>
+        <div id="overlay">
+            <div class="cv-spinner">
+                <span class="spinner"></span>
             </div>
         </div>
     </div>

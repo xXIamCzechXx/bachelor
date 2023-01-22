@@ -24,6 +24,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-source-editing": "^35.4.0",
         "aos": "^2.3.4",
         "jquery-smooth-scroll": "^2.2.0",
         "smooth-scroll": "^16.1.3"
