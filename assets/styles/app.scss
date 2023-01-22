@@ -1405,9 +1405,10 @@ footer {
     }
 
     .social-round-icon {
-      display: flex;
+      display: grid;
       align-items: center;
       vertical-align: middle;
+      justify-content: center;
       border: solid 1px rgba(255,255,255,0.3);
       border-image: $border_gradient, 1;
       font-size: 18px;
@@ -1716,9 +1717,12 @@ footer {
 }
 
 svg {
-  position: absolute;
+  position: relative;
   //left: 0;
-  transform: translate(-50%, 0);
+  //transform: translate(-50%, 0);
+  float: left;
+  margin: 6px;
+  font-size: 20px;
   top: 0;
   fill: none;
   stroke: $background_white;

@@ -17,7 +17,17 @@ import './styles/responsivity.scss';
 //import './styles/editor/material-dashboard.css';
 
 import './js/ajax';
-import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting';
+// import './controllers/aos/sass/aos.scss';
+// import throttle from 'lodash.throttle';
+// import debounce from 'lodash.debounce';
+//
+// import observe from './controllers/aos/js/libs/observer';
+//
+// import detect from './controllers/aos/js/helpers/detector';
+// import handleScroll from './controllers/aos/js/helpers/handleScroll';
+// import prepare from './controllers/aos/js/helpers/prepare';
+// import elements from './controllers/aos/js/helpers/elements';
+// import './controllers/aos/js/aos';
 
 // start the Stimulus application
 import './bootstrap';
@@ -323,7 +333,6 @@ window.addEventListener( 'resize', function(){
     dieY = h / 2 / opts.len;
 });
 */
-
 AOS.init();
 
 // Cookies

@@ -9,9 +9,11 @@
             <meta name="description" content="Jsme parta kluků a taťka, co se snaží prosadit VR a turnaje ve Virtuální realitě mezi lidmi. Specializujeme se hlavně na Beat Saber a začínáme i s hrou Pavlov VR, tak se přidej i ty!">
         {% endblock %}
         <link rel="icon" type="image/png" href="{{ asset('build/images/logos/logo.png') }}">
-        <script src="{{ asset('editor/js/smooth-scroll.polyfills.min.js') }}"></script>
         <link rel="stylesheet" href="{{ asset('editor/css/material-dashboard.css') }}">
-      <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <link href="{{ asset('build/controllers/fontawesome/css/all.css') }}" rel="stylesheet">
+        <link href="{{ asset('build/controllers/fontawesome/scss/fontawesome.scss') }}" rel="stylesheet">
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        {# <link href="{{ asset('build/controllers/aos/sass/aos.scss') }}" rel="stylesheet"> #}
         <script src="{{ asset('editor/js/gallery.js') }}"></script>
 
         <title>{% block title %}Czech Saber | Turnaje VR{% endblock %}</title>
@@ -25,12 +27,15 @@
             {% if page.name is defined and (page.name == "contact" or page.name == "app_login" or page.name == "app_register") %}
                 <script src='https://www.google.com/recaptcha/api.js?render={{ translator.getValue('SITE_KEY', '6Lf7_UwaAAAAANAhJ2-ZHDpsGTikaCilEzWhs7Rt')|raw }}'></script>
             {% endif %}
+            <script src="{{ asset('editor/js/smooth-scroll.polyfills.min.js') }}"></script>
             <script src="{{ asset('editor/js/core/jquery.min.js') }}"></script>
             <script src="{{ asset('editor/js/core/popper.min.js') }}"></script>
-            <script src="https://kit.fontawesome.com/05c0bf8e9c.js" crossorigin="anonymous"></script>
+            {# <script src="https://kit.fontawesome.com/05c0bf8e9c.js" crossorigin="anonymous"></script> #}
             <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-            <script src="{{ asset('editor/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script>
+            {# <script src="{{ asset('build/controllers/aos/js/aos.js') }}"></script> #}
+            {# <script src="{{ asset('editor/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> recently removed #}
             <script src="{{ asset('editor/js/core/bootstrap-material-design.min.js') }}"></script> {# This handles floating labels in form #}
+            <script defer src="{{ asset('build/controllers/fontawesome/js/all.js') }}"></script>
             <script src="{{ asset('editor/js/material-dashboard.js?v=2.1.2') }}" type="text/javascript"></script>
             <script type="text/javascript">
                 function showTable($value) {
