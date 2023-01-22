@@ -801,7 +801,16 @@ hr {
   overflow: hidden;
   background-size: cover;
   background-position: center;
-  background-image: url("/assets/images/assets/cupa-mcr.jpg");
+}
+.top-foto-container .top-foto-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  display: block;
+  transform: translate(-50%, -50%);
+  filter: brightness(50%);
 }
 
 .top-foto-title-container {
@@ -915,6 +924,13 @@ hr {
   display: block;
   content: "";
   z-index: 1;
+}
+
+.nav-pills {
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
 }
 
 .glob-navbar {
@@ -1138,7 +1154,7 @@ hr {
   width: 100vw;
   height: 100vh;
   position: relative;
-  filter: brightness(100%);
+  filter: brightness(50%);
   top: 0;
   left: 0;
   border-bottom: solid 14px #3B3F6D;
@@ -2084,9 +2100,10 @@ footer .footer .footer-container .footer-logo {
   display: table;
 }
 .social-buttons-container .social-buttons-section .social-round-icon {
-  display: flex;
+  display: grid;
   align-items: center;
   vertical-align: middle;
+  justify-content: center;
   border: solid 1px rgba(255, 255, 255, 0.3);
   border-image: linear-gradient(90deg, #3B3F6D 0%, #2997ff 30%, #e73c7e 100%), 1;
   font-size: 18px;
@@ -2121,6 +2138,21 @@ footer .footer .footer-container .footer-logo {
   max-width: 1720px;
   margin: 0 auto;
   padding-bottom: 24px;
+}
+
+.c-btn svg {
+  position: absolute !important;
+  margin: 0 auto !important;
+  transform: translate(-50%, 0) !important;
+  /* float: left; */
+  /* margin: 6px; */
+  /* font-size: 20px; */
+  top: 0 !important;
+  fill: none !important;
+  stroke: #f2f2f2 !important;
+  stroke-dasharray: 150 480 !important;
+  stroke-dashoffset: 150 !important;
+  transition: 0.9s ease-in-out !important;
 }
 
 #instafeed-container {
@@ -2436,8 +2468,10 @@ footer .footer .footer-container .footer-logo {
 }
 
 svg {
-  position: absolute;
-  transform: translate(-50%, 0);
+  position: relative;
+  float: left;
+  margin: 6px;
+  font-size: 20px;
   top: 0;
   fill: none;
   stroke: #f2f2f2;
