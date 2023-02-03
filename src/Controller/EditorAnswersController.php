@@ -6,6 +6,7 @@ use App\Entity\FormAnswers;
 use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,23 +32,31 @@ class EditorAnswersController extends BaseEditorController
      */
     public function editAnswer(Request $request, FormAnswers $answer): Response
     {
-        $data = $request->request;
+        if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
+            $data = $request->request;
+            $this->processRequest($answer, $data, $data->get('answer-action'));
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
+        }
+
+        return $this->redirectToRoute('editor_answers');
+    }
+
+    /**
+     * @param $entity
+     * @param InputBag $data
+     * @param string $action
+     */
+    protected function processRequest($entity, InputBag $data, String $action = 'undefined')
+    {
         $logger = new Log();
-        $logger->setAction($data->get('answer-action'));
+        $logger->setAction($action);
 
-        switch ($data->get('answer-action')) {
+        switch ($action) {
             case 'remove':
-                if ($this->isGranted(SUPER_ADMIN, EDITOR)) {
-                    $this->em->remove($answer);
-
-                    $this->addFlash(FLASH_SUCCESS, 'Odpověď z formuláře byla úspěšně smazána');
-                    $logger->setType(LOGGER_TYPE_SUCCESS);
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
+                $logger->setOperation($entity->getName()." [ ".$entity->getId()." ] ");
+                $this->em->remove($entity);
+                $this->addFlash(FLASH_SUCCESS, 'Odpověď z formuláře byla úspěšně smazána');
                 break;
 
             default:
@@ -58,18 +67,9 @@ class EditorAnswersController extends BaseEditorController
                 break;
         }
 
-        if(empty($logger->getOperation())) {
-            $logger->setOperation($answer->getName());
-        }
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_FORM_ANSWERS))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName());
+        $logger = $this->completeLogger($logger, MODULE_CONSTANTS, $entity->getName() ." [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();
-
-        return $this->redirectToRoute('editor_answers');
     }
 }

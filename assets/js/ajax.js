@@ -3,12 +3,12 @@ $(document).ajaxSend(function() {
     $("#overlay").fadeIn(300);
 });
 
-// Ajax for automatic refresh of scforeboard
-// $(document).ready(function () {
-//     setInterval(function() {
-//         $('.update-scoreboard').click();
-//     }, 4000)
-// });
+// Ajax for automatic refresh of scoreboard
+$(document).ready(function () {
+    setInterval(function() {
+        $('.update-scoreboard').click();
+    }, 4000)
+});
 
 $(document).on('click', '.update-scoreboard', function(e) {
     e.preventDefault();

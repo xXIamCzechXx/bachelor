@@ -6,6 +6,8 @@ use App\Entity\Log;
 use App\Entity\Settings;
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,28 +29,36 @@ class EditorSettingsController extends BaseEditorController
     /**
      * @Route("/editor-edit/{id}/settings", name="editor_edit_settings", methods="POST")
      */
-    public function modifySettings(Settings $settings, Request $request)
+    public function editSettings(Settings $settings, Request $request)
+    {
+        if ($this->isGranted(self::ADMIN)) {
+            $data = $request->request;
+            $this->processRequest($settings, $data, $data->get('settings-action'), $request->files);
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
+        }
+
+        return $this->redirectToRoute('editor_settings');
+    }
+
+    /**
+     * @param $entity
+     * @param InputBag $data
+     * @param string $action
+     */
+    protected function processRequest($entity, InputBag $data, String $action = 'undefined', $files = null, $uploadHelper = null)
     {
         $logger = new Log();
-        $data = $request->request;
-        $action = $data->get('settings-action');
         $logger->setAction($action);
 
         switch ($action) {
             case 'edit':
-                if ($this->isGranted(SUPER_ADMIN)) {
-                    $settings
-                        ->setInstagramFeedToken($data->get('settings-instagram-feed-token'))
-                        ->setRecaptchaSecretKey($data->get('settings-recaptcha-secret-key'))
-                        ->setRecaptchaSiteKey($data->get('settings-recaptcha-site-key'))
-                    ;
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste změnili konstantu');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
+                $entity
+                    ->setInstagramFeedToken($data->get('settings-instagram-feed-token'))
+                    ->setRecaptchaSecretKey($data->get('settings-recaptcha-secret-key'))
+                    ->setRecaptchaSiteKey($data->get('settings-recaptcha-site-key'));
+
+                $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste změnili konstantu');
                 break;
 
             default:
@@ -59,22 +69,9 @@ class EditorSettingsController extends BaseEditorController
                 break;
         }
 
-        if(empty($logger->getOperation())) {
-            $logger->setOperation("Změna nastavení webu");
-        }
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_CONSTANTS))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName())
-        ;
+        $logger = $this->completeLogger($logger, MODULE_PAGES, $entity->getName() ." [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();
-
-        return $this->redirectToRoute('editor_settings');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\AnswerTypes;
 use App\Entity\FormAnswers;
+use PhpParser\Node\Stmt\Label;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\AbstractType;
@@ -93,6 +94,7 @@ class ContactFormType extends AbstractType
                     'placeholder' => ''
                 ]
             ])
+            /*
             ->add('gdpr', CheckboxType::class, [
                 'label' => 'Odškrtnutím souhlasíte se zpracováním osobních údajů',
                 'mapped' => false,
@@ -104,6 +106,7 @@ class ContactFormType extends AbstractType
                 ],
                 'required' => true,
             ])
+            */
         ;
     }
 

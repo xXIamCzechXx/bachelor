@@ -27,14 +27,6 @@ define('FLASH_SUCCESS', 'success'); // In case data fetch to database
 define('LOGGER_TYPE_FAILED', 'failed'); // In case data fetch to database
 define('LOGGER_TYPE_SUCCESS', 'success'); // In case data doesnt fetch
 
-// ROLES
-define('SUPER_ADMIN', 'ROLE_SUPER_ADMIN'); // Manage everything and can controll everything
-define('ADMIN', 'ROLE_ADMIN'); // Manage everything except sensitive data ( like deleting )
-define('COORDINATOR', 'ROLE_COORDINATOR'); //Manage tourneys, cannot controll news and sensitive data
-define('EDITOR', 'ROLE_EDITOR'); //Manage news, cannot controll tourneys and sensitive data
-
-define('USER', 'ROLE_USER'); //Manage news, cannot controll tourneys and sensitive data
-
 // Editor modules
 define('MODULE_UNDEFIED', 'Undefied module');
 define('MODULE_USERS', 'Users');
@@ -58,6 +50,13 @@ define('SECRET_KEY', '6Lf7_UwaAAAAAHZfaEWmwI85R2-h30UJNEBERKlg');
 
 abstract class SharedController extends AbstractController
 {
+    // ROLES
+    const SUPER_ADMIN = 'ROLE_SUPER_ADMIN'; // Manage everything and can controll everything
+    const ADMIN = 'ROLE_ADMIN'; // Manage everything except sensitive data ( like deleting )
+    const COORDINATOR = 'ROLE_COORDINATOR'; //Manage tourneys, cannot controll news and sensitive data
+    const EDITOR = 'ROLE_EDITOR'; //Manage news, cannot controll tourneys and sensitive data
+    const USER = 'ROLE_USER'; //Manage news, cannot controll tourneys and sensitive data
+
     /**
      * @var EntityManagerInterface
      */

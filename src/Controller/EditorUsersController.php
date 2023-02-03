@@ -80,7 +80,7 @@ class EditorUsersController extends BaseEditorController
 
         switch ($data->get('user-action')) {
             case 'edit':
-                if ($this->isGranted(SUPER_ADMIN)) {
+                if ($this->isGranted(self::SUPER_ADMIN)) {
                     $country = $this->em->getRepository(Countries::class)->findOneBy(['id' => $data->get('user-country')]);
 
                     if ($data->get('user-name') && strlen($data->get('user-name')) <= 3) {
@@ -156,7 +156,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'remove':
-                if ($this->isGranted(SUPER_ADMIN)) {
+                if ($this->isGranted(self::SUPER_ADMIN)) {
                     $tournaments = $this->em->getRepository(Tournaments::class)->findAll();
                     foreach ($tournaments as $tournament) {
                         $tournament->removePlayer($user);
@@ -189,7 +189,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'hide':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
+                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
                     $user->hide();
                     $this->addFlash(FLASH_WARNING, 'Zneaktivnili jste uživatele');
                     break;
@@ -201,7 +201,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'show':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
+                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
                     $user->show();
                     $this->addFlash(FLASH_SUCCESS, 'Zaktivnili jste uživatele');
                     break;
@@ -213,7 +213,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'regenerate-unique-id':
-                if ($this->isGranted(SUPER_ADMIN)) {
+                if ($this->isGranted(self::SUPER_ADMIN)) {
                     $user->setUniqueId($userNormalizer->generateUniquePlayerId());
                     $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste uživateli vygenerovali nové ID');
                     break;
@@ -225,7 +225,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'recalculate-score':
-                if ($this->isGranted(SUPER_ADMIN)) {
+                if ($this->isGranted(self::SUPER_ADMIN)) {
                     $user = $userNormalizer->calculateScore($user);
                     $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přepočítali % uživateli');
                     break;
@@ -237,7 +237,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'password':
-                if ($this->isGranted(SUPER_ADMIN)) {
+                if ($this->isGranted(self::SUPER_ADMIN)) {
                     if ($data->get('user-password') == $data->get('user-passwordRepeat')) {
                         $user->setPassword($passwordHasher->hashPassword($user, $data->get('user-password')));
                         $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste změnili heslo uživatele');
@@ -292,7 +292,7 @@ class EditorUsersController extends BaseEditorController
 
         switch ($data->get('badge-action')) {
             case 'add':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
+                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
                     if (!empty($data->get('badge-name'))) {
 
                         /** @var UploadedFile $uploadedFile */
@@ -377,7 +377,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'hide':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
+                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
                     $badge->hide();
                     $this->addFlash(FLASH_WARNING, 'Skrili jste badge');
                     break;
@@ -389,7 +389,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'show':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
+                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
                     $badge->show();
                     $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste badge');
                     break;
@@ -401,7 +401,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'remove':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
+                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
                     $this->em->remove($badge);
                     $this->addFlash(FLASH_WARNING, 'Odstranili jste badge');
                     break;
@@ -450,7 +450,7 @@ class EditorUsersController extends BaseEditorController
 
         switch ($data->get('hdm-action')) {
             case 'add':
-                if ($this->isGranted(ADMIN)) {
+                if ($this->isGranted(self::ADMIN)) {
                     if (!empty($data->get('hdm-name'))) {
 
                         /** @var UploadedFile $uploadedFile */
@@ -538,7 +538,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'hide':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
+                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
                     $hdm->hide();
                     $this->addFlash(FLASH_WARNING, 'Skrili jste hdm');
                     break;
@@ -550,7 +550,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'show':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
+                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
                     $hdm->show();
                     $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste badge');
                     break;
@@ -562,7 +562,7 @@ class EditorUsersController extends BaseEditorController
                 break;
 
             case 'remove':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
+                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
                     $this->em->remove($hdm);
                     $this->addFlash(FLASH_WARNING, 'Odstranili jste hdm');
                     break;

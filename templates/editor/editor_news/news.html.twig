@@ -54,8 +54,8 @@
                                                         <img class="editor-preview-image" src="{{ asset(news.imgPath()) }}">
                                                     {% endif %}
                                                 </td>
-                                                <td class="val1" style="min-width: 180px;">{{ news.title|length > news.title|slice(0, newsTitleLength)|length ? news.title|striptags|slice(0, newsTitleLength)~'...' : news.title }}</td>
-                                                <td class="val2" style="min-width: 340px;">{{ news.notation|length > news.notation|slice(0, newsContentLength)|length ? news.notation|striptags|slice(0, newsContentLength)~'...' : news.notation }}</td>
+                                                <td class="val1" style="min-width: 180px;">{{ news.title|length > news.title|slice(0, 44)|length ? news.title|striptags|slice(0, 44)~'...' : news.title }}</td>
+                                                <td class="val2" style="min-width: 340px;">{{ news.notation|length > news.notation|slice(0, 80)|length ? news.notation|striptags|slice(0, 80)~'...' : news.notation }}</td>
                                                 <td class="val3" class="text-center">{{ news.author.nickname }}</td>
                                                 <td class="val4" style="min-width: 154px;" class="text-center">{{ news.addedAt|date('d. m. Y H:i:s') }}</td>
                                                 <td style="min-width: 132px;" class="td-actions text-right">

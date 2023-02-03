@@ -19,11 +19,11 @@ class ScoresaberApi {
     /**
      * @return mixed
      */
-    public function fetchUserScoresaberData($scoresaberId = null)
+    public function fetchUserScoresaberData($scoresaberId = null, $type = 'full')
     {
         if (null !== $scoresaberId || 0 !== $scoresaberId) {
             $context = stream_context_create(array('https' => array('header'=>'Connection: close\r\n')));
-            $player = json_decode(@file_get_contents('https://scoresaber.com/api/player/'.$scoresaberId.'/full', false, $context));
+            $player = json_decode(@file_get_contents('https://scoresaber.com/api/player/'.$scoresaberId.'/'.$type, false, $context));
             if ($player) {
                 return $player;
             }
@@ -39,7 +39,6 @@ class ScoresaberApi {
     public function mapScoresaberUsersData($users)
     {
         $players = [];
-        $playersData = $this->fetchTopFiftyScoresaberData();
 
         /** @var User $user */
         foreach ($users as $user) {
@@ -56,7 +55,7 @@ class ScoresaberApi {
                 "replaysWatched" => 0,
             );
 
-            if ($playerData = $this->fetchUserScoresaberData($user->getScoresaberId())) {
+            if ($playerData = $this->fetchUserScoresaberData($user->getScoresaberId(), 'basic')) {
                 $players[$user->getId()] = array(
                     "pp" => (float)$playerData->pp,
                     "country" => (string)$playerData->country,

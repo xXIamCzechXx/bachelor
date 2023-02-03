@@ -17,7 +17,7 @@
 			<li class="nav-item active news-index" style="margin-left: 60px;">
 				<a class="nav-link" href="{{ path('editor_news_categories') }}">
 					<i class="far fa-list-alt"></i>
-					<p>Kategorie</p>
+					<p class="fa-margin">Kategorie</p>
 				</a>
 			</li>
 		{% endblock %}
@@ -64,15 +64,15 @@
 															</div>
 														</a>
 														{% if category.view == 1 %}
-															<button name="category-action" value="hide" type="submit" rel="tooltip" title="Skrýt" class="btn btn-success btn-link btn-sm">
+															<button name="category-action" value="hide-category" type="submit" rel="tooltip" title="Skrýt" class="btn btn-success btn-link btn-sm">
 																<i class="far fa-eye"></i>
 															</button>
 														{% else %}
-															<button name="category-action" value="show" type="submit" rel="tooltip" title="Zobrazit" class="btn btn-danger btn-link btn-sm">
+															<button name="category-action" value="show-category" type="submit" rel="tooltip" title="Zobrazit" class="btn btn-danger btn-link btn-sm">
 																<i class="far fa-eye-slash"></i>
 															</button>
 														{% endif %}
-														<button name="category-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+														<button name="category-action" value="remove-category" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
 															<i class="far fa-trash-alt"></i>
 														</button>
 														<a href="{{ path('news') }}" target="_blank">
@@ -127,7 +127,7 @@
 									</div>
 								</div>
 							</div>
-							<button type="submit" name="category-action" value="edit" class="btn btn-primary pull-right">{{ editorSaveChanges }}</button>
+							<button type="submit" name="category-action" value="edit-category" class="btn btn-primary pull-right">{{ editorSaveChanges }}</button>
 							<button type="button" class="btn btn-secondary btn-close pull-right" data-bs-dismiss="modal">{{ editorClose }}</button>
 							<div class="clearfix"></div>
 						</div>
@@ -169,7 +169,7 @@
 								</div>
 							</div>
 						</div>
-						<button type="submit" name="category-action" value="add" class="btn btn-primary pull-right">{{ editorAdd }}</button>
+						<button type="submit" name="category-action" value="add-category" class="btn btn-primary pull-right">{{ editorAdd }}</button>
 						<button type="button" class="btn btn-secondary btn-close pull-right" data-bs-dismiss="modal">{{ editorClose }}</button>
 						<div class="clearfix"></div>
 					</div>

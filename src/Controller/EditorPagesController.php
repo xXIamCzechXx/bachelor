@@ -8,8 +8,10 @@ use App\Entity\Log;
 use App\Entity\Pages;
 use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,67 +29,68 @@ class EditorPagesController extends BaseEditorController
 
         return $this->render('editor/editor_pages/pages.html.twig', [
             'pages' => $pages,
-            'pagesNameLength' => 100,
-            'pagesDescriptionLength' => 120,
         ]);
     }
 
     /**
      * @Route("/editor-edit/{id}/page", name="editor_edit_page", methods="POST")
      */
-    public function modifyPage(Pages $page, Request $request, UploadHelper $uploadHelper)
+    public function editPage(Pages $page, Request $request, UploadHelper $uploadHelper)
+    {
+        if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
+            $data = $request->request;
+            $this->processRequest($page, $data, $data->get('page-action'), $request->files, $uploadHelper);
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
+        }
+
+        return $this->redirectToRoute('editor_pages');
+    }
+
+    /**
+     * @param $entity
+     * @param InputBag $data
+     * @param string $action
+     */
+    protected function processRequest($entity, InputBag $data, String $action = 'undefined', $files = null, $uploadHelper = null)
     {
         $logger = new Log();
-        $data = $request->request;
-        $logger->setAction($data->get('page-action'));
+        $logger->setAction($action);
 
-        switch ($data->get('page-action')) {
+        switch ($action) {
             case 'edit':
-                if ($this->isGranted(SUPER_ADMIN, EDITOR)) {
-                    /** @var UploadedFile $uploadedFile */
-                    $uploadedFile = $request->files->get('page-image');
+                /** @var UploadedFile $uploadedFile */
+                $uploadedFile = $files->get('page-image');
 
-                    if ($uploadedFile) {
-                        $newFileName = $uploadHelper->uploadImage($uploadedFile, 'logos', $page->getImgName());
-                        $page->setImgName($newFileName);
-                    }
-                    $page
-                        //->setName($data->get('page-name'))
-                        //->setUrl($data->get('page-url'))
-                        ->setTitle($data->get('page-title'))
-                        ->setHeading($data->get('page-heading'))
-                        ->setAlt($data->get('page-alt'))
-                        ->setInstagramToken($data->get('page-instagram'))
-                        ->setMetaDescription($data->get('page-description'))
-                        ->setKeywords($data->get('page-keywords'))
-                    ;
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali stránku');
-                    $logger->setType(LOGGER_TYPE_SUCCESS);
-                    break;
+                if ($uploadedFile) {
+                    $newFileName = $uploadHelper->uploadImage($uploadedFile, 'logos', $entity->getImgName());
+                    $entity->setImgName($newFileName);
                 }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger->setType(LOGGER_TYPE_FAILED);
+                $entity
+                    //->setName($data->get('page-name'))
+                    //->setUrl($data->get('page-url'))
+                    ->setTitle($data->get('page-title'))
+                    ->setHeading($data->get('page-heading'))
+                    ->setAlt($data->get('page-alt'))
+                    ->setInstagramToken($data->get('page-instagram'))
+                    ->setMetaDescription($data->get('page-description'))
+                    ->setKeywords($data->get('page-keywords'))
+                ;
+                $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali stránku');
+                $logger->setType(LOGGER_TYPE_SUCCESS);
                 break;
 
             default:
-                $logger->setOperation(UNEXPECTED_ERROR);
                 $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-                $logger->setType(LOGGER_TYPE_FAILED);
+                $logger
+                    ->setOperation(UNEXPECTED_ERROR)
+                    ->setType(LOGGER_TYPE_FAILED);
                 break;
         }
 
-        if(empty($logger->getOperation())) {
-            $logger->setOperation($page->getName()." [ ".$page->getId()." ] ");
-        }
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_PAGES))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName());
+        $logger = $this->completeLogger($logger, MODULE_PAGES, $entity->getName() ." [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();
-
-        return $this->redirectToRoute('editor_pages');
     }
 }

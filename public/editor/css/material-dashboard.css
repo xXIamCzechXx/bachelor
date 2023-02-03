@@ -15292,7 +15292,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .sidebar .nav li .dropdown-menu a:focus,
 .sidebar .nav li.active>[data-toggle="collapse"] {
   background-color: rgba(200, 200, 200, 0.2);
-  color: #3C4858;
+  color: rgba(220, 220, 220, 0.8);
   box-shadow: none;
 }
 
@@ -15347,7 +15347,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .sidebar .nav li .dropdown-menu a {
   margin: 10px 15px 0;
   border-radius: 3px;
-  color: #3C4858;
+  color: rgba(220, 220, 220, 0.8);
   padding-left: 10px;
   padding-right: 10px;
   text-transform: capitalize;
@@ -16790,7 +16790,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .table>thead>tr>td,
 .table>tbody>tr>td,
 .table>tfoot>tr>td {
-  padding: 12px 8px;
+  padding: 12px 16px;
   vertical-align: middle;
   border-color: #ddd;
 }

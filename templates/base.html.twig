@@ -33,10 +33,11 @@
             {# <script src="https://kit.fontawesome.com/05c0bf8e9c.js" crossorigin="anonymous"></script> #}
             <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
             {# <script src="{{ asset('build/controllers/aos/js/aos.js') }}"></script> #}
-            {# <script src="{{ asset('editor/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> recently removed #}
+            <script src="{{ asset('editor/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> {# Necessary for menu sidebar #}
             <script src="{{ asset('editor/js/core/bootstrap-material-design.min.js') }}"></script> {# This handles floating labels in form #}
             <script defer src="{{ asset('build/controllers/fontawesome/js/all.js') }}"></script>
-            <script src="{{ asset('editor/js/material-dashboard.js?v=2.1.2') }}" type="text/javascript"></script>
+            {# <script src="{{ asset('editor/js/material-dashboard.js?v=2.1.2') }}" type="text/javascript"></script> Same as script below #}
+            <script src="{{ asset('editor/js/material-dashboard.js') }}" type="text/javascript"></script>
             <script type="text/javascript">
                 function showTable($value) {
                     $('.' + $value).css('display', 'block');
@@ -49,7 +50,7 @@
             {{ include('default/utilities/shared/_marketing.html.twig') }}
         {% endblock %}
     </head>
-    <body>
+    <body class="user-interface">
         {% block scripts %}
             {{ include('default/utilities/shared/_scripts.html.twig') }}
         {% endblock %}

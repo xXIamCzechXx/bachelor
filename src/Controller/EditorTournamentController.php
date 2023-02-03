@@ -42,7 +42,7 @@ class EditorTournamentController extends BaseEditorController
     /**
      * @Route("/editor-edit/{id}/tournament", name="editor_edit_tournament", methods="POST")
      */
-    public function modifyTournament(Tournaments $tournament, Request $request)
+    public function editTournament(Tournaments $tournament, Request $request)
     {
         $logger = new Log();
         $data = $request->request;
@@ -51,7 +51,7 @@ class EditorTournamentController extends BaseEditorController
 
         switch ($data->get('tournament-action')) {
             case 'edit':
-                if ($this->isGranted(SUPER_ADMIN)) {
+                if ($this->isGranted(self::SUPER_ADMIN)) {
                     if (!empty($data->get('tournament-name'))) {
 
                         $tournament
@@ -73,7 +73,7 @@ class EditorTournamentController extends BaseEditorController
                 break;
 
             case 'remove':
-                if($this->isGranted(SUPER_ADMIN)) {
+                if($this->isGranted(self::SUPER_ADMIN)) {
                     $this->em->remove($tournament);
                     $this->addFlash(FLASH_WARNING, 'Úspěšně jste odstranili turnaj');
                     break;
@@ -123,7 +123,7 @@ class EditorTournamentController extends BaseEditorController
 
         switch ($data->get('tournament-action')) {
             case 'add':
-                if ($this->isGranted(SUPER_ADMIN)) {
+                if ($this->isGranted(self::SUPER_ADMIN)) {
                     if (!empty($data->get('tournament-name'))) {
                         $tournament
                             ->setName($data->get('tournament-name'))
@@ -184,7 +184,7 @@ class EditorTournamentController extends BaseEditorController
 
         switch ($data->get('score-action')) {
             case 'remove':
-                if($this->isGranted(SUPER_ADMIN)) {
+                if($this->isGranted(self::SUPER_ADMIN)) {
                     $tournamentScore = $this->em->getRepository(TournamentsScores::class)->findOneBy(['id' => $tournamentsScores->getId()]);
                     $user = $tournamentScore->getUser();
                     $this->em->remove($tournamentScore);

@@ -127,8 +127,8 @@ class FormAnswers
      */
     public function validate(ExecutionContextInterface $context, $payload)
     {
-        if (stripos($this->getPhone(), "777 777 777") !== false) {
-            $context->buildViolation('Číslo se rovná 777 777 777')
+        if (stripos($this->getPhone(), "773 777 777") !== false) {
+            $context->buildViolation('Zadali jste zakázané číslo')
                 ->atPath('phone')
                 ->addViolation();
         }

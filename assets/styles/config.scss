@@ -72,9 +72,16 @@
 }
 
 .form-check-input {
+  height: 14px;
   position: absolute;
+  padding: 0;
+  webkit-transform: scale(0.5,0.5);
   margin-top: 0.12rem !important;
   margin-left: 0.25rem !important;
+}
+
+.form-check-label {
+
 }
 
 #contact_form_gdpr {
@@ -234,4 +241,11 @@ blockquote {
 }
 .form-check {
   margin: 0;
+}
+
+.sidebar-wrapper .svg-inline--fa {
+  font-size: 20px;
+}
+.scoreboard-table svg {
+  font-size: 12px !important;
 }

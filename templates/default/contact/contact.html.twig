@@ -14,7 +14,7 @@
                 <li class="nav-item active  ">
                     <a class="nav-link" href="{{ path('account') }}">
                         <i class="fas fa-headset"></i>
-                        <p>Kontakt</p>
+                        <p class="fa-margin">Kontakt</p>
                     </a>
                 </li>
             </div>
@@ -38,6 +38,7 @@
 
                     <h2 class="text-center">Kontaktujte nás</h2><hr>
                     {{ form_widget(form) }}
+                    <label style="padding: 0 20px;">Odesláním souhlasíte se zpracováním osobních údajů</label>
                     <div class="col-md-12 button-border float-left full-width-button"><button type="submit">Odeslat zprávu</button></div>
                     {{ form_end(form) }}
                 </div>

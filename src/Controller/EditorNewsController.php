@@ -16,6 +16,7 @@ use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,152 +37,23 @@ class EditorNewsController extends BaseEditorController
       $categories = $this->em->getRepository(NewsCategories::class)->findAll();
 
       return $this->render('editor/editor_news/news.html.twig', [
-        'newsTitleLength' => 44,
-        'newsContentLength' => 80,
         'newsArray' => $news,
         'admins' => $admins,
         'categories' => $categories,
       ]);
     }
 
-    protected function getRequest($request = null)
-    {
-
-    }
     /**
      * @Route("/editor-edit/{slug}/news", name="editor_edit_news", methods="POST")
      */
     public function editNews(News $news, Request $request, UploadHelper $uploadHelper)
     {
-        $logger = new Log();
-        $data = $request->request;
-        $logger->setAction($data->get('news-action'));
-
-        $slug = $data->get('news-slug');
-        $addedAt = new \DateTimeImmutable($data->get('news-addedAt'));
-
-        switch ($data->get('news-action')) {
-            case 'edit':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
-                    $allCategories = $this->em->getRepository(NewsCategories::class)->findAll();
-                    foreach ($allCategories as $categoryRow) {
-                        $news->removeNewsCategory($categoryRow);
-                    }
-
-                    if ($data->get('category-action')) {
-                        foreach ($data->get('category-action') as $category) {
-                            if ($category != '0') {
-                                $categoryEntity = $this->em->getRepository(NewsCategories::class)->findOneBy(['id' => $category]);
-                                $news->addNewsCategory($categoryEntity);
-                            }
-                        }
-                    }
-                    /** @var UploadedFile $uploadedFile */
-                    $uploadedFile = $request->files->get('news-image');
-
-                    if ($uploadedFile) {
-                        $newFileName = $uploadHelper->uploadImage($uploadedFile, 'news', $news->getImgName());
-                        $news->setImgName($newFileName);
-                        //$news->setImgName(pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME));
-                    }
-
-                    if (!$user = $this->em->getRepository(User::class)->findOneBy(
-                        ['nickname' => $data->get('news-author')]
-                    )) {
-                        $user = $this->getUser();
-                    }
-
-                    if (!empty($data->get('news-title'))) {
-                        if (empty($slug)) {
-                            $slug = Urlizer::urlize($data->get('news-title'));
-                        }
-                        if (!empty($addedAt)) {
-                            $news->setAddedAt($addedAt);
-                        }
-                        $news
-                            ->setAuthor($user)
-                            ->setSlug($slug)
-                            ->setTitle($data->get('news-title'))
-                            ->setAlt($data->get('news-alt'))
-                            ->setView($data->get('news-view'))
-                            ->setNotation($data->get('news-notation'))
-                            ->setContent($data->get('news-content'))
-                            ->setKeywords($data->get('news-keywords'))
-                            ->setMetaDescription($data->get('news-description'));
-
-                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali článek');
-                        break;
-                    }
-                    $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko titulek(nadpis), prosím založte produkt znovu se správnými hodnotami');
-                    $logger
-                        ->setType(LOGGER_TYPE_FAILED)
-                        ->setOperation("Title was empty, please fill title before adding news");
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            case 'remove':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
-                    $this->em->remove($news);
-                    $this->addFlash(FLASH_WARNING, 'Úspěšně jste odstranili článek');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            case 'hide':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR) || $this->isGranted(ADMIN)) {
-                    $news->hide();
-                    $this->addFlash(FLASH_WARNING, 'Skrili jste novinku');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            case 'show':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR) || $this->isGranted(ADMIN)) {
-                    $news->show();
-                    $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste novinku');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            default:
-                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-                $logger
-                    ->setOperation(UNEXPECTED_ERROR)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
+        if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
+            $data = $request->request;
+            $this->processRequest($news, $data, $data->get('news-action'), $request->files, $uploadHelper);
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }
-
-        if (empty($logger->getOperation())) {
-            $logger->setOperation($news->getTitle()." [ ".$news->getId()." ] ");
-        }
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_NEWS))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName());
-
-        $this->em->persist($logger);
-        $this->em->flush();
 
         return $this->redirectToRoute('editor_news');
     }
@@ -191,97 +63,14 @@ class EditorNewsController extends BaseEditorController
      */
     public function addNews(Request $request, UploadHelper $uploadHelper)
     {
-        $logger = new Log();
-        $news = new News();
-        $data = $request->request;
-        $logger->setAction($data->get('news-action'));
-
-        $slug = $data->get('news-slug');
-        $addedAt = new \DateTimeImmutable($data->get('news-addedAt'));
-
-        switch ($data->get('news-action')) {
-            case 'add':
-                if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
-                    if ($data->get('category-action')) {
-                        foreach ($data->get('category-action') as $category) {
-                            if ($category != '0') {
-                                $categoryEntity = $this->em->getRepository(NewsCategories::class)->findOneBy(['id' => $category]);
-                                $news->addNewsCategory($categoryEntity);
-                            }
-                        }
-                    }
-                    /** @var UploadedFile $uploadedFile */
-                    $uploadedFile = $request->files->get('news-image');
-
-                    if ($uploadedFile) {
-                        $newFileName = $uploadHelper->uploadImage($uploadedFile, 'news', $news->getImgName());
-                        $news->setImgName($newFileName);
-                    }
-
-                    if (!$user = $this->em->getRepository(User::class)->findOneBy(
-                        ['nickname' => $data->get('news-author')]
-                    )) {
-                        $user = $this->getUser();
-                    }
-
-                    if (!empty($data->get('news-title'))) {
-                        if (empty($slug)) {
-                            $slug = Urlizer::urlize($data->get('news-title'));
-                        }
-                        if (!empty($addedAt)) {
-                            $news->setAddedAt($addedAt);
-                        }
-                        $news
-                            ->setAuthor($user)
-                            ->setSlug($slug)
-                            ->setTitle($data->get('news-title'))
-                            ->setAlt($data->get('news-alt'))
-                            ->setView($data->get('news-view'))
-                            ->setNotation($data->get('news-notation'))
-                            ->setContent($data->get('news-content'))
-                            ->setKeywords($data->get('news-keywords'))
-                            ->setMetaDescription($data->get('news-description'));
-
-                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali článek');
-                        break;
-                    }
-                    $news = null;
-                    $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko titulek(nadpis), prosím založte produkt znovu se správnými hodnotami');
-                    $logger
-                        ->setType(LOGGER_TYPE_FAILED)
-                        ->setOperation("Title was empty, title gotta be filled before adding news");
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            default:
-                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-                $logger
-                    ->setOperation(UNEXPECTED_ERROR)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-        }
-        if (empty($logger->getOperation())) {
-            $logger->setOperation($news->getTitle());
-        }
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
+        if ($this->isGranted(self::SUPER_ADMIN)) {
+            $news = new News();
+            $data = $request->request;
+            $this->processRequest($news, $data, $data->get('news-action'), $request->files, $uploadHelper);
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }
 
-        $logger
-            ->setModule($this->getModuleName(MODULE_NEWS))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName());
-
-        $this->em->persist($logger);
-        if ($news) {
-            $this->em->persist($news);
-        }
-        $this->em->flush();
         return $this->redirectToRoute('editor_news');
     }
 
@@ -302,58 +91,13 @@ class EditorNewsController extends BaseEditorController
    */
   public function addNewsCategory(Request $request)
   {
-    $logger = new Log();
-    $newsCategory = new NewsCategories();
-    $data = $request->request;
-    $logger->setAction($data->get('category-action'));
-
-    switch ($data->get('category-action')) {
-      case 'add':
-          if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
-              if (!empty($data->get('category-name'))) {
-                  $newsCategory
-                      ->setColor($data->get('category-color'))
-                      ->setName($data->get('category-name'))
-                      ->setDescription($data->get('category-description'));
-                  $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali kategorii článku');
-                  break;
-              }
-              $newsCategory = null;
-              $logger->setOperation("Name of category was empty, name gotta be filled before adding category");
-              $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název kategorie, prosím založte kategorii znovu se správnými hodnotami');
-              break;
-          }
-          $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-          $logger
-              ->setOperation(NO_RIGHTS)
-              ->setType(LOGGER_TYPE_FAILED);
-          break;
-
-      default:
-          $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-          $logger
-              ->setOperation(UNEXPECTED_ERROR)
-              ->setType(LOGGER_TYPE_FAILED);
-          break;
+    if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
+      $newsCategories = new NewsCategories();
+      $data = $request->request;
+      $this->processRequest($newsCategories, $data, $data->get('category-action'));
+    } else {
+      $this->addFlash(FLASH_DANGER, NO_RIGHTS);
     }
-
-    if(empty($logger->getOperation())) {
-        $logger->setOperation($newsCategory->getName()." [ ".$newsCategory->getId()." ] ");
-    }
-    if (empty($logger->getType())) {
-        $logger->setType(LOGGER_TYPE_SUCCESS);
-    }
-
-    $logger
-      ->setModule($this->getModuleName(MODULE_NEWS_CATEGORIES))
-      ->setUser($this->getUser())
-      ->setUserName($this->getUser()->getFirstName());
-
-    $this->em->persist($logger);
-    if ($newsCategory) {
-      $this->em->persist($newsCategory);
-    }
-    $this->em->flush();
 
     return $this->redirectToRoute('editor_news_categories');
   }
@@ -363,86 +107,219 @@ class EditorNewsController extends BaseEditorController
    */
   public function editNewsCategory(NewsCategories $newsCategory, Request $request)
   {
-    $logger = new Log();
-    $data = $request->request;
-    $logger->setAction($data->get('category-action'));
-
-    switch ($data->get('category-action')) {
-      case 'edit':
-        if (!empty($data->get('category-name'))) {
-          $newsCategory
-            ->setColor($data->get('category-color'))
-            ->setName($data->get('category-name'))
-            ->setDescription($data->get('category-description'))
-          ;
-          $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali kategorii galerie');
-          break;
-        }
-        $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název kategorie, prosím upravte kategorii znovu se správnými hodnotami');
-        $logger
-            ->setType(LOGGER_TYPE_FAILED)
-            ->setOperation("Name of category was empty, name gotta be filled before editing category");
-        break;
-
-        case 'hide':
-            if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
-                $newsCategory->hide();
-                $this->addFlash(FLASH_WARNING, 'Skrili jste kategorii novinek');
-                break;
-            }
-            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-            $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-            break;
-
-        case 'show':
-            if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
-                $newsCategory->show();
-                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste kategorii novinek');
-                break;
-            }
-            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-            $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-            break;
-
-      case 'remove':
-          if ($this->isGranted(SUPER_ADMIN) || $this->isGranted(EDITOR)) {
-              $this->em->remove($newsCategory);
-              $this->addFlash(FLASH_WARNING, 'Odstranili jste kategorii');
-              break;
-          }
-          $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-          $logger
-              ->setOperation(NO_RIGHTS)
-              ->setType(LOGGER_TYPE_FAILED);
-          break;
-
-      default:
-          $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-          $logger
-              ->setOperation(UNEXPECTED_ERROR)
-              ->setType(LOGGER_TYPE_FAILED);
-          break;
+    if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
+      $data = $request->request;
+      $this->processRequest($newsCategory, $data, $data->get('category-action'));
+    } else {
+      $this->addFlash(FLASH_DANGER, NO_RIGHTS);
     }
-
-    if(empty($logger->getOperation())) {
-        $logger->setOperation($newsCategory->getName());
-    }
-    if (empty($logger->getType())) {
-        $logger->setType(LOGGER_TYPE_SUCCESS);
-    }
-
-    $logger
-      ->setModule($this->getModuleName(MODULE_NEWS_CATEGORIES))
-      ->setUser($this->getUser())
-      ->setUserName($this->getUser()->getFirstName());
-
-    $this->em->persist($logger);
-    $this->em->flush();
 
     return $this->redirectToRoute('editor_news_categories');
   }
+
+    /**
+     * @param $entity
+     * @param InputBag $data
+     * @param string $action
+     */
+    protected function processRequest($entity, InputBag $data, String $action = 'undefined', $files = null, $uploadHelper = null)
+    {
+        $logger = new Log();
+        $logger->setAction($action);
+
+        switch ($action) {
+            case 'add':
+                $slug = $data->get('news-slug');
+                $addedAt = new \DateTimeImmutable($data->get('news-addedAt'));
+                if ($data->get('category-action')) {
+                    foreach ($data->get('category-action') as $category) {
+                        if ($category != '0') {
+                            $categoryEntity = $this->em->getRepository(NewsCategories::class)->findOneBy(['id' => $category]);
+                            $entity->addNewsCategory($categoryEntity);
+                        }
+                    }
+                }
+                /** @var UploadedFile $uploadedFile */
+                $uploadedFile = $files->get('news-image');
+
+                if ($uploadedFile) {
+                    $newFileName = $uploadHelper->uploadImage($uploadedFile, 'news', $entity->getImgName());
+                    $entity->setImgName($newFileName);
+                }
+
+                if (!$user = $this->em->getRepository(User::class)->findOneBy(
+                    ['nickname' => $data->get('news-author')]
+                )) {
+                    $user = $this->getUser();
+                }
+
+                if (!empty($data->get('news-title'))) {
+                    if (empty($slug)) {
+                        $slug = Urlizer::urlize($data->get('news-title'));
+                    }
+                    if (!empty($addedAt)) {
+                        $entity->setAddedAt($addedAt);
+                    }
+                    $entity
+                        ->setAuthor($user)
+                        ->setSlug($slug)
+                        ->setTitle($data->get('news-title'))
+                        ->setAlt($data->get('news-alt'))
+                        ->setView($data->get('news-view'))
+                        ->setNotation($data->get('news-notation'))
+                        ->setContent($data->get('news-content'))
+                        ->setKeywords($data->get('news-keywords'))
+                        ->setMetaDescription($data->get('news-description'));
+
+                    $this->em->persist($entity);
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali článek');
+                    break;
+                }
+
+                $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko titulek(nadpis), prosím založte produkt znovu se správnými hodnotami');
+                $logger
+                    ->setType(LOGGER_TYPE_FAILED)
+                    ->setOperation("Title was empty, title gotta be filled before adding news");
+                break;
+
+            case 'edit':
+                $slug = $data->get('news-slug');
+                $addedAt = new \DateTimeImmutable($data->get('news-addedAt'));
+                $allCategories = $this->em->getRepository(NewsCategories::class)->findAll();
+                foreach ($allCategories as $categoryRow) {
+                    $entity->removeNewsCategory($categoryRow);
+                }
+
+                if ($data->get('category-action')) {
+                    foreach ($data->get('category-action') as $category) {
+                        if ($category != '0') {
+                            $categoryEntity = $this->em->getRepository(NewsCategories::class)->findOneBy(['id' => $category]);
+                            $entity->addNewsCategory($categoryEntity);
+                        }
+                    }
+                }
+                /** @var UploadedFile $uploadedFile */
+                $uploadedFile = $files->get('news-image');
+
+                if ($uploadedFile) {
+                    $newFileName = $uploadHelper->uploadImage($uploadedFile, 'news', $entity->getImgName());
+                    $entity->setImgName($newFileName);
+                    //$news->setImgName(pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME));
+                }
+
+                if (!$user = $this->em->getRepository(User::class)->findOneBy(
+                    ['nickname' => $data->get('news-author')]
+                )) {
+                    $user = $this->getUser();
+                }
+
+                if (!empty($data->get('news-title'))) {
+                    if (empty($slug)) {
+                        $slug = Urlizer::urlize($data->get('news-title'));
+                    }
+                    if (!empty($addedAt)) {
+                        $entity->setAddedAt($addedAt);
+                    }
+                    $entity
+                        ->setAuthor($user)
+                        ->setSlug($slug)
+                        ->setTitle($data->get('news-title'))
+                        ->setAlt($data->get('news-alt'))
+                        ->setView($data->get('news-view'))
+                        ->setNotation($data->get('news-notation'))
+                        ->setContent($data->get('news-content'))
+                        ->setKeywords($data->get('news-keywords'))
+                        ->setMetaDescription($data->get('news-description'));
+
+                    $this->em->persist($entity);
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali článek');
+                    break;
+                }
+                $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko titulek(nadpis), prosím založte produkt znovu se správnými hodnotami');
+                $logger
+                    ->setType(LOGGER_TYPE_FAILED)
+                    ->setOperation("Title was empty, please fill title before adding news");
+                break;
+
+            case 'remove':
+                $this->em->remove($entity);
+                $this->addFlash(FLASH_WARNING, 'Úspěšně jste odstranili článek');
+                break;
+
+            case 'hide':
+                $entity->hide();
+                $this->addFlash(FLASH_WARNING, 'Skrili jste novinku');
+                break;
+
+            case 'show':
+                $entity->show();
+                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste novinku');
+                break;
+
+            case 'add-category':
+                if (!empty($data->get('category-name'))) {
+                    $entity
+                        ->setColor($data->get('category-color'))
+                        ->setName($data->get('category-name'))
+                        ->setDescription($data->get('category-description'));
+
+                    $this->em->persist($entity);
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali kategorii článku');
+                    break;
+                }
+                $logger->setOperation("Name of category was empty, name gotta be filled before adding category");
+                $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název kategorie, prosím založte kategorii znovu se správnými hodnotami');
+                break;
+
+            case 'edit-category':
+                if (!empty($data->get('category-name'))) {
+                    $entity
+                        ->setColor($data->get('category-color'))
+                        ->setName($data->get('category-name'))
+                        ->setDescription($data->get('category-description'))
+                    ;
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali kategorii galerie');
+                    break;
+                }
+                $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název kategorie, prosím upravte kategorii znovu se správnými hodnotami');
+                $logger
+                    ->setType(LOGGER_TYPE_FAILED)
+                    ->setOperation("Name of category was empty, name gotta be filled before editing category");
+                break;
+
+            case 'hide-category':
+                $entity->hide();
+                $this->addFlash(FLASH_WARNING, 'Skrili jste kategorii novinek');
+                break;
+
+            case 'show-category':
+                $entity->show();
+                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste kategorii novinek');
+                break;
+
+            case 'remove-category':
+                if ($this->isGranted(self::SUPER_ADMIN)) { // There is an violation because is deleting
+                    $this->em->remove($entity);
+                    $this->addFlash(FLASH_WARNING, 'Odstranili jste kategorii');
+                    break;
+                }
+                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
+                $logger
+                    ->setOperation(NO_RIGHTS)
+                    ->setType(LOGGER_TYPE_FAILED);
+                break;
+
+            default:
+                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
+                $logger
+                    ->setOperation(UNEXPECTED_ERROR)
+                    ->setType(LOGGER_TYPE_FAILED);
+                break;
+        }
+
+        $logger = $this->completeLogger($logger, MODULE_NEWS, $entity->getTitle() ." [ ".$entity->getId()." ] ");
+
+        $this->em->persist($logger);
+        $this->em->flush();
+    }
 }

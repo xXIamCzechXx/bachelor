@@ -646,7 +646,7 @@ hr {
 
 .twitch-figure {
   position: absolute;
-  width: 460px;
+  //width: 460px;
   height: auto;
   overflow-x: hidden;
 }
@@ -659,7 +659,8 @@ hr {
 }
 .twitch-figure-right {
   margin-top: -18px;
-  right: -32px;
+  right: 26px;
+  //right: -32px;
 }
 .twitch-figure-right-hp {
   margin-top: -18px;
@@ -1457,11 +1458,6 @@ footer {
     /* margin: 6px; */
     /* font-size: 20px; */
     top: 0 !important;
-    fill: none !important;
-    stroke: #f2f2f2 !important;
-    stroke-dasharray: 150 480 !important;
-    stroke-dashoffset: 150 !important;
-    transition: 0.9s ease-in-out !important;
   }
 }
 
@@ -1519,12 +1515,11 @@ footer {
 
 .default-form {
   position: relative;
-  padding: 24px 10px 24px 10px;
+  padding: 0;
   border-radius: 5px;
   width: 720px;
   max-width: 90vw;
   z-index: 2;
-  padding-bottom: 24px;
   left: 50%;
   transform: translate(-50%, 0);
 
@@ -1734,7 +1729,7 @@ footer {
   }
 }
 
-svg {
+.user-interface svg {
   position: relative;
   //left: 0;
   //transform: translate(-50%, 0);
@@ -1997,7 +1992,6 @@ svg {
   padding: 84px 0 32px 0;
   position: relative;
   width: 100%;
-  margin-bottom: 32px;
   min-height: 480px;
 
   .cst-leaderboard-section {
@@ -2012,6 +2006,7 @@ svg {
 .bracket-image {
   max-width: 100%;
   display: block;
+  padding: 20px;
 }
 
 .modal-dialog {
@@ -2118,4 +2113,15 @@ svg {
       height: 24px;
     }
   }
+}
+
+.contact-wrapper {
+  .twitch-figure img {
+    max-height: 500px;
+  }
+}
+
+.fa-margin {
+  margin-left: 12px !important;
+  display: inline-block !important;
 }

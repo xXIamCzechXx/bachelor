@@ -12,27 +12,7 @@
                         <li class="nav-item  ">
                             <a class="nav-link" href="{{ path('homepage') }}">
                                 <i class="fas fa-map-signs"></i>
-                                <p>Hlavní strana</p>
-                            </a>
-                        </li>
-                    </div>
-                {% endblock %}
-                {% block turnaj %}
-                    <div class="button-border">
-                        <li class="nav-item  ">
-                            <a class="nav-link" href="{{ path('beatsaber') }}">
-                                <i class="far fa-caret-square-down"></i>
-                                <p>Beat Saber</p>
-                            </a>
-                        </li>
-                    </div>
-                {% endblock %}
-                {% block aboutUs %}
-                    <div class="button-border">
-                        <li class="nav-item  ">
-                            <a class="nav-link" href="{{ path('pavlov') }}">
-                                <i class="fas fa-crosshairs"></i>
-                                <p>Pavlov VR</p>
+                                <p class="fa-margin">Hlavní strana</p>
                             </a>
                         </li>
                     </div>
@@ -42,7 +22,7 @@
                         <li class="nav-item  ">
                             <a class="nav-link" href="{{ path('users') }}">
                                 <i class="fa-solid fa-users-between-lines"></i>
-                                <p>Hráči</p>
+                                <p class="fa-margin">Hráči</p>
                             </a>
                         </li>
                     </div>
@@ -52,7 +32,7 @@
                         <li class="nav-item  ">
                             <a class="nav-link" href="{{ path('gallery') }}">
                                 <i class="fas fa-photo-video"></i>
-                                <p>Galerie</p>
+                                <p class="fa-margin">Galerie</p>
                             </a>
                         </li>
                     </div>
@@ -62,7 +42,7 @@
                         <li class="nav-item  ">
                             <a class="nav-link" href="{{ path('news') }}">
                                 <i class="fas fa-book-open"></i>
-                                <p>Články</p>
+                                <p class="fa-margin">Novinky</p>
                             </a>
                         </li>
                     </div>
@@ -72,7 +52,37 @@
                         <li class="nav-item  ">
                             <a class="nav-link" href="{{ path('contact') }}">
                                 <i class="fas fa-headset"></i>
-                                <p>Kontakt</p>
+                                <p class="fa-margin">Kontakt</p>
+                            </a>
+                        </li>
+                    </div>
+                {% endblock %}
+                {% block turnaj %}
+                    <div class="button-border">
+                        <li class="nav-item  ">
+                            <a class="nav-link" href="{{ path('beatsaber') }}">
+                                <i class="far fa-caret-square-down"></i>
+                                <p class="fa-margin">Beat Saber</p>
+                            </a>
+                        </li>
+                    </div>
+                {% endblock %}
+                {% block scoreboard %}
+                    <div class="button-border">
+                        <li class="nav-item  ">
+                            <a class="nav-link" href="{{ path('scoreboard') }}">
+                                <i class="fa-solid fa-vr-cardboard"></i>
+                                <p class="fa-margin">Scoreboard</p>
+                            </a>
+                        </li>
+                    </div>
+                {% endblock %}
+                {% block pavlov %}
+                    <div class="button-border">
+                        <li class="nav-item  ">
+                            <a class="nav-link" href="{{ path('pavlov') }}">
+                                <i class="fas fa-crosshairs"></i>
+                                <p class="fa-margin">Pavlov VR</p>
                             </a>
                         </li>
                     </div>
@@ -84,7 +94,7 @@
                             <li class="nav-item  ">
                                 <a class="nav-link" href="{{ path('account') }}">
                                     <i class="fas fa-id-card"></i>
-                                    <p>Účet</p>
+                                    <p class="fa-margin">Účet</p>
                                 </a>
                             </li>
                         </div>
@@ -94,7 +104,7 @@
                             <li class="nav-item  ">
                                 <a class="nav-link" href="{{ path('app_logout') }}">
                                     <i class="fas fa-door-open"></i>
-                                    <p>Odhlásit se</p>
+                                    <p class="fa-margin">Odhlásit se</p>
                                 </a>
                             </li>
                         </div>
@@ -106,7 +116,7 @@
                                 <li class="nav-item  ">
                                     <a class="nav-link" href="{{ path('editor') }}">
                                         <i class="fas fa-wrench"></i>
-                                        <p>Editor</p>
+                                        <p class="fa-margin">Editor</p>
                                     </a>
                                 </li>
                             </div>
@@ -118,7 +128,7 @@
                             <li class="nav-item  ">
                                 <a class="nav-link" href="{{ path('app_login') }}">
                                     <i class="far fa-address-card"></i>
-                                    <p>Přihlášení</p>
+                                    <p class="fa-margin">Přihlášení</p>
                                 </a>
                             </li>
                         </div>
@@ -128,7 +138,7 @@
                             <li class="nav-item  ">
                                 <a class="nav-link" href="{{ path('app_register') }}">
                                     <i class="far fa-newspaper"></i>
-                                    <p>Registrace</p>
+                                    <p class="fa-margin">Registrace</p>
                                 </a>
                             </li>
                         </div>

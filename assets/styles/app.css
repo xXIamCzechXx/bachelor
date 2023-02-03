@@ -283,7 +283,10 @@
 }
 
 .form-check-input {
+  height: 14px;
   position: absolute;
+  padding: 0;
+  webkit-transform: scale(0.5, 0.5);
   margin-top: 0.12rem !important;
   margin-left: 0.25rem !important;
 }
@@ -445,6 +448,14 @@ blockquote {
 
 .form-check {
   margin: 0;
+}
+
+.sidebar-wrapper .svg-inline--fa {
+  font-size: 20px;
+}
+
+.scoreboard-table svg {
+  font-size: 12px !important;
 }
 
 .show-object {
@@ -1226,7 +1237,6 @@ hr {
 
 .twitch-figure {
   position: absolute;
-  width: 460px;
   height: auto;
   overflow-x: hidden;
 }
@@ -1241,7 +1251,7 @@ hr {
 
 .twitch-figure-right {
   margin-top: -18px;
-  right: -32px;
+  right: 26px;
 }
 
 .twitch-figure-right-hp {
@@ -2148,11 +2158,6 @@ footer .footer .footer-container .footer-logo {
   /* margin: 6px; */
   /* font-size: 20px; */
   top: 0 !important;
-  fill: none !important;
-  stroke: #f2f2f2 !important;
-  stroke-dasharray: 150 480 !important;
-  stroke-dashoffset: 150 !important;
-  transition: 0.9s ease-in-out !important;
 }
 
 #instafeed-container {
@@ -2233,12 +2238,11 @@ footer .footer .footer-container .footer-logo {
 
 .default-form {
   position: relative;
-  padding: 24px 10px 24px 10px;
+  padding: 0;
   border-radius: 5px;
   width: 720px;
   max-width: 90vw;
   z-index: 2;
-  padding-bottom: 24px;
   left: 50%;
   transform: translate(-50%, 0);
 }
@@ -2467,7 +2471,7 @@ footer .footer .footer-container .footer-logo {
   margin: 0.35em 0 !important;
 }
 
-svg {
+.user-interface svg {
   position: relative;
   float: left;
   margin: 6px;
@@ -2747,7 +2751,6 @@ svg {
   padding: 84px 0 32px 0;
   position: relative;
   width: 100%;
-  margin-bottom: 32px;
   min-height: 480px;
 }
 .cst-leaderboard-container .cst-leaderboard-section {
@@ -2761,6 +2764,7 @@ svg {
 .bracket-image {
   max-width: 100%;
   display: block;
+  padding: 20px;
 }
 
 .modal-dialog {
@@ -2869,6 +2873,15 @@ svg {
 }
 .view-discord-container .view-discord-section .discord-logo {
   height: 24px;
+}
+
+.contact-wrapper .twitch-figure img {
+  max-height: 500px;
+}
+
+.fa-margin {
+  margin-left: 12px !important;
+  display: inline-block !important;
 }
 
 /*# sourceMappingURL=app.css.map */

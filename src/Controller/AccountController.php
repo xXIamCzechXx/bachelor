@@ -210,21 +210,20 @@ class AccountController extends BaseController
     public function getScoresaberData($user)
     {
         $player = [];
-        $context = stream_context_create(array('https' => array('header'=>'Connection: close\r\n')));
+
+        $player["pp"] = "Nutný scoresaber";
+        $player["countryRank"] = "Nutný scoresaber";
+        $player["rank"] = "Nutný scoresaber";
+        $player["country"] = "CZ";
 
         if (null != $user->getScoresaberId() && $user->getScoresaberId() !== '' && $user->getScoresaberId() !== 0) {
+            $context = stream_context_create(array('https' => array('header'=>'Connection: close\r\n')));
             if ($playerData = json_decode(@file_get_contents('https://new.scoresaber.com/api/player/'.$user->getScoresaberId().'/basic', false, $context))) {
                 $player["pp"] = number_format($playerData->playerInfo->pp, 2);
                 $player["countryRank"] = $playerData->playerInfo->countryRank;
                 $player["rank"] = $playerData->playerInfo->rank;
                 $player["country"] = $playerData->playerInfo->country;
             }
-        }
-        if (empty($player)) {
-            $player["pp"] = "Nutný scoresaber";
-            $player["countryRank"] = "Nutný scoresaber";
-            $player["rank"] = "Nutný scoresaber";
-            $player["country"] = "CZ";
         }
 
         return $player;

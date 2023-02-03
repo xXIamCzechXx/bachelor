@@ -51,6 +51,19 @@ class Log
      */
     private $action;
 
+    /**
+     * @param string $module
+     * @param string $operation
+     * @param string $type
+     * @param string $action
+     */
+    public function __construct(string $module = 'Undefined', string $operation = 'Undefined', string $type = 'success', string $action = 'undefined') {
+        $this->module = $module;
+        $this->operation = $operation;
+        $this->type = $type;
+        $this->action = $action;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

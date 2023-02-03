@@ -34,7 +34,7 @@ class EditorTournamentMapsController extends BaseEditorController
 
         switch ($data->get('map-action')) {
             case 'edit':
-                if ($this->isGranted(SUPER_ADMIN)) {
+                if ($this->isGranted(self::SUPER_ADMIN)) {
                     if (!empty($data->get('map-bsr')) && !empty($data->get('map-difficulty'))) {
 
                         $tournamentMap
@@ -64,7 +64,7 @@ class EditorTournamentMapsController extends BaseEditorController
                 break;
 
             case 'remove':
-                if($this->isGranted(SUPER_ADMIN)) {
+                if($this->isGranted(self::SUPER_ADMIN)) {
                     foreach ($tournamentMap->getTournamentsScores() as $scores) {
                         $this->em->remove($tournamentMap->removeTournamentsScore($scores));
                     }
@@ -116,7 +116,7 @@ class EditorTournamentMapsController extends BaseEditorController
 
         switch ($data->get('map-action')) {
             case 'add':
-                if ($this->isGranted(SUPER_ADMIN)) {
+                if ($this->isGranted(self::SUPER_ADMIN)) {
                     if (!empty($data->get('map-bsr')) && !empty($data->get('map-difficulty'))) {
 
                         $tournamentMap

@@ -34,10 +34,11 @@ class UsersController extends DefaultController
 
     /**
      * @Route("/players-data-ajaxize/{from}/{step}", name="playersDataAjaxize")
+     * Renders amount of users and their scoresaber data
      */
     public function ajaxizePlayersData(String $from, String $step, Request $request, ScoresaberApi $scoresaberApi)
     {
-        if (!$request->isXmlHttpRequest()) {
+        if (!$request->isXmlHttpRequest()) { // Not an Ajax request -> 404
             throw $this->createNotFoundException();
         }
 
@@ -55,18 +56,21 @@ class UsersController extends DefaultController
 
     /**
      * @Route("/player-data-ajaxize/{id}", name="playerDataAjaxize")
+     * Loads data of specific user and return template of his profile card
      */
     public function ajaxizePlayerData(User $user, Request $request, ScoresaberApi $scoresaberApi)
     {
+        if (!$request->isXmlHttpRequest()) { // Not an Ajax request -> 404
+            throw $this->createNotFoundException();
+        }
+
         $scoresaberData = $scoresaberApi->mapScoresaberUserData($user->getScoresaberId());
 
-        if ($request->isXmlHttpRequest()) {
-            return $this->render("default/users/detail/users_detail.html.twig",
-                [
-                    'user' => $user,
-                    'scoresaberData' => $scoresaberData,
-                ]
-            );
-        }
+        return $this->render("default/users/detail/users_detail.html.twig",
+            [
+                'user' => $user,
+                'scoresaberData' => $scoresaberData,
+            ]
+        );
     }
 }
