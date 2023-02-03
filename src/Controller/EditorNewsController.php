@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Config\TwigConfig;
 use function Symfony\Component\String\b;
 
 class EditorNewsController extends BaseEditorController
