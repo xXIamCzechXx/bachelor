@@ -63,9 +63,7 @@ class EditorNewsController extends BaseEditorController
     public function addNews(Request $request, UploadHelper $uploadHelper)
     {
         if ($this->isGranted(self::SUPER_ADMIN)) {
-            $news = new News();
-            $data = $request->request;
-            $this->processRequest($news, $data, $data->get('news-action'), $request->files, $uploadHelper);
+            $this->processRequest(new News(), $request->request, $request->request->get('news-action'), $request->files, $uploadHelper);
         } else {
             $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }
@@ -91,9 +89,7 @@ class EditorNewsController extends BaseEditorController
   public function addNewsCategory(Request $request)
   {
     if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
-      $newsCategories = new NewsCategories();
-      $data = $request->request;
-      $this->processRequest($newsCategories, $data, $data->get('category-action'));
+      $this->processRequest(new NewsCategories(), $request->request, $request->request->get('category-action'));
     } else {
       $this->addFlash(FLASH_DANGER, NO_RIGHTS);
     }

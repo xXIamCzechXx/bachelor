@@ -61,9 +61,7 @@ class EditorTournamentController extends BaseEditorController
     public function addTournament(Request $request)
     {
         if ($this->isGranted(self::SUPER_ADMIN)) {
-            $webhook = new Tournaments();
-            $data = $request->request;
-            $this->processRequest($webhook, $data, $data->get('tournament-action'));
+            $this->processRequest(new Tournaments(), $request->request, $request->request->get('tournament-action'));
         } else {
             $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }
@@ -103,8 +101,9 @@ class EditorTournamentController extends BaseEditorController
                     $entity
                         ->setName($data->get('tournament-name'))
                         ->setDescription($data->get('tournament-description'))
-                        ->setDate($date)
-                    ;
+                        ->setDate($date);
+
+                    $this->em->persist($entity);
                     $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste vytvořili turnaj '.$data->get('tournament-name'));
                     break;
                 }

@@ -47,9 +47,7 @@ class EditorDiscordController extends BaseEditorController
     public function addWebhook(Request $request)
     {
         if ($this->isGranted(self::SUPER_ADMIN)) {
-            $webhook = new Webhooks();
-            $data = $request->request;
-            $this->processRequest($webhook, $data, $data->get('webhook-action'));
+            $this->processRequest(new Webhooks(), $request->request, $request->request->get('webhook-action'));
         } else {
             $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }

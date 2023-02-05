@@ -87,7 +87,7 @@ class AccountController extends BaseController
     /**
      * @Route("/ucet-edit/{id}/user", name="account_edit_user", methods="POST")
      */
-    public function modifyUser(User $user, Request $request, UserPasswordHasherInterface $passwordHasher, UploadHelper $uploadHelper)
+    public function editUser(User $user, Request $request, UserPasswordHasherInterface $passwordHasher, UploadHelper $uploadHelper)
     {
         $logger = new Log();
         $data = $request->request;

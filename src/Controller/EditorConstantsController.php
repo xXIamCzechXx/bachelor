@@ -46,9 +46,7 @@ class EditorConstantsController extends BaseEditorController
     public function addConstant(Request $request)
     {
         if ($this->isGranted(self::SUPER_ADMIN)) {
-            $constant = new Constants();
-            $data = $request->request;
-            $this->processRequest($constant, $data, $data->get('constant-action'));
+            $this->processRequest(new Constants(), $request->request, $request->request->get('constant-action'));
         } else {
             $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }

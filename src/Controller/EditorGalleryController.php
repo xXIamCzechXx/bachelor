@@ -54,9 +54,7 @@ class EditorGalleryController extends BaseEditorController
   public function addImage(Request $request, UploadHelper $uploadHelper)
   {
       if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
-          $galleryImage = new GalleryImages();
-          $data = $request->request;
-          $this->processRequest($galleryImage, $data, $data->get('img-action'), $request->files, $uploadHelper);
+          $this->processRequest(new GalleryImages(), $request->request, $request->request->get('img-action'), $request->files, $uploadHelper);
       } else {
           $this->addFlash(FLASH_DANGER, NO_RIGHTS);
       }
@@ -82,9 +80,7 @@ class EditorGalleryController extends BaseEditorController
   public function addGalleryCategory(Request $request, UploadHelper $uploadHelper)
   {
       if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
-          $galleryCategory = new GalleryCategories();
-          $data = $request->request;
-          $this->processRequest($galleryCategory, $data, $data->get('category-action'));
+          $this->processRequest(new GalleryCategories(), $request->request, $request->request->get('category-action'));
       } else {
           $this->addFlash(FLASH_DANGER, NO_RIGHTS);
       }

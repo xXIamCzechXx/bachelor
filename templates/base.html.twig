@@ -50,7 +50,7 @@
             {{ include('default/utilities/shared/_marketing.html.twig') }}
         {% endblock %}
     </head>
-    <body class="user-interface">
+    <body>
         {% block scripts %}
             {{ include('default/utilities/shared/_scripts.html.twig') }}
         {% endblock %}
@@ -85,7 +85,9 @@
                     {% endif %}
                 {% endblock %}
             </h1>
-            {% block body %}{% endblock %}
+            <div class="body user-interface">
+                {% block body %}{% endblock %}
+            </div>
 
         {% block footer %}
             {{ include('default/utilities/shared/_footer.html.twig') }}

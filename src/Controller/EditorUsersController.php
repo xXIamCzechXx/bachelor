@@ -13,8 +13,10 @@ use App\Entity\UserBadges;
 use App\Service\UploadHelper;
 use App\Service\UserNormalizer;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\PasswordHasherInterface;
@@ -71,7 +73,7 @@ class EditorUsersController extends BaseEditorController
     /**
      * @Route("/editor-edit/{id}/user", name="editor_edit_user", methods="POST")
      */
-    public function modifyUser(User $user, Request $request, UserPasswordHasherInterface $passwordHasher, UserNormalizer $userNormalizer, UploadHelper $uploadHelper)
+    public function editUser(User $user, Request $request, UserPasswordHasherInterface $passwordHasher, UserNormalizer $userNormalizer, UploadHelper $uploadHelper)
     {
         $logger = new Log(); // Upravit na user log
         $data = $request->request;
@@ -285,63 +287,11 @@ class EditorUsersController extends BaseEditorController
      */
     public function addUserBadge(Request $request, UploadHelper $uploadHelper)
     {
-        $logger = new Log();
-        $badge = new UserBadges();
-        $data = $request->request;
-        $logger->setAction($data->get('badge-action'));
-
-        switch ($data->get('badge-action')) {
-            case 'add':
-                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
-                    if (!empty($data->get('badge-name'))) {
-
-                        /** @var UploadedFile $uploadedFile */
-                        $uploadedFile = $request->files->get('badge-image');
-
-                        if ($uploadedFile) {
-                            $newFileName = $uploadHelper->uploadImage($uploadedFile, 'badges');
-                            $badge->setImgName($newFileName);
-                        }
-                        $badge->setName($data->get('badge-name'));
-                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali badge');
-                        break;
-                    }
-                    $badge = null;
-                    $logger->setOperation("Name of badge was empty, name gotta be filled before adding.");
-                    $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název badge, prosím založte badge znovu se správnými hodnotami');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            default:
-                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-                $logger
-                    ->setOperation(UNEXPECTED_ERROR)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
+        if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::ADMIN)) {
+            $this->processRequest(new UserBadges(), $request->request, $request->request->get('badge-action'), $request->files, $uploadHelper);
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }
-
-        if(empty($logger->getOperation())) {
-            $logger->setOperation($badge->getName());
-        }
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_BADGES))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName());
-
-        $this->em->persist($logger);
-        if ($badge) {
-            $this->em->persist($badge);
-        }
-        $this->em->flush();
 
         return $this->redirectToRoute('editor_users_badges');
     }
@@ -351,22 +301,85 @@ class EditorUsersController extends BaseEditorController
      */
     public function editUserBadge(UserBadges $badge, Request $request, UploadHelper $uploadHelper)
     {
-        $logger = new Log();
-        $data = $request->request;
-        $logger->setOperation($data->get('badge-action'));
+        if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::ADMIN)) {
+            $this->processRequest($badge, $request->request, $request->request->get('badge-action'), $request->files, $uploadHelper);
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
+        }
 
-        switch ($data->get('badge-action')) {
-            case 'edit':
+        return $this->redirectToRoute('editor_users_badges');
+    }
+
+    /**
+     * @Route("/editor-add/user-hdm", name="editor_add_user_hdm", methods="POST")
+     */
+    public function addUserHdm(Request $request, UploadHelper $uploadHelper)
+    {
+        if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::ADMIN)) {
+            $this->processRequest(new Hdm(), $request->request, $request->request->get('hdm-action'), $request->files, $uploadHelper);
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
+        }
+
+        return $this->redirectToRoute('editor_users_hdms');
+    }
+
+    /**
+     * @Route("/editor-edit/{id}/news-user-hdm", name="editor_edit_user_hdm", methods="POST")
+     */
+    public function editUserHdm(Hdm $hdm, Request $request, UploadHelper $uploadHelper)
+    {
+        if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::ADMIN)) {
+            $this->processRequest($hdm, $request->request, $request->request->get('hdm-action'), $request->files, $uploadHelper);
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
+        }
+
+        return $this->redirectToRoute('editor_users_hdms');
+    }
+
+    /**
+     * @param $entity
+     * @param InputBag $data
+     * @param string $action
+     */
+    protected function processRequest($entity, InputBag $data, String $action = 'undefined', $files = null, $uploadHelper = null)
+    {
+        $logger = new Log();
+        $logger->setAction($action);
+
+        switch ($action) {
+            case 'add-badge':
                 if (!empty($data->get('badge-name'))) {
+
                     /** @var UploadedFile $uploadedFile */
-                    $uploadedFile = $request->files->get('badge-image');
+                    $uploadedFile = $files->get('badge-image');
 
                     if ($uploadedFile) {
-                        $newFileName = $uploadHelper->uploadImage($uploadedFile, 'badges', $badge->getImgName());
-                        $badge->setImgName($newFileName);
+                        $newFileName = $uploadHelper->uploadImage($uploadedFile, 'badges');
+                        $entity->setImgName($newFileName);
+                    }
+                    $entity->setName($data->get('badge-name'));
+                    $this->em->persist($entity);
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali badge');
+                    break;
+                }
+                $entity = null;
+                $logger->setOperation("Name of badge was empty, name gotta be filled before adding.");
+                $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název badge, prosím založte badge znovu se správnými hodnotami');
+                break;
+
+            case 'edit-badge':
+                if (!empty($data->get('badge-name'))) {
+                    /** @var UploadedFile $uploadedFile */
+                    $uploadedFile = $files->get('badge-image');
+
+                    if ($uploadedFile) {
+                        $newFileName = $uploadHelper->uploadImage($uploadedFile, 'badges', $entity->getImgName());
+                        $entity->setImgName($newFileName);
                     }
 
-                    $badge->setName($data->get('badge-name'));
+                    $entity->setName($data->get('badge-name'));
                     $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali badge');
                     break;
                 }
@@ -376,40 +389,77 @@ class EditorUsersController extends BaseEditorController
                     ->setOperation("Name of badge was empty, name gotta be filled before editing");
                 break;
 
-            case 'hide':
-                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
-                    $badge->hide();
-                    $this->addFlash(FLASH_WARNING, 'Skrili jste badge');
+            case 'hide-badge':
+                $entity->hide();
+                $this->addFlash(FLASH_WARNING, 'Skrili jste badge');
+                break;
+
+            case 'show-badge':
+                $entity->show();
+                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste badge');
+                break;
+
+            case 'remove-badge':
+                $this->em->remove($entity);
+                $this->addFlash(FLASH_WARNING, 'Odstranili jste badge');
+                break;
+
+            case 'add-hdm':
+                if (!empty($data->get('hdm-name'))) {
+
+                    /** @var UploadedFile $uploadedFile */
+                    $uploadedFile = $files->get('hdm-image');
+
+                    if ($uploadedFile) {
+                        $newFileName = $uploadHelper->uploadImage($uploadedFile, 'hdms');
+                        $entity->setImgName($newFileName);
+                    }
+
+                    $entity->setName($data->get('hdm-name'));
+                    $this->em->persist($entity);
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali hdm');
                     break;
                 }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
+                $entity = null;
                 $logger
-                    ->setOperation(NO_RIGHTS)
+                    ->setOperation("Name of hdm was empty, name gotta be filled before adding.")
                     ->setType(LOGGER_TYPE_FAILED);
+                $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název hdm, prosím založte hdm znovu se správnými hodnotami');
                 break;
 
-            case 'show':
-                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
-                    $badge->show();
-                    $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste badge');
+            case 'edit-hdm':
+                if (!empty($data->get('hdm-name'))) {
+                    /** @var UploadedFile $uploadedFile */
+                    $uploadedFile = $files->get('hdm-image');
+
+                    if ($uploadedFile) {
+                        $newFileName = $uploadHelper->uploadImage($uploadedFile, 'hdms', $entity->getImgName());
+                        $entity->setImgName($newFileName);
+                    }
+
+                    $entity->setName($data->get('hdm-name'));
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali hdm');
                     break;
                 }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
+                $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název hdm, prosím upravte hdm znovu se správnými hodnotami');
                 $logger
-                        ->setOperation(NO_RIGHTS)
-                        ->setType(LOGGER_TYPE_FAILED);
+                    ->setType(LOGGER_TYPE_FAILED)
+                    ->setOperation("Name of hdm was empty, name gotta be filled before editing");
                 break;
 
-            case 'remove':
-                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
-                    $this->em->remove($badge);
-                    $this->addFlash(FLASH_WARNING, 'Odstranili jste badge');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                        ->setOperation(NO_RIGHTS)
-                        ->setType(LOGGER_TYPE_FAILED);
+            case 'hide-hdm':
+                $entity->hide();
+                $this->addFlash(FLASH_WARNING, 'Skrili jste hdm');
+                break;
+
+            case 'show-hdm':
+                $entity->show();
+                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste badge');
+                break;
+
+            case 'remove-hdm':
+                $this->em->remove($entity);
+                $this->addFlash(FLASH_WARNING, 'Odstranili jste hdm');
                 break;
 
             default:
@@ -420,182 +470,9 @@ class EditorUsersController extends BaseEditorController
                 break;
         }
 
-        if(empty($logger->getOperation())) {
-            $logger->setOperation($badge->getName()." [ ".$badge->getId()." ] ");
-        }
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_BADGES))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName());
+        $logger = $this->completeLogger($logger, MODULE_CONSTANTS, $entity->getName() ." [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();
-
-        return $this->redirectToRoute('editor_users_badges');
-    }
-
-    /**
-     * @Route("/editor-add/user-hdm", name="editor_add_user_hdm", methods="POST")
-     */
-    public function addUserHdm(Request $request, UploadHelper $uploadHelper)
-    {
-        $logger = new Log();
-        $hdm = new Hdm();
-        $data = $request->request;
-        $logger->setAction($data->get('hdm-action'));
-
-        switch ($data->get('hdm-action')) {
-            case 'add':
-                if ($this->isGranted(self::ADMIN)) {
-                    if (!empty($data->get('hdm-name'))) {
-
-                        /** @var UploadedFile $uploadedFile */
-                        $uploadedFile = $request->files->get('hdm-image');
-
-                        if ($uploadedFile) {
-                            $newFileName = $uploadHelper->uploadImage($uploadedFile, 'hdms');
-                            $hdm->setImgName($newFileName);
-                        }
-
-                        $hdm->setName($data->get('hdm-name'));
-                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali hdm');
-                        break;
-                    }
-                    $badge = null;
-                    $logger
-                        ->setOperation("Name of hdm was empty, name gotta be filled before adding.")
-                        ->setType(LOGGER_TYPE_FAILED);
-                    $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název hdm, prosím založte hdm znovu se správnými hodnotami');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                        ->setOperation(NO_RIGHTS)
-                        ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            default:
-                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-                $logger
-                        ->setOperation(UNEXPECTED_ERROR)
-                        ->setType(LOGGER_TYPE_FAILED);
-                break;
-        }
-
-        if(empty($logger->getOperation())) {
-            $logger->setOperation($hdm->getName());
-        }
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger
-                ->setModule($this->getModuleName(MODULE_HDMS))
-                ->setUser($this->getUser())
-                ->setUserName($this->getUser()->getFirstName());
-
-        $this->em->persist($logger);
-        if ($hdm) {
-            $this->em->persist($hdm);
-        }
-        $this->em->flush();
-
-        return $this->redirectToRoute('editor_users_hdms');
-    }
-
-    /**
-     * @Route("/editor-edit/{id}/news-user-hdm", name="editor_edit_user_hdm", methods="POST")
-     */
-    public function editUserHdm(Hdm $hdm, Request $request, UploadHelper $uploadHelper)
-    {
-        $logger = new Log();
-        $data = $request->request;
-        $logger->setAction($data->get('hdm-action'));
-
-        switch ($data->get('hdm-action')) {
-            case 'edit':
-                if (!empty($data->get('hdm-name'))) {
-                    /** @var UploadedFile $uploadedFile */
-                    $uploadedFile = $request->files->get('hdm-image');
-
-                    if ($uploadedFile) {
-                        $newFileName = $uploadHelper->uploadImage($uploadedFile, 'hdms', $hdm->getImgName());
-                        $hdm->setImgName($newFileName);
-                    }
-
-                    $hdm->setName($data->get('hdm-name'));
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali hdm');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název hdm, prosím upravte hdm znovu se správnými hodnotami');
-                $logger
-                        ->setType(LOGGER_TYPE_FAILED)
-                        ->setOperation("Name of hdm was empty, name gotta be filled before editing");
-                break;
-
-            case 'hide':
-                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
-                    $hdm->hide();
-                    $this->addFlash(FLASH_WARNING, 'Skrili jste hdm');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                        ->setOperation(NO_RIGHTS)
-                        ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            case 'show':
-                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
-                    $hdm->show();
-                    $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste badge');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                        ->setOperation(NO_RIGHTS)
-                        ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            case 'remove':
-                if ($this->isGranted(self::SUPER_ADMIN) || $this->isGranted(self::EDITOR)) {
-                    $this->em->remove($hdm);
-                    $this->addFlash(FLASH_WARNING, 'Odstranili jste hdm');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                        ->setOperation(NO_RIGHTS)
-                        ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            default:
-                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-                $logger
-                        ->setOperation(UNEXPECTED_ERROR)
-                        ->setType(LOGGER_TYPE_FAILED);
-                break;
-        }
-
-        if(empty($logger->getOperation())) {
-            $logger->setOperation($hdm->getName()." [ ".$hdm->getId()." ] ");
-        }
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger
-                ->setModule($this->getModuleName(MODULE_HDMS))
-                ->setUser($this->getUser())
-                ->setUserName($this->getUser()->getFirstName());
-
-        $this->em->persist($logger);
-        $this->em->flush();
-
-        return $this->redirectToRoute('editor_users_hdms');
     }
 }

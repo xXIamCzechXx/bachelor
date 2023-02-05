@@ -80,15 +80,15 @@
 															</div>
 														</a>
 														{% if hdm.view == 1 %}
-															<button name="hdm-action" value="hide" type="submit" rel="tooltip" title="Skrýt" class="btn btn-success btn-link btn-sm">
+															<button name="hdm-action" value="hide-hdm" type="submit" rel="tooltip" title="Skrýt" class="btn btn-success btn-link btn-sm">
 																<i class="far fa-eye"></i>
 															</button>
 														{% else %}
-															<button name="hdm-action" value="show" type="submit" rel="tooltip" title="Zobrazit" class="btn btn-danger btn-link btn-sm">
+															<button name="hdm-action" value="show-hdm" type="submit" rel="tooltip" title="Zobrazit" class="btn btn-danger btn-link btn-sm">
 																<i class="far fa-eye-slash"></i>
 															</button>
 														{% endif %}
-														<button name="hdm-action" value="remove" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
+														<button name="hdm-action" value="remove-hdm" type="submit" rel="tooltip" title="Odstranit" class="btn btn-danger btn-link btn-sm">
 															<i class="far fa-trash-alt"></i>
 														</button>
 													</form>
@@ -135,7 +135,7 @@
 									</div>
 								</div>
 							</div>
-							<button type="submit" name="hdm-action" value="edit" class="btn btn-primary pull-right">{{ editorSaveChanges }}</button>
+							<button type="submit" name="hdm-action" value="edit-hdm" class="btn btn-primary pull-right">{{ editorSaveChanges }}</button>
 							<button type="button" class="btn btn-secondary btn-close pull-right" data-bs-dismiss="modal">{{ editorClose }}</button>
 							<div class="clearfix"></div>
 						</div>
@@ -170,7 +170,7 @@
 								</div>
 							</div>
 						</div>
-						<button type="submit" name="hdm-action" value="add" class="btn btn-primary pull-right">{{ editorAdd }}</button>
+						<button type="submit" name="hdm-action" value="add-hdm" class="btn btn-primary pull-right">{{ editorAdd }}</button>
 						<button type="button" class="btn btn-secondary btn-close pull-right" data-bs-dismiss="modal">{{ editorClose }}</button>
 						<div class="clearfix"></div>
 					</div>

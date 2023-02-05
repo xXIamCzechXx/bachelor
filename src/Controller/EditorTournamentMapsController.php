@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Log;
 use App\Entity\Tournaments;
 use App\Entity\TournamentsMaps;
+use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,80 +28,14 @@ class EditorTournamentMapsController extends BaseEditorController
     /**
      * @Route("/editor-edit/{id}/tournament-map", name="editor_edit_tournament_map", methods="POST")
      */
-    public function modifyTournamentMap(TournamentsMaps $tournamentMap, Request $request)
+    public function editTournamentMap(TournamentsMaps $tournamentMap, Request $request)
     {
-        $logger = new Log();
-        $data = $request->request;
-        $logger->setAction($data->get('map-action'));
-
-        switch ($data->get('map-action')) {
-            case 'edit':
-                if ($this->isGranted(self::SUPER_ADMIN)) {
-                    if (!empty($data->get('map-bsr')) && !empty($data->get('map-difficulty'))) {
-
-                        $tournamentMap
-                            ->setBsr($data->get('map-bsr'))
-                            ->setDifficulty($data->get('map-difficulty'))
-                            ->setPool($data->get('map-pool'))
-                        ;
-
-                        $tournamentMap = $this->getMapInfo($tournamentMap);
-                        if (empty($tournamentMap->getName()) || empty($tournamentMap->getMaxScore())) {
-                            $this->addFlash(FLASH_DANGER, 'Mapa nebo obtížnost nebyly nalezeny na bsaber.com');
-                            $logger->setType(LOGGER_TYPE_FAILED);
-                            $tournamentMap = null;
-                            break;
-                        }
-                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste změnili mapu');
-                        break;
-                    }
-                    $this->addFlash(FLASH_DANGER, 'Není vyplněn bsr mapy nebo obtížnost, zkuste to prosím znovu');
-                    $logger->setType(LOGGER_TYPE_FAILED);
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                        ->setOperation(NO_RIGHTS)
-                        ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            case 'remove':
-                if($this->isGranted(self::SUPER_ADMIN)) {
-                    foreach ($tournamentMap->getTournamentsScores() as $scores) {
-                        $this->em->remove($tournamentMap->removeTournamentsScore($scores));
-                    }
-                    $this->em->remove($tournamentMap);
-                    $this->addFlash(FLASH_WARNING, 'Úspěšně jste odstranili mapu');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-            default:
-                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-                $logger
-                    ->setOperation(UNEXPECTED_ERROR)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
+        if ($this->isGranted(self::ADMIN)) {
+            $data = $request->request;
+            $this->processRequest($tournamentMap, $data, $data->get('map-action'));
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }
-
-        if(empty($logger->getOperation()) && $tournamentMap !== null) {
-            $logger->setOperation($tournamentMap !== null ? $tournamentMap->getName()." [ ".$tournamentMap->getId()." ] " : 'Operation was unsuccesful');
-        }
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_TOURNAMENT))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName())
-        ;
-
-        $this->em->persist($logger);
-        $this->em->flush();
 
         return $this->redirectToRoute('editor_tournament_maps');
     }
@@ -109,67 +45,11 @@ class EditorTournamentMapsController extends BaseEditorController
      */
     public function addTournamentMap(Request $request)
     {
-        $logger = new Log();
-        $tournamentMap = new TournamentsMaps();
-        $data = $request->request;
-        $logger->setAction($data->get('map-action'));
-
-        switch ($data->get('map-action')) {
-            case 'add':
-                if ($this->isGranted(self::SUPER_ADMIN)) {
-                    if (!empty($data->get('map-bsr')) && !empty($data->get('map-difficulty'))) {
-
-                        $tournamentMap
-                            ->setBsr($data->get('map-bsr'))
-                            ->setDifficulty($data->get('map-difficulty'))
-                            ->setPool($data->get('map-pool'))
-                        ;
-                        $tournamentMap = $this->getMapInfo($tournamentMap);
-                        if (empty($tournamentMap->getName()) || empty($tournamentMap->getMaxScore())) {
-                            $this->addFlash(FLASH_DANGER, 'Mapa nebo obtížnost nebyly nalezeny na bsaber.com');
-                            $logger->setType(LOGGER_TYPE_FAILED);
-                            $tournamentMap = null;
-                            break;
-                        }
-                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste vložili mapu '.$data->get('map-name'));
-                        break;
-                    }
-                    $this->addFlash(FLASH_DANGER, 'Není vyplněn bsr mapy nebo obtížnost, zkuste to prosím znovu');
-                    $logger->setType(LOGGER_TYPE_FAILED);
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            default:
-                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-                $logger
-                    ->setOperation(UNEXPECTED_ERROR)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
+        if ($this->isGranted(self::SUPER_ADMIN)) {
+            $this->processRequest(new TournamentsMaps(), $request->request, $request->request->get('map-action'));
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }
-
-        if(empty($logger->getOperation())) {
-            $logger->setOperation($tournamentMap !== null ? $tournamentMap->getName() : 'Operation was unsuccesful');
-        }
-
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_TOURNAMENT))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName());
-
-        $this->em->persist($logger);
-        if ($tournamentMap) {
-            $this->em->persist($tournamentMap);
-        }
-        $this->em->flush();
 
         return $this->redirectToRoute('editor_tournament_maps');
     }
@@ -194,5 +74,81 @@ class EditorTournamentMapsController extends BaseEditorController
         }
 
         return $tournamentMap;
+    }
+
+    /**
+     * @param $entity
+     * @param InputBag $data
+     * @param string $action
+     */
+    protected function processRequest($entity, InputBag $data, String $action = 'undefined')
+    {
+        $logger = new Log();
+        $logger->setAction($action);
+
+        switch ($action) {
+            case 'add':
+                if (!empty($data->get('map-bsr')) && !empty($data->get('map-difficulty'))) {
+                    $entity
+                        ->setBsr($data->get('map-bsr'))
+                        ->setDifficulty($data->get('map-difficulty'))
+                        ->setPool($data->get('map-pool'));
+
+                    $tournamentMap = $this->getMapInfo($entity);
+                    if (empty($tournamentMap->getName()) || empty($tournamentMap->getMaxScore())) {
+                        $this->addFlash(FLASH_DANGER, 'Mapa nebo obtížnost nebyly nalezeny na bsaber.com');
+                        $logger->setType(LOGGER_TYPE_FAILED);
+                        $tournamentMap = null;
+                        break;
+                    }
+                    $this->em->persist($entity);
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste vložili mapu '.$data->get('map-name'));
+                    break;
+                }
+                $this->addFlash(FLASH_DANGER, 'Není vyplněn bsr mapy nebo obtížnost, zkuste to prosím znovu');
+                $logger->setType(LOGGER_TYPE_FAILED);
+                break;
+
+            case 'edit':
+                if (!empty($data->get('map-bsr')) && !empty($data->get('map-difficulty'))) {
+                    $entity
+                        ->setBsr($data->get('map-bsr'))
+                        ->setDifficulty($data->get('map-difficulty'))
+                        ->setPool($data->get('map-pool'));
+
+                    $tournamentMap = $this->getMapInfo($entity);
+                    if (empty($tournamentMap->getName()) || empty($tournamentMap->getMaxScore())) {
+                        $this->addFlash(FLASH_DANGER, 'Mapa nebo obtížnost nebyly nalezeny na bsaber.com');
+                        $logger->setType(LOGGER_TYPE_FAILED);
+                        $tournamentMap = null;
+                        break;
+                    }
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste změnili mapu');
+                    break;
+                }
+                $this->addFlash(FLASH_DANGER, 'Není vyplněn bsr mapy nebo obtížnost, zkuste to prosím znovu');
+                $logger->setType(LOGGER_TYPE_FAILED);
+                break;
+
+            case 'remove':
+                foreach ($entity->getTournamentsScores() as $scores) {
+                    $this->em->remove($entity->removeTournamentsScore($scores));
+                }
+                $this->em->remove($entity);
+                $this->addFlash(FLASH_WARNING, 'Úspěšně jste odstranili mapu');
+                break;
+
+            default:
+                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
+                $logger
+                    ->setOperation(UNEXPECTED_ERROR)
+                    ->setType(LOGGER_TYPE_FAILED);
+                break;
+        }
+
+        $logger = $this->completeLogger($logger, MODULE_TOURNAMENT, $entity->getName() ." [ ".$entity->getId()." ] ");
+
+        $this->em->persist($logger);
+        $this->em->flush();
     }
 }
