@@ -11,6 +11,7 @@ use App\Repository\TournamentsScoresRepository;
 use App\Service\UserNormalizer;
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,68 +45,12 @@ class EditorTournamentController extends BaseEditorController
      */
     public function editTournament(Tournaments $tournament, Request $request)
     {
-        $logger = new Log();
-        $data = $request->request;
-        $logger->setAction($data->get('tournament-action'));
-        $date = new \DateTimeImmutable($data->get('tournament-date'));
-
-        switch ($data->get('tournament-action')) {
-            case 'edit':
-                if ($this->isGranted(self::SUPER_ADMIN)) {
-                    if (!empty($data->get('tournament-name'))) {
-
-                        $tournament
-                            ->setName($data->get('tournament-name'))
-                            ->setDescription($data->get('tournament-description'))
-                            ->setDate($date)
-                        ;
-                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste změnili turnaje');
-                        break;
-                    }
-                    $this->addFlash(FLASH_DANGER, 'Není vyplněn název turnaje, zkuste to prosím znovu');
-                    $logger->setType(LOGGER_TYPE_FAILED);
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            case 'remove':
-                if($this->isGranted(self::SUPER_ADMIN)) {
-                    $this->em->remove($tournament);
-                    $this->addFlash(FLASH_WARNING, 'Úspěšně jste odstranili turnaj');
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-            default:
-                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-                $logger
-                    ->setOperation(UNEXPECTED_ERROR)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
+        if ($this->isGranted(self::SUPER_ADMIN)) {
+            $data = $request->request;
+            $this->processRequest($tournament, $data, $data->get('tournament-action'));
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }
-
-        if(empty($logger->getOperation())) {
-            $logger->setOperation($tournament->getName()." [ ".$tournament->getId()." ] ");
-        }
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_TOURNAMENT))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName())
-        ;
-
-        $this->em->persist($logger);
-        $this->em->flush();
 
         return $this->redirectToRoute('editor_tournament');
     }
@@ -115,60 +60,13 @@ class EditorTournamentController extends BaseEditorController
      */
     public function addTournament(Request $request)
     {
-        $logger = new Log();
-        $tournament = new Tournaments();
-        $data = $request->request;
-        $logger->setAction($data->get('tournament-action'));
-        $date = new \DateTimeImmutable($data->get('tournament-date'));
-
-        switch ($data->get('tournament-action')) {
-            case 'add':
-                if ($this->isGranted(self::SUPER_ADMIN)) {
-                    if (!empty($data->get('tournament-name'))) {
-                        $tournament
-                            ->setName($data->get('tournament-name'))
-                            ->setDescription($data->get('tournament-description'))
-                            ->setDate($date)
-                        ;
-                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste vytvořili turnaj '.$data->get('tournament-name'));
-                        break;
-                    }
-                    $this->addFlash(FLASH_DANGER, 'Není vyplněn název turnaje, zkuste to prosím znovu');
-                    $logger->setType(LOGGER_TYPE_FAILED);
-                    break;
-                }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
-
-            default:
-                $this->addFlash(FLASH_DANGER, UNEXPECTED_ERROR_FLASH);
-                $logger
-                    ->setOperation(UNEXPECTED_ERROR)
-                    ->setType(LOGGER_TYPE_FAILED);
-                break;
+        if ($this->isGranted(self::SUPER_ADMIN)) {
+            $webhook = new Tournaments();
+            $data = $request->request;
+            $this->processRequest($webhook, $data, $data->get('tournament-action'));
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
         }
-
-        if(empty($logger->getOperation())) {
-            $logger->setOperation($tournament->getName());
-        }
-
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_TOURNAMENT))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName());
-
-        $this->em->persist($logger);
-        if ($tournament) {
-            $this->em->persist($tournament);
-        }
-        $this->em->flush();
 
         return $this->redirectToRoute('editor_tournament');
     }
@@ -178,27 +76,73 @@ class EditorTournamentController extends BaseEditorController
      */
     public function removeScore(Request $request, TournamentsScores $tournamentsScores, UserNormalizer $userNormalizer)
     {
-        $logger = new Log(); // Upravit na user log
-        $data = $request->request;
-        $logger->setAction($data->get('score-action'));
+        if ($this->isGranted(self::SUPER_ADMIN)) {
+            $data = $request->request;
+            $this->processRequest($tournamentsScores, $data, $data->get('score-action'), $request->files);
+        } else {
+            $this->addFlash(FLASH_DANGER, NO_RIGHTS);
+        }
 
-        switch ($data->get('score-action')) {
+        return $this->redirectToRoute('editor_tournament_scores');
+    }
+
+    /**
+     * @param $entity
+     * @param InputBag $data
+     * @param string $action
+     */
+    protected function processRequest($entity, InputBag $data, String $action = 'undefined', $files = null, $uploadHelper = null)
+    {
+        $logger = new Log();
+        $logger->setAction($action);
+
+        switch ($action) {
+            case 'add':
+                if (!empty($data->get('tournament-name'))) {
+                    $date = new \DateTimeImmutable($data->get('tournament-date'));
+                    $entity
+                        ->setName($data->get('tournament-name'))
+                        ->setDescription($data->get('tournament-description'))
+                        ->setDate($date)
+                    ;
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste vytvořili turnaj '.$data->get('tournament-name'));
+                    break;
+                }
+                $this->addFlash(FLASH_DANGER, 'Není vyplněn název turnaje, zkuste to prosím znovu');
+                $logger->setType(LOGGER_TYPE_FAILED);
+                break;
+
+            case 'edit':
+                if (!empty($data->get('tournament-name'))) {
+                    $date = new \DateTimeImmutable($data->get('tournament-date'));
+                    $entity
+                        ->setName($data->get('tournament-name'))
+                        ->setDescription($data->get('tournament-description'))
+                        ->setDate($date);
+
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste změnili turnaje');
+                    break;
+                }
+                $this->addFlash(FLASH_DANGER, 'Není vyplněn název turnaje, zkuste to prosím znovu');
+                $logger->setType(LOGGER_TYPE_FAILED);
+                break;
+
             case 'remove':
-                if($this->isGranted(self::SUPER_ADMIN)) {
-                    $tournamentScore = $this->em->getRepository(TournamentsScores::class)->findOneBy(['id' => $tournamentsScores->getId()]);
+                $this->em->remove($entity);
+                $this->addFlash(FLASH_WARNING, 'Úspěšně jste odstranili turnaj');
+                break;
+
+            case 'remove-score':
+                if ($tournamentScore = $this->em->getRepository(TournamentsScores::class)->findOneBy(['id' => $entity->getId()])) {
                     $user = $tournamentScore->getUser();
                     $this->em->remove($tournamentScore);
                     $this->em->flush();
+                    $userNormalizer = new UserNormalizer($this->em);
                     $user = $userNormalizer->calculateScore($user);
                     $this->em->persist($user);
                     $this->em->flush();
                     $this->addFlash(FLASH_WARNING, 'Úspěšně jste odstranili score a zaktualizovalo se skóre uživatele');
-                    break;
                 }
-                $this->addFlash(FLASH_DANGER, NO_RIGHTS);
-                $logger
-                    ->setOperation(NO_RIGHTS)
-                    ->setType(LOGGER_TYPE_FAILED);
                 break;
 
             default:
@@ -209,20 +153,9 @@ class EditorTournamentController extends BaseEditorController
                 break;
         }
 
-        if (empty($logger->getType())) {
-            $logger->setType(LOGGER_TYPE_SUCCESS);
-        }
-
-        $logger->setOperation("Score delete");
-
-        $logger
-            ->setModule($this->getModuleName(MODULE_TOURNAMENT))
-            ->setUser($this->getUser())
-            ->setUserName($this->getUser()->getFirstName());
+        $logger = $this->completeLogger($logger, MODULE_PAGES, $entity->getName() ." [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();
-
-        return $this->redirectToRoute('editor_tournament_scores');
     }
 }
