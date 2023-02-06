@@ -17,6 +17,8 @@ import './styles/responsivity.scss';
 //import './styles/editor/material-dashboard.css';
 
 import './js/ajax';
+import './js/pagination.js';
+import './js/pagination.min';
 // import './controllers/aos/sass/aos.scss';
 // import throttle from 'lodash.throttle';
 // import debounce from 'lodash.debounce';
@@ -31,8 +33,6 @@ import './js/ajax';
 
 // start the Stimulus application
 import './bootstrap';
-import './controllers/pagination.js';
-import './controllers/pagination.min';
 require('bootstrap');
 
 // loads the jquery package from node_modules
