@@ -1,101 +1,19 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-        {% block meta %}
-            <meta name="keywords" content="Virtuální realita, VR, Beat Saber, Pavlov VR, HTC, PlayZONE, Turnaj, Turnaje">
-            <meta name="description" content="Jsme parta kluků a taťka, co se snaží prosadit VR a turnaje ve Virtuální realitě mezi lidmi. Specializujeme se hlavně na Beat Saber a začínáme i s hrou Pavlov VR, tak se přidej i ty!">
-        {% endblock %}
-        <link rel="icon" type="image/png" href="{{ asset('build/images/logos/logo.png') }}">
-        <link rel="stylesheet" href="{{ asset('editor/css/material-dashboard.css') }}">
-        <link href="{{ asset('build/controllers/fontawesome/css/all.css') }}" rel="stylesheet">
-        <link href="{{ asset('build/controllers/fontawesome/scss/fontawesome.scss') }}" rel="stylesheet">
-        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-        {# <link href="{{ asset('build/controllers/aos/sass/aos.scss') }}" rel="stylesheet"> #}
-        <script src="{{ asset('editor/js/gallery.js') }}"></script>
-
-        <title>{% block title %}Czech Saber | Turnaje VR{% endblock %}</title>
-
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
+            {#{{ encore_entry_link_tags('app') }}#}
         {% endblock %}
 
         {% block javascripts %}
-            <!--   Core JS Files   -->
-            {% if page.name is defined and (page.name == "contact" or page.name == "app_login" or page.name == "app_register") %}
-                <script src='https://www.google.com/recaptcha/api.js?render={{ translator.getValue('SITE_KEY', '6Lf7_UwaAAAAANAhJ2-ZHDpsGTikaCilEzWhs7Rt')|raw }}'></script>
-            {% endif %}
-            <script src="{{ asset('editor/js/smooth-scroll.polyfills.min.js') }}"></script>
-            <script src="{{ asset('editor/js/core/jquery.min.js') }}"></script>
-            <script src="{{ asset('editor/js/core/popper.min.js') }}"></script>
-            {# <script src="https://kit.fontawesome.com/05c0bf8e9c.js" crossorigin="anonymous"></script> #}
-            <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-            {# <script src="{{ asset('build/controllers/aos/js/aos.js') }}"></script> #}
-            <script src="{{ asset('editor/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> {# Necessary for menu sidebar #}
-            <script src="{{ asset('editor/js/core/bootstrap-material-design.min.js') }}"></script> {# This handles floating labels in form #}
-            <script defer src="{{ asset('build/controllers/fontawesome/js/all.js') }}"></script>
-            {# <script src="{{ asset('editor/js/material-dashboard.js?v=2.1.2') }}" type="text/javascript"></script> Same as script below #}
-            <script src="{{ asset('editor/js/material-dashboard.js') }}" type="text/javascript"></script>
-            <script type="text/javascript">
-                function showTable($value) {
-                    $('.' + $value).css('display', 'block');
-                }
-            </script>
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-
-        {% block marketing %}
-            {{ include('default/utilities/shared/_marketing.html.twig') }}
+            {#{{ encore_entry_script_tags('app') }}#}
         {% endblock %}
     </head>
     <body>
-        {% block scripts %}
-            {{ include('default/utilities/shared/_scripts.html.twig') }}
-        {% endblock %}
-
-            {% block header %}
-                {{ include('default/utilities/shared/_topfoto.html.twig') }}
-            {% endblock %}
-
-            {% for key, message in app.flashes('success') %}
-                <div class="alert alert-success">
-                    {{ message }}
-                </div>
-            {% endfor %}
-            {% for key, message in app.flashes('danger') %}
-                <div class="alert alert-danger">
-                    {{ message }}
-                </div>
-            {% endfor %}
-            {% for key, message in app.flashes('warning') %}
-                <div class="alert alert-warning">
-                    {{ message }}
-                </div>
-            {% endfor %}
-
-            {% block sidebar %}{% endblock %}
-            {% block navbar %}{% endblock %}
-
-            <h1 class="visuallyHidden">
-                {% block heading %}
-                    {% if page.heading is defined %}
-                        {{ page.heading|raw }}
-                    {% endif %}
-                {% endblock %}
-            </h1>
-            <div class="body user-interface">
-                {% block body %}{% endblock %}
-            </div>
-
-        {% block footer %}
-            {{ include('default/utilities/shared/_footer.html.twig') }}
-        {% endblock %}
-
-        {% block cookie %}
-            {{ include('default/utilities/component/_cookie.html.twig') }}
-        {% endblock %}
-
+        {% block body %}{% endblock %}
     </body>
 </html>

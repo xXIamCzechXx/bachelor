@@ -36,40 +36,38 @@
         "version": "v0.5.3"
     },
     "doctrine/doctrine-bundle": {
-        "version": "2.4",
+        "version": "2.5",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "2.4",
-            "ref": "dda18c8830b143bc31c0e0457fb13b9029614d76"
+            "ref": "013b823e7fee65890b23e40f31e6667a1ac519ac"
         },
         "files": [
             "./config/packages/doctrine.yaml",
-            "./config/packages/prod/doctrine.yaml",
-            "./config/packages/test/doctrine.yaml",
             "./src/Entity/.gitignore",
             "./src/Repository/.gitignore"
         ]
     },
     "doctrine/doctrine-fixtures-bundle": {
-        "version": "3.0",
+        "version": "3.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "3.0",
-            "ref": "e5b542d4ef47d8a003c91beb35650c76907f7e53"
+            "ref": "1f5514cfa15b947298df4d771e694e578d4c204d"
         },
         "files": [
             "./src/DataFixtures/AppFixtures.php"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
-        "version": "3.1",
+        "version": "3.2",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "3.1",
-            "ref": "ee609429c9ee23e22d6fa5728211768f51ed2818"
+            "ref": "1d01ec03c6ecbd67c3375c5478c9a423ae5d6a33"
         },
         "files": [
             "./config/packages/doctrine_migrations.yaml",
@@ -253,12 +251,12 @@
         ]
     },
     "stof/doctrine-extensions-bundle": {
-        "version": "1.2",
+        "version": "1.7",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
+            "branch": "main",
             "version": "1.2",
-            "ref": "6c1ceb662f8997085f739cd089bfbef67f245983"
+            "ref": "e805aba9eff5372e2d149a9ff56566769e22819d"
         },
         "files": [
             "./config/packages/stof_doctrine_extensions.yaml"
@@ -295,15 +293,15 @@
         "version": "v5.3.0"
     },
     "symfony/debug-bundle": {
-        "version": "4.1",
+        "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "4.1",
-            "ref": "0ce7a032d344fb7b661cd25d31914cd703ad445b"
+            "branch": "main",
+            "version": "5.3",
+            "ref": "5aa8aa48234c8eb6dbdd7b3cd5d791485d2cec4b"
         },
         "files": [
-            "./config/packages/dev/debug.yaml"
+            "./config/packages/debug.yaml"
         ]
     },
     "symfony/debug-pack": {
@@ -343,12 +341,12 @@
         "version": "v5.3.0"
     },
     "symfony/flex": {
-        "version": "1.0",
+        "version": "1.17",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "1.0",
-            "ref": "c0eeb50665f0f77226616b6038a9b06c03752d8e"
+            "ref": "146251ae39e06a95be0fe3d13c807bcf3938b172"
         },
         "files": [
             "./.env"
@@ -361,9 +359,9 @@
         "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "5.3",
-            "ref": "772b77cfb5017644547ef7f9364c54e4eb9a6c61"
+            "ref": "09e1895fe170fe829d57168ba8ad268ef2669cc3"
         },
         "files": [
             "./config/packages/cache.yaml",
@@ -392,24 +390,24 @@
         "version": "v5.3.0"
     },
     "symfony/lock": {
-        "version": "5.2",
+        "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "5.2",
-            "ref": "a1c8800e40ae735206bb14586fdd6c4630a51b8d"
+            "ref": "8e937ff2b4735d110af1770f242c1107fdab4c8e"
         },
         "files": [
             "./config/packages/lock.yaml"
         ]
     },
     "symfony/mailer": {
-        "version": "4.3",
+        "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "4.3",
-            "ref": "15658c2a0176cda2e7dba66276a2030b52bd81b2"
+            "ref": "2bf89438209656b85b9a49238c4467bff1b1f939"
         },
         "files": [
             "./config/packages/mailer.yaml"
@@ -434,15 +432,12 @@
         "version": "3.7",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "3.7",
-            "ref": "a7bace7dbc5a7ed5608dbe2165e0774c87175fe6"
+            "ref": "213676c4ec929f046dfde5ea8e97625b81bc0578"
         },
         "files": [
-            "./config/packages/dev/monolog.yaml",
-            "./config/packages/prod/deprecations.yaml",
-            "./config/packages/prod/monolog.yaml",
-            "./config/packages/test/monolog.yaml"
+            "./config/packages/monolog.yaml"
         ]
     },
     "symfony/notifier": {
@@ -467,12 +462,12 @@
         "version": "v5.3.3"
     },
     "symfony/phpunit-bridge": {
-        "version": "5.3",
+        "version": "5.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "5.3",
-            "ref": "905679249e7b10f06c572917a9022a72cbfedc04"
+            "ref": "819d3d2ffa4590eba0b8f4f3e5e89415ee4e45c3"
         },
         "files": [
             "./.env.test",
@@ -536,9 +531,9 @@
         "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "5.3",
-            "ref": "44633353926a0382d7dfb0530922c5c0b30fae11"
+            "ref": "85de1d8ae45b284c3c84b668171d2615049e698f"
         },
         "files": [
             "./config/packages/routing.yaml",
@@ -552,9 +547,9 @@
         "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "5.3",
-            "ref": "8b35bfc00a7716db4ca5a764a4b338476ca3a704"
+            "ref": "98f1f2b0d635908c2b40f3675da2d23b1a069d30"
         },
         "files": [
             "./config/packages/security.yaml"
@@ -610,9 +605,9 @@
         "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "5.3",
-            "ref": "3dd530739a4284e3272274c128dbb7a8140a66f1"
+            "ref": "ce42aa769cc2edfd9246e5647a3a967afe6387ca"
         },
         "files": [
             "./config/packages/twig.yaml",
@@ -620,15 +615,14 @@
         ]
     },
     "symfony/validator": {
-        "version": "4.3",
+        "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "4.3",
-            "ref": "3eb8df139ec05414489d55b97603c5f6ca0c44cb"
+            "branch": "main",
+            "version": "5.3",
+            "ref": "c32cfd98f714894c4f128bb99aa2530c1227603c"
         },
         "files": [
-            "./config/packages/test/validator.yaml",
             "./config/packages/validator.yaml"
         ]
     },
@@ -701,16 +695,15 @@
         "version": "v1.4.0"
     },
     "zenstruck/foundry": {
-        "version": "1.9",
+        "version": "1.14",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.9",
-            "ref": "26a9e6291d5fc0bfd1d673bc1d6cfe3c582c7678"
+            "branch": "main",
+            "version": "1.10",
+            "ref": "37c2f894cc098ab4c08874b80cccc8e2f8de7976"
         },
         "files": [
-            "./config/packages/dev/zenstruck_foundry.yaml",
-            "./config/packages/test/zenstruck_foundry.yaml"
+            "./config/packages/zenstruck_foundry.yaml"
         ]
     }
 }

@@ -1,18 +1,5 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
-    form_themes:
-        - bootstrap_5_layout.html.twig
-    globals:
-        projectDir: '%kernel.project_dir%'
-        translator: '@app.translator'
-        settings: '@app.settings'
-        cookie: '@app.cookie'
-
-        # Editor constants
-        editorTitle: 'Czechsaber'
-        editorSaveChanges: 'Uložit změny'
-        editorAdd: 'Přidat'
-        editorClose: 'Zavřít'
 
 when@test:
     twig:
