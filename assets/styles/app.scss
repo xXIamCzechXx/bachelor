@@ -183,18 +183,19 @@ hr {
   height: 356px;
   width: 100%;
   overflow: hidden;
+  //filter: brightness(0.9);
   background-size: cover;
   background-position: center;
 
   .top-foto-img {
     position: absolute;
-    top: 50%;
+    //top: 50%;
     left: 50%;
     min-width: 100%;
     min-height: 100%;
     display: block;
-    transform: translate(-50%, -50%);
-    filter: brightness(50%);
+    transform: translate(-50%, 0);
+    filter: brightness(33%);
   }
 }
 
@@ -567,7 +568,7 @@ hr {
     width: 100vw;
     height: 100vh;
     position: relative;
-    filter: brightness(50%);
+    filter: brightness(33%);
     top: 0;
     left: 0;
     border-bottom: solid 14px $brand_light;
@@ -651,6 +652,7 @@ hr {
   overflow-x: hidden;
 }
 .twitch-figure-left {
+  margin-top: -9px;
   left: 80px;
 }
 .twitch-figure-left-hp {
@@ -658,7 +660,7 @@ hr {
   //transform: translate(calc(-50% - 648px), 0);
 }
 .twitch-figure-right {
-  margin-top: -18px;
+  margin-top: -20px;
   right: 26px;
   //right: -32px;
 }
