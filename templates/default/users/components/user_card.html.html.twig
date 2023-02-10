@@ -1,7 +1,7 @@
 {% for user in users %}
     {# <a href="{{ path("account") }}"> #}
     <div class="card-border" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
-        <div class="user-card-cont" data-user-id="{{ user.id() }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="{{ user.color is not empty and user.color != "#ffffff" ? "background:"~user.color : '' }}">
+        <div class="user-card-cont" data-action="click->user-card#showModal" data-user-id="{{ user.id() }}" style="{{ user.color is not empty and user.color != "#ffffff" ? "background:"~user.color : '' }}">
             <div class="user-picture" {% if user.getTournaments[0] is defined %}style="background: green;"{% endif %}>
                 <img src="{{ asset(user.imgPath(user.imgName)) }}" alt="{{ user.nickname }}">
             </div>

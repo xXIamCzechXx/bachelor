@@ -9,12 +9,11 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 Encore
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
-
-    .copyFiles({from: './assets/images', to: 'images/[path][name].[ext]', to: 'images/[path][name].[ext]', pattern: /\.(png|jpg|jpeg)$/})
-    .copyFiles({from: './assets/styles/fontawesome', to: 'fontawesome/[path][name].[ext]', to: 'fontawesome/[path][name].[ext]'})
-    .copyFiles({from: './assets/controllers', to: 'controllers/[path][name].[ext]', to: 'controllers/[path][name].[ext]'})
     // public path used by the web server to access the output path
     .setPublicPath('/build')
+    .copyFiles({from: './assets/images', to: 'images/[path][name].[ext]', to: 'images/[path][name].[ext]', pattern: /\.(png|jpg|jpeg)$/})
+    .copyFiles({from: './assets/controllers/fontawesome', to: 'fontawesome/[path][name].[ext]', to: 'fontawesome/[path][name].[ext]'})
+    .copyFiles({from: './assets/controllers', to: 'controllers/[path][name].[ext]', to: 'controllers/[path][name].[ext]'})
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
 
@@ -22,7 +21,7 @@ Encore
      * ENTRY CONFIG
      *
      * Each entry will result in one JavaScript file (e.g. app.js)
-     * and one CSS file (e.g. app.scss) if your JavaScript imports CSS.
+     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
 
@@ -34,8 +33,7 @@ Encore
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
-    //.enableSingleRuntimeChunk()
-    .disableSingleRuntimeChunk()
+    .enableSingleRuntimeChunk()
 
     /*
      * FEATURE CONFIG
@@ -48,17 +46,17 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning()
+    .enableVersioning(Encore.isProduction())
 
-    //.configureBabel((config) => {
-    //    config.plugins.push('@babel/plugin-proposal-class-properties');
-    //})
+    .configureBabel((config) => {
+        config.plugins.push('@babel/plugin-proposal-class-properties');
+    })
 
     // enables @babel/preset-env polyfills
-    //.configureBabelPresetEnv((config) => {
-    //    config.useBuiltIns = 'usage';
-    //    config.corejs = 3;
-    //})
+    .configureBabelPresetEnv((config) => {
+        config.useBuiltIns = 'usage';
+        config.corejs = 3;
+    })
 
     // enables Sass/SCSS support
     .enableSassLoader()
@@ -67,7 +65,7 @@ Encore
     //.enableTypeScriptLoader()
 
     // uncomment if you use React
-    //.enableReactPreset()
+    .enableReactPreset()
 
     // uncomment to get integrity="..." attributes on your script & link tags
     // requires WebpackEncoreBundle 1.4 or higher

@@ -2769,6 +2769,8 @@ footer .footer .footer-container .footer-logo {
 
 .modal-dialog {
   max-width: 1064px;
+  top: 50%;
+  transform: translate(0, -50%) !important;
 }
 
 .modal-content {

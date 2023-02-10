@@ -19,25 +19,11 @@ import './styles/responsivity.scss';
 import './js/ajax';
 import './js/pagination.js';
 import './js/pagination.min';
-// import './controllers/aos/sass/aos.scss';
-// import throttle from 'lodash.throttle';
-// import debounce from 'lodash.debounce';
-//
-// import observe from './controllers/aos/js/libs/observer';
-//
-// import detect from './controllers/aos/js/helpers/detector';
-// import handleScroll from './controllers/aos/js/helpers/handleScroll';
-// import prepare from './controllers/aos/js/helpers/prepare';
-// import elements from './controllers/aos/js/helpers/elements';
-// import './controllers/aos/js/aos';
 
 // start the Stimulus application
 import './bootstrap';
-require('bootstrap');
 
 // loads the jquery package from node_modules
-
-import jquery from 'jquery';
 
 // import the function from greet.js (the .js extension is optional)
 // ./ (or ../) means to look for a local file
@@ -128,7 +114,6 @@ $(document).ready(function ()
     /*
     positionSet('.slide-from-left');
     positionSet('.slide-from-right');
-
     slideObject('.slide-from-left', 'margin-left');
     slideObject('.slide-from-right', 'margin-left');
     showObject('.show-object', 'opacity');
@@ -165,7 +150,6 @@ $(window).scroll(function()
 function positionSet(obj)
 {
     var objString = String(obj);
-
     $(obj).each(function (j) {
         if(objString === '.slide-from-right') {
             let rightObject = $(window).width() - $(this).offset().left;
@@ -320,15 +304,12 @@ Line.prototype.step = function(){
 
 /*
 window.addEventListener( 'resize', function(){
-
     w = c.width = window.innerWidth;
     h = c.height = window.innerHeight - 14;
     ctx.fillStyle = 'rgba(0,0,0,0.6)';
     ctx.fillRect( 0, 0, w, h );
-
     opts.cx = w / 2;
     opts.cy = h / 2;
-
     dieX = w / 2 / opts.len;
     dieY = h / 2 / opts.len;
 });

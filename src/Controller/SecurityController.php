@@ -23,9 +23,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends BaseController
 {
     /**
-     * @Route("/prihlaseni", name="app_login")
+     * @Route("/connexion", name="app_login")
      */
-    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
+    public function login(AuthenticationUtils $authenticationUtils, LoginFormAuthenticator $authenticator, Request $request): Response
     {
         if ($this->getUser()) { return $this->redirectToRoute('editor'); }
 

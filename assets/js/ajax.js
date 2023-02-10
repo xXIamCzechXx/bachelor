@@ -1,6 +1,7 @@
 // This shows an specific layout for loading data from ajaxize on done method
 $(document).ajaxSend(function() {
     $("#overlay").fadeIn(300);
+    $(".cv-spinner").fadeIn(300);
 });
 
 // Ajax for automatic refresh of scoreboard
@@ -21,6 +22,7 @@ $(document).on('click', '.update-scoreboard', function(e) {
 });
 
 // Ajax for fetching scoresaber data for exact user action
+/*
 $(document).on('click', '.user-card-cont', function(e) {
     e.preventDefault();
     let userId = $(this).data('user-id');
@@ -35,6 +37,7 @@ $(document).on('click', '.user-card-cont', function(e) {
         },350);
     });
 });
+*/
 
 $(document).on('click', '#show-more-users', function(e) {
     e.preventDefault();
