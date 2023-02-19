@@ -17,6 +17,7 @@
         "phpdocumentor/reflection-docblock": "^5.2",
         "scienta/doctrine-json-functions": "^5.0",
         "sensio/framework-extra-bundle": "^6.2",
+        "sensiolabs/ansi-to-html": "^1.2",
         "stof/doctrine-extensions-bundle": "^1.6",
         "symfony/asset": "5.4.*",
         "symfony/console": "5.4.*",

@@ -2,10 +2,14 @@
 
 namespace App\Connector;
 
+use Symfony\Component\HttpFoundation\Exception\JsonException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Collecting and listening for a requests from Tournament Assistant
+ */
 class TournamentAssistantApi {
 
     /**
@@ -14,36 +18,55 @@ class TournamentAssistantApi {
     private $request;
 
     /**
+     * @var mixed|null
+     */
+    private mixed $data;
+
+    /**
      * @param $request
+     * @throws \JsonException
      */
     public function __construct($request)
     {
-        $this->request = json_decode($request->getContent());
+        $this->request = $request;
+        $this->data = json_decode($this->request->getContent());
     }
 
     /**
      * @return Response
      */
-    public function processRequest($request)
+    public function processRequest()
     {
-        $request = json_decode($request->getContent());
-        if (null === $request) {
-            $response = $this->finishMethod(Response::HTTP_NO_CONTENT, "Request is empty");
+        if (!$this->request) {
+            return $this->finishMethod(Response::HTTP_BAD_REQUEST, "Request is not set");
         }
 
-        if (!isset($request->players)) {
-            $response = $this->finishMethod(Response::HTTP_NO_CONTENT, "Request has not players");
+        if (null === $this->data) {
+            return $this->finishMethod(Response::HTTP_NO_CONTENT, "Request is empty");
         }
 
-        if (!password_verify('arimodu', $this->request->secret)) {
+        if (!isset($this->data->players)) {
+            return $this->finishMethod(Response::HTTP_NO_CONTENT, "Request has not players");
+        }
+
+        if (!password_verify('arimodu', $this->data->secret)) {
             return $this->finishMethod(Response::HTTP_FORBIDDEN, "Authentication failed");
         }
 
-        if (!isset($response)) {
-            $response = $this->finishMethod(Response::HTTP_BAD_REQUEST, "Something went wrong");
-        }
-        return $response;
+        $response = $this->processData();
+
+        return $this->finishMethod(Response::HTTP_ACCEPTED, $response);
+
         //$this->finishMethod();
+    }
+
+    public function processData()
+    {
+        if (!$this->data) {
+            return $this->finishMethod(Response::HTTP_BAD_REQUEST, "Request is not set");
+        }
+
+        return "Everything goes well!";
     }
 
     /**
@@ -56,6 +79,7 @@ class TournamentAssistantApi {
         $response->setStatusCode($statusCode);
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(new JsonResponse($content));
+        $response->send();
 
         return $response;
     }

@@ -2,6 +2,9 @@
 
 namespace App\Command;
 
+use App\Connector\ScoresaberApi;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,32 +15,72 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:sync-scoresaber-users',
-    description: 'Add a short description for your command',
+    description: 'Synchronize the users with the scoresaber.',
 )]
 class SyncScoresaberUsersCommand extends Command
 {
+    public function __construct(protected EntityManagerInterface $em)
+    {
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
         $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
-        ;
+            ->addArgument('method', InputArgument::OPTIONAL, 'Argument description')
+            ->addOption('method', null, InputOption::VALUE_OPTIONAL, 'Option description');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
+        $method = $input->getArgument('method');
 
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
+        if ($method) {
+            $io->note(sprintf('<info>You passed an argument: %s</info>', $method));
         }
 
-        if ($input->getOption('option1')) {
-            // ...
+        if ($method = $input->getOption('method')) {
+            $io->note(sprintf('You passed an option (method name): %s', $method));
+        } else {
+            $io->note('<info>You did not pass an option (method name)</info>');
+            return Command::INVALID;
         }
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $users = $this->em->getRepository(User::class)->findAll();
+        $scoresaberApi = new ScoresaberApi();
+        $mappedUsers = $scoresaberApi->mapUsersData($users);
+
+        $io->title('Start synchronizing scoresaber users');
+        $io->info([
+            'Basic infrormation about synchronization:',
+            sprintf('Total users on web: %s', count($users)),
+            sprintf('Total mapped users: %s', array_count_values(array_column($mappedUsers, 'mapped'))[1]),
+            sprintf('Started: %s', date('Y-m-d H:i:s')),
+        ]);
+        $io->newLine(1);
+        foreach ($mappedUsers as $key => $mappedUser) {
+            $io->section(sprintf('User ID: %s', $key));
+            $io->text([
+                sprintf('Performance points: %s', $mappedUser['pp']),
+                sprintf('Rank: %s', $mappedUser['rank']),
+                sprintf('Country rank: %s', $mappedUser['countryRank']),
+                sprintf('Average ranked accuracy: %s', $mappedUser['averageRankedAccuracy']),
+            ]);
+
+            if($user = $this->em->getRepository(User::class)->findOneBy(['id' => $key])) {
+                $user->setRank($mappedUser['rank']);
+                $user->setCountryRank($mappedUser['countryRank']);
+                $user->setAvgPercentage($mappedUser['averageRankedAccuracy']);
+                $user->setPp($mappedUser['pp']);
+                $this->em->persist($user);
+                $this->em->flush();
+            } else {
+                $io->note(sprintf('User with ID %s does not exist', $key));
+            }
+        }
+
+        $io->success(sprintf('Synchronization was successful, ended at: %s', date('Y-m-d H:i:s')));
 
         return Command::SUCCESS;
     }

@@ -120,11 +120,28 @@
                         </a>
                     </li>
                 {% endblock %}
+                {% block integrations %}
+                    <li class="nav-item ">
+                        <div class="menu-arrow menu-arrow-closed" data-value="integrations-index"></div>
+                        <a class="nav-link" href="{{ path('editor_users') }}">
+                            <i class="material-icons">person</i>
+                            <p>Integrace</p>
+                        </a>
+                    </li>
+                {% endblock %}
                 {% block discord %}
-                    <li class="nav-item">
+                    <li class="nav-item integrations-index closed" style="margin-left: 30px;">
                         <a class="nav-link" href="{{ path('editor_discord') }}">
                             <i class="fa-brands fa-discord"></i>
                             <p class="fa-margin">Discord</p>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% block synchronization %}
+                    <li class="nav-item integrations-index closed" style="margin-left: 30px;">
+                        <a class="nav-link" href="{{ path('editor_discord') }}">
+                            <i class="fa-brands fa-discord"></i>
+                            <p class="fa-margin">Synchronizace</p>
                         </a>
                     </li>
                 {% endblock %}

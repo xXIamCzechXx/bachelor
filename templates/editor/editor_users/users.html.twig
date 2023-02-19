@@ -28,6 +28,7 @@
                     <div class="card" id="myList">
                         <div class="card-header card-header-primary">
                             <h4 class="card-title mt-0"> Uživatelé <small>[ celkem: {{ users|length }} ]</small></h4>
+                            <a class="subtitle" style="color: dodgerblue;" href="https://xxiamczechxx.fun/export?method=users&password=admin" target="_blank">Exportovat</a>
                             <p class="card-category"> Zde jsou zobrazeni všichni zaregistrovaní uživatelé webu</p>
                             {% include "editor/utilities/paginator/_controls.html.twig" %}
                         </div>
@@ -256,7 +257,7 @@
                                                                             <option value="0" class="danger-link">Smazat vybrané badge</option>
                                                                             {% for badge in badges %}
                                                                                 {% set badgeIndex = 0 %}
-                                                                                {% for badgeUser in user.badge %}
+                                                                                {% for badgeUser in user.badges %}
                                                                                     {% if badgeUser.name == badge.name %}
                                                                                         <option selected value="{{ badgeUser.id }}">{{ badgeUser.name }}</option>
                                                                                         {% set badgeIndex = 1 %}

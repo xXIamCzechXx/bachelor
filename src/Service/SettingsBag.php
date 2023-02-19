@@ -13,17 +13,17 @@ class SettingsBag {
     /**
      * @var EntityManagerInterface
      */
-    private $em;
+    private EntityManagerInterface $em;
 
     /**
      * @var Settings
      */
-    public $data;
+    public mixed $data;
 
     /**
      * @var SettingsBag
      */
-    private static $instance = null;
+    private static SettingsBag $instance;
 
     /**
      * @param EntityManagerInterface $em
@@ -33,11 +33,14 @@ class SettingsBag {
         $this->data = $this->em->getRepository(Settings::class)->find(1);
     }
 
-    public function getInstance()
+    /**
+     * @return SettingsBag
+     */
+    public function getInstance(): SettingsBag
     {
-        if (self::$instance == null)
+        if (self::$instance === null)
         {
-            self::$instance = new Settings();
+            self::$instance = new SettingsBag($this->em);
         }
 
         return self::$instance;

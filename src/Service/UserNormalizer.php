@@ -10,18 +10,21 @@ class UserNormalizer {
     /**
      * @var EntityManagerInterface
      */
-    private $em;
+    private EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
-    public function generateUniquePlayerId()
+    /**
+     * @throws \Exception
+     */
+    public function generateUniquePlayerId(): string
     {
-        $randNumber = rand(1,999);
+        $randNumber = random_int(1,999);
         $charOptions = "ABCD";
-        $char = $charOptions[rand(0, strlen($charOptions)-1)];
+        $char = $charOptions[random_int(0, strlen($charOptions)-1)];
 
         switch (mb_strlen($randNumber)) {
             case 1:
@@ -54,13 +57,13 @@ class UserNormalizer {
                 if ($score->getMap()->getId() > 0 && $score->getPercentage() > 0) {
                     if (!isset($mapArray[$score->getMap()->getId()])) {
                         $mapArray[$score->getMap()->getId()] = array(
-                                'percentage' => $score->getPercentage())
-                        ;
+                            'percentage' => $score->getPercentage()
+                        );
                     } else {
                         if ($mapArray[$score->getMap()->getId()]['percentage'] < $score->getPercentage()) {
                             $mapArray[$score->getMap()->getId()] = array(
-                                    'percentage' => $score->getPercentage())
-                            ;
+                                'percentage' => $score->getPercentage()
+                            );
                         }
                     }
                 }
@@ -69,7 +72,7 @@ class UserNormalizer {
             $totalPercentage = 0;
             foreach ($mapArray as $key => $map) {
                 $totalPercentage += $map['percentage'];
-                if ($key == 1) {
+                if ($key === 1) {
                     break; // Ošetření proti odehrání vícero map
                 }
             }
@@ -88,14 +91,12 @@ class UserNormalizer {
             if ($score->getMap()->getId() > 0 && $score->getPercentage() > 0) {
                 if (!isset($mapArray[$score->getMap()->getId()])) {
                     $mapArray[$score->getMap()->getId()] = array(
-                            'percentage' => $score->getPercentage())
-                    ;
-                } else {
-                    if ($mapArray[$score->getMap()->getId()]['percentage'] < $score->getPercentage()) {
-                        $mapArray[$score->getMap()->getId()] = array(
-                                'percentage' => $score->getPercentage())
-                        ;
-                    }
+                        'percentage' => $score->getPercentage()
+                    );
+                } else if ($mapArray[$score->getMap()->getId()]['percentage'] < $score->getPercentage()) {
+                    $mapArray[$score->getMap()->getId()] = array(
+                        'percentage' => $score->getPercentage()
+                    );
                 }
             }
         }
@@ -103,7 +104,7 @@ class UserNormalizer {
         $totalPercentage = 0;
         foreach ($mapArray as $key => $map) {
             $totalPercentage += $map['percentage'];
-            if ($key == 1) {
+            if ($key === 1) {
                 break; // Ošetření proti odehrání vícero map
             }
         }

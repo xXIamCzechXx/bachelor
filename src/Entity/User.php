@@ -190,6 +190,21 @@ class User implements UserInterface
     private $gender;
 
     /**
+     * @ORM\Column(type="float")
+     */
+    private $pp;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $rank;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $countryRank;
+
+    /**
      * @ORM\OneToMany(targetEntity=TournamentsScores::class, mappedBy="User")
      */
     private $tournamentsScores;
@@ -197,19 +212,19 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="float", length=64, nullable=true)
      */
-    private $avgPercentage = 0;
+    private ?float $avgPercentage = 0;
 
     /**
-     * @param float $avgPercentage
+     * @param float|null $avgPercentage
      */
-    public function setAvgPercentage(float $avgPercentage): void {
+    public function setAvgPercentage($avgPercentage): void {
         $this->avgPercentage = $avgPercentage;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getAvgPercentage(): float {
+    public function getAvgPercentage() {
         return $this->avgPercentage;
     }
 
@@ -383,10 +398,9 @@ class User implements UserInterface
         return $this;
     }
 
-    public function __toString() {
-
-        return $this->getFirstName();
-
+    public function __toString()
+    {
+        return (string)$this->getFirstName();
     }
 
     /**
@@ -687,7 +701,7 @@ class User implements UserInterface
     /**
      * @return Collection|UserBadges[]
      */
-    public function getBadge(): Collection
+    public function getBadges(): Collection
     {
         return $this->badge;
     }
@@ -837,6 +851,54 @@ class User implements UserInterface
         $this->gender = $gender;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPp()
+    {
+        return $this->pp;
+    }
+
+    /**
+     * @param mixed $pp
+     */
+    public function setPp($pp): void
+    {
+        $this->pp = $pp;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRank()
+    {
+        return $this->rank;
+    }
+
+    /**
+     * @param mixed $rank
+     */
+    public function setRank($rank): void
+    {
+        $this->rank = $rank;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountryRank()
+    {
+        return $this->countryRank;
+    }
+
+    /**
+     * @param mixed $countryRank
+     */
+    public function setCountryRank($countryRank): void
+    {
+        $this->countryRank = $countryRank;
     }
 
     /**

@@ -11,27 +11,27 @@ class DiscordWebhook {
     /**
      * @var string
      */
-    private $url;
+    private string $url;
 
     /**
      * @var string
      */
-    private $title = 'Undefied title';
+    private string $title = 'Undefied title';
 
     /**
      * @var string
      */
-    private $type = 'Rich';
+    private string $type = 'Rich';
 
     /**
      * @var string
      */
-    private $content = 'Empty content';
+    private string $content = 'Empty content';
 
     /**
      * @var ContainerInterface
      */
-    private $container;
+    private ContainerInterface $container;
 
     /**
      * @param ContainerInterface $container
@@ -44,11 +44,16 @@ class DiscordWebhook {
      * @param $data
      * @return bool|string
      */
-    public function sendMessage($data, $url)
+    public function sendMessage($data, $url): bool|string
     {
+        $this->url = $url;
+        $this->title = $data['title'];
+        $this->type = $data['type'];
+        $this->content = $data['content'];
+
         if(!empty($data)) {
             $ch = curl_init($url);
-            $msg = "payload_json=" . urlencode($data)."";
+            $msg = "payload_json=" . urlencode($data);
 
             if(isset($ch)) {
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -83,7 +88,7 @@ class DiscordWebhook {
                     "description" => $this->getContent(),
                     "url" => "https://czechsaber.cz",
                     "timestamp" => date("c", strtotime("now")),
-                    "color" => hexdec( "3366ff" ),
+                    "color" => hexdec("3366ff"),
                     "footer" => [
                         "text" => "czechsaber.cz/automatic-message",
                         "icon_url" => "https://czechsaber.cz/build/images/logos/logo.png"
@@ -115,7 +120,7 @@ class DiscordWebhook {
                     */
                 ]
             ]
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+        ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
     /**

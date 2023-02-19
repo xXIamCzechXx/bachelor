@@ -10,10 +10,10 @@ class UploadHelper
     /**
      * @var string
      */
-    private $uploadsPath;
+    private string $uploadsPath;
 
     /**
-     * @param $uploadsPath
+     * @param string $uploadsPath
      */
     public function __construct(string $uploadsPath)
     {
@@ -41,17 +41,19 @@ class UploadHelper
         // Ochrana proti zhroucení FTP - nepřepisuje obrázky, jenom updatuje název v db
         if (file_exists($destination.'/'.$newFileName)) {
             return $newFileName;
-        } else {
-            $uploadedFile->move($destination, $newFileName);
         }
+
+        $uploadedFile->move($destination, $newFileName);
 
         return $newFileName;
     }
 
-    /*
+    /**
+     * @param string $path
+     * @return string
+     */
     public function getPublicPath(string $path): string
     {
         return 'uploads/products/'.$path;
     }
-    */
 }

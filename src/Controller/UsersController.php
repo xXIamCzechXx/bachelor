@@ -23,12 +23,12 @@ class UsersController extends DefaultController
 
         $scoresaberApi = new ScoresaberApi();
         $users = $this->em->getRepository(User::class)->findVisibleUsersWithLimit(10, 0);
-        $usersData = $scoresaberApi->mapScoresaberUsersData($users);
+//        $usersData = $scoresaberApi->mapUsersData($users);
 
         return $this->render('default/users/users.html.twig', [
             'page' => $page,
             'users' => $users,
-            'usersData' => $usersData,
+//            'usersData' => $usersData,
         ]);
     }
 
@@ -43,7 +43,7 @@ class UsersController extends DefaultController
         }
 
         $users = $this->em->getRepository(User::class)->findVisibleUsersWithLimit(10, $from);
-        $usersData = $scoresaberApi->mapScoresaberUsersData($users);
+        $usersData = $scoresaberApi->mapUsersData($users);
 
         return $this->render("default/users/components/user_card.html.html.twig",
             [
@@ -64,7 +64,7 @@ class UsersController extends DefaultController
             throw $this->createNotFoundException();
         }
 
-        $scoresaberData = $scoresaberApi->mapScoresaberUserData($user->getScoresaberId());
+        $scoresaberData = $scoresaberApi->mapUserData($user->getScoresaberId());
 
         return $this->render("default/users/detail/users_detail.html.twig",
             [

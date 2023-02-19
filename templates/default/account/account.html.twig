@@ -93,11 +93,11 @@
                                     </tr>
                                 </table>
                             </div>
-                            {% if app.user.badge is defined and app.user.badge|length > 0 %}
+                            {% if app.user.badges is defined and app.user.badges|length > 0 %}
                                 <div class="badge-container">
                                     <div class="badge-section">
                                         {% set badgeindex = 0 %}
-                                        {% for key, badge in app.user.badge %}
+                                        {% for key, badge in app.user.badges %}
                                             {% if badgeindex < 4 %}
                                                 {% if badge.view == 1 %}
                                                     <img src="{{ asset(badge.imgPath(badge.imgName)) }}">

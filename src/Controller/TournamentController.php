@@ -141,11 +141,10 @@ class TournamentController extends BaseController
 
     /**
      * @Route("/api", name="api", methods={"GET"})
+     * @throws \JsonException
      */
     public function renderApi(Request $request)
     {
-        $connector = new TournamentAssistantApi($request);
-
-        return $connector->processRequest($request);
+        return (new TournamentAssistantApi($request))->processRequest();
     }
 }

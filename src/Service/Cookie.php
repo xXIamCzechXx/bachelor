@@ -11,7 +11,7 @@ class Cookie extends AbstractController
     /**
      * @var EntityManagerInterface
      */
-    private $em;
+    private EntityManagerInterface $em;
 
     /**
      * @param EntityManagerInterface $em
@@ -84,7 +84,7 @@ class Cookie extends AbstractController
             </script>
         ';
         // This is not how it should work, but whatever
-        if ($analytics_storage == 'granted') {
+        if ((string)$analytics_storage === 'granted') {
             $script .= '
                 <script type="text/javascript">
                     window.dataLayer.push({"event":"cookie_consent_all"});
