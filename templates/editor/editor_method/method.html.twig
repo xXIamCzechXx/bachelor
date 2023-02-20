@@ -1,0 +1,79 @@
+{% extends 'editor.html.twig' %}
+
+{% block title %}Methods | {{ editorTitle }}{% endblock %}
+
+{% block sidebar %}
+    {% embed "editor/utilities/sidebar.html.twig" %}
+        {% block integrations %}
+            <li class="nav-item  ">
+                <div class="menu-arrow menu-arrow-opened" data-value="integrations-index"></div>
+                <a class="nav-link menu-arrow-closed" href="{{ path('editor_users') }}">
+                    <i class="material-icons">person</i>
+                    <p>Uživatelé</p>
+                </a>
+            </li>
+        {% endblock %}
+        {% block badges %}
+            <li class="nav-item integrations-index" style="margin-left: 30px;">
+                <a class="nav-link" href="{{ path('editor_discord') }}">
+                    <i class="fa-brands fa-discord"></i>
+                    <p class="fa-margin">Discord</p>
+                </a>
+            </li>
+        {% endblock %}
+        {% block synchronization %}
+            <li class="nav-item active" style="margin-left: 30px;">
+                <a class="nav-link" href="{{ path('editor_method') }}">
+                    <i class="fa-brands fa-discord"></i>
+                    <p class="fa-margin">Synchronizace</p>
+                </a>
+            </li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "editor/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-plain" id="myList">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title mt-0">Metody synchronizace</h4>
+                            <p class="card-category">Zde jsou zobrazeny veškeré lohy synchronizací</p>
+                            {% include "editor/utilities/paginator/_controls.html.twig" %}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class=" text-primary">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th style="width: 232px;"><input type="text" class="search form-control" placeholder="Provedeno" /></th>
+                                            <th style="width: 160px;"><input type="text" class="search form-control" placeholder="Log" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Operace" /></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        {% for key, method in methods %}
+                                            <tr>
+                                                <td>{{ log.id }}</td>
+                                                <td class="val1">{{ method.createdAt|date }}</td>
+                                                <td class="val3">{{ method.log }}</td>
+                                                <td class="val4">{{ method.operation }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ConstantsRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 

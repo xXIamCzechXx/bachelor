@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -929,6 +930,21 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function setLoggedAt(?\DateTimeInterface $loggedAt): self
+    {
+        $this->loggedAt = $loggedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserBadges>
+     */
+    public function getBadge(): Collection
+    {
+        return $this->badge;
     }
 
 }
