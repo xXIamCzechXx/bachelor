@@ -34,9 +34,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card" id="myList">
-                        <div class="card-header card-header-primary">
-                            <h4 class="card-title ">Kategorie Galerií <small>[ kategorií celkem: {{ galleryCategories|length }} ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
-                            <p class="card-category">Vytvoření a konfigurace galerií pro obrázky v galerii</p>
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title ">
+                                Kategorie Galerií <small>[ kategorií celkem: {{ galleryCategories|length }} ]</small>
+                                <a onclick="showTable('add')" class="btn btn-round btn-fill btn-info" style="float: right;">Přidat kategorii</a>
+                            </h4>
                             {% include "editor/utilities/paginator/_controls.html.twig" %}
                         </div>
                         <div class="card-body">
@@ -62,7 +64,7 @@
                                                 <td style="min-width: 132px;" class="td-actions text-right">
                                                     <form action="{{ path('editor_edit_gallery_category', { id: category.id }) }}" method="POST" enctype="multipart/form-data">
                                                         <a onclick="showTable({{ category.id }})">
-                                                            <div rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                            <div rel="tooltip" title="Editovat" class="btn btn-link btn-sm">
                                                                 <i class="material-icons">edit</i>
                                                             </div>
                                                         </a>

@@ -4,17 +4,8 @@
 
 {% block sidebar %}
     {% embed "editor/utilities/sidebar.html.twig" %}
-        {% block integrations %}
-            <li class="nav-item  ">
-                <div class="menu-arrow menu-arrow-opened" data-value="integrations-index"></div>
-                <a class="nav-link menu-arrow-closed" href="{{ path('editor_users') }}">
-                    <i class="material-icons">person</i>
-                    <p>Uživatelé</p>
-                </a>
-            </li>
-        {% endblock %}
-        {% block badges %}
-            <li class="nav-item integrations-index" style="margin-left: 30px;">
+        {% block discord %}
+            <li class="nav-item">
                 <a class="nav-link" href="{{ path('editor_discord') }}">
                     <i class="fa-brands fa-discord"></i>
                     <p class="fa-margin">Discord</p>
@@ -22,9 +13,9 @@
             </li>
         {% endblock %}
         {% block synchronization %}
-            <li class="nav-item active" style="margin-left: 30px;">
+            <li class="nav-item active">
                 <a class="nav-link" href="{{ path('editor_method') }}">
-                    <i class="fa-brands fa-discord"></i>
+                    <i class="fa-solid fa-server"></i>
                     <p class="fa-margin">Synchronizace</p>
                 </a>
             </li>
@@ -42,7 +33,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-plain" id="myList">
-                        <div class="card-header card-header-primary">
+                        <div class="card-header card-header-success">
                             <h4 class="card-title mt-0">Metody synchronizace</h4>
                             <p class="card-category">Zde jsou zobrazeny veškeré lohy synchronizací</p>
                             {% include "editor/utilities/paginator/_controls.html.twig" %}
@@ -53,18 +44,28 @@
                                     <thead class=" text-primary">
                                         <tr>
                                             <th>ID</th>
-                                            <th style="width: 232px;"><input type="text" class="search form-control" placeholder="Provedeno" /></th>
-                                            <th style="width: 160px;"><input type="text" class="search form-control" placeholder="Log" /></th>
-                                            <th><input type="text" class="search form-control" placeholder="Operace" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Alias" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Url adresa" /></th>
+                                            <th style="width: 600px;"><input type="text" class="search form-control" placeholder="Log" /></th>
+                                            <th><input type="text" class="search form-control" placeholder="Úspěšnost" /></th>
+                                            <th style="width: 232px;"><input type="text" class="search form-control" placeholder="Naposledy spuštěno" /></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody class="list">
                                         {% for key, method in methods %}
                                             <tr>
-                                                <td>{{ log.id }}</td>
-                                                <td class="val1">{{ method.createdAt|date }}</td>
+                                                <td>{{ method.id }}</td>
+                                                <td class="val3">{{ method.alias }}</td>
+                                                <td class="val4">{{ method.slug }}</td>
                                                 <td class="val3">{{ method.log }}</td>
-                                                <td class="val4">{{ method.operation }}</td>
+                                                <td class="val3">{{ method.type }}</td>
+                                                <td class="val4">{{ method.updatedAt|date }}</td>
+                                                <td class="td-actions text-right">
+                                                    <a href="{{ method.slug }}" target="_blank" type="submit" rel="tooltip" title="Spustit synchronizaci" class="btn" style="background: rgba(0,0,0,0);">
+                                                        <i class="fa-solid fa-download"></i>
+                                                    </a>
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>

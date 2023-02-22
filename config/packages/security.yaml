@@ -19,6 +19,8 @@ security:
             lazy: true
             provider: users_in_memory
             custom_authenticator: App\Security\LoginFormAuthenticator
+            logout:
+                path: app_logout
             #entry_point: App\Security\LoginFormAuthenticator
 
             # activate different ways to authenticate

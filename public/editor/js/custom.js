@@ -10,7 +10,8 @@
 function showTable($value) {
     $('.' + $value).css('display', 'block');
 }
-$(document).ready(function() {
+document.addEventListener('turbo:load', () =>
+{
     setTimeout(function()
     {
         $(".alert").animate({opacity: 0}, 750);
@@ -19,7 +20,7 @@ $(document).ready(function() {
 
     // Javascript method's body can be found in assets/js/demos.js
     md.initDashboardPageCharts();
-    $('body').on("click", ".edit-form-bcg, .btn-close", function () {
+    $(".edit-form-bcg, .btn-close").on("click", function () {
         $('.edit-form-bcg').css('display', 'none');
         $('.edit-form').css('display', 'none');
     })
@@ -32,13 +33,13 @@ $(document).ready(function() {
             .html(inputFile.files[0].name);
     });
 
-    $(document).on('click', '.menu-arrow-closed', function() {
+    $('.menu-arrow-closed').on('click', function() {
         let value = getClassValue(this);
         $(value).css('display', 'block');
         $(this).removeClass('menu-arrow-closed').addClass('menu-arrow-opened').removeClass('closed');
     });
 
-    $(document).on('click', '.menu-arrow-opened', function() {
+    $('.menu-arrow-opened').on('click', function() {
         let value = getClassValue(this);
         $(value).css('display', 'none');
         $(this).removeClass('menu-arrow-opened').addClass('menu-arrow-closed');
@@ -54,7 +55,7 @@ $(document).ready(function() {
     }
 });
 
-$(document).ready(function() {
+document.addEventListener('turbo:load', () => {
     var paginatorValues = [ 'val1', 'val2', 'val3', 'val4', 'val5', 'val6' ];
     var options = {
         valueNames: paginatorValues,
@@ -168,7 +169,6 @@ $(document).ready(function() {
 
         $('.switch-sidebar-image input').change(function() {
             $full_page_background = $('.full-page-background');
-
             $input = $(this);
 
             if ($input.is(':checked')) {
@@ -200,22 +200,16 @@ $(document).ready(function() {
 
         $('.switch-sidebar-mini input').change(function() {
             $body = $('body');
-
             $input = $(this);
 
             if (md.misc.sidebar_mini_active == true) {
                 $('body').removeClass('sidebar-mini');
                 md.misc.sidebar_mini_active = false;
-
                 $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
-
             } else {
-
                 $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
-
                 setTimeout(function() {
                     $('body').addClass('sidebar-mini');
-
                     md.misc.sidebar_mini_active = true;
                 }, 300);
             }

@@ -4,16 +4,9 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-    <link rel="icon" type="image/png" href="{{ asset('build/images/logos/logo.5a5bebe3.png') }}">
-    <link href="{{ asset('build/fontawesome/css/all.css') }}" rel="stylesheet">
-    <!--     Fonts and icons     -->
-    <link rel="stylesheet" href="{{ asset('editor/css/material-dashboard.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('build/images/logos/logo.png') }}">
+    {# <link rel="stylesheet" href="{{ asset('editor/css/material-dashboard.css') }}"> #}
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-    <link href="{{ asset('build/controllers/fontawesome/css/fontawesome.css') }}" rel="stylesheet">
-    <link href="{{ asset('build/controllers/fontawesome/css/brands.css') }}" rel="stylesheet">
-    <link href="{{ asset('build/controllers/fontawesome/css/solid.css') }}" rel="stylesheet">
-    {# <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"> #}
-    {# <script src="https://kit.fontawesome.com/05c0bf8e9c.js" crossorigin="anonymous"></script> #}
     <title>{% block title %}Czechsaber | Virtuální realita{% endblock %}</title>
 
     {% block stylesheets %}
@@ -23,15 +16,12 @@
     {% block javascripts %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> {# Manages editor table filter #}
-        <!--   Core JS Files   -->
         <!--  Rich text editor -->
         <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
         <!--  Other and custom js -->
-        <script src="{{ asset('editor/js/custom.js') }}"></script>
-        <script src="{{ asset('editor/js/core/jquery.min.js') }}"></script>
-        <script src="{{ asset('editor/js/core/popper.min.js') }}"></script>
-        <script src="{{ asset('editor/js/core/bootstrap-material-design.min.js') }}"></script>
-        <script src="{{ asset('editor/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script>
+        {# <script src="{{ asset('editor/js/core/jquery.min.js') }}"></script> #}
+        {# <script src="{{ asset('editor/js/core/bootstrap-material-design.min.js') }}"></script> #}
+        {# <script src="{{ asset('editor/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> #}
         <!-- Plugin for the momentJs  -->
         {# <script src="{{ asset('editor/js/plugins/moment.min.js') }}"></script> #}
         <!-- Forms Validations Plugin -->
@@ -58,19 +48,21 @@
         {# <script src="{{ asset('editor/js/plugins/jquery-jvectormap.js') }}"></script> #}
         <!-- Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
         {# <script src="{{ asset('editor/js/plugins/nouislider.min.js') }}"></script> #}
-
         <!-- Chartist JS -->
-        <script src="{{ asset('editor/js/plugins/chartist.min.js') }}"></script>
+        {# <script src="{{ asset('editor/js/plugins/chartist.min.js') }}"></script> #}
         <!-- Notifications Plugin    -->
-        <script src="{{ asset('editor/js/plugins/bootstrap-notify.js') }}"></script>
-        <script defer src="{{ asset('build/controllers/fontawesome/js/all.js') }}"></script>
+        {# <script src="{{ asset('editor/js/plugins/bootstrap-notify.js') }}"></script> #}
+        {# <script defer src="{{ asset('build/controllers/fontawesome/js/all.js') }}"></script> #}
         <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-        <script src="{{ asset('editor/js/material-dashboard.js?v=2.1.2') }}" type="text/javascript"></script>
+        {# <script src="{{ asset('editor/js/material-dashboard.js?v=2.1.2') }}" type="text/javascript"></script> #}
 
+        <!--   Core JS Files   -->
         {{ encore_entry_script_tags('app') }}
+        <script src="{{ asset('editor/js/custom.js') }}"></script>
     {% endblock %}
 </head>
-<body class="dark-edition">
+<body class="dark-edition" data-controller="default">
+    <script src="{{ asset('editor/js/core/popper.min.js') }}"></script>
     <div class="wrapper">
 
         {% for key, message in app.flashes('success') %}

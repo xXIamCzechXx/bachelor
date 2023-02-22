@@ -167,7 +167,7 @@ class EditorNewsController extends BaseEditorController
                         ->setMetaDescription($data->get('news-description'));
 
                     $this->em->persist($entity);
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali článek');
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali záznam');
                     break;
                 }
 
@@ -227,7 +227,7 @@ class EditorNewsController extends BaseEditorController
                         ->setMetaDescription($data->get('news-description'));
 
                     $this->em->persist($entity);
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali článek');
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali záznam');
                     break;
                 }
                 $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko titulek(nadpis), prosím založte produkt znovu se správnými hodnotami');
@@ -243,12 +243,12 @@ class EditorNewsController extends BaseEditorController
 
             case 'hide':
                 $entity->hide();
-                $this->addFlash(FLASH_WARNING, 'Skrili jste novinku');
+                $this->addFlash(FLASH_WARNING, 'Skryli jste záznam');
                 break;
 
             case 'show':
                 $entity->show();
-                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste novinku');
+                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste záznam');
                 break;
 
             case 'add-category':
@@ -259,7 +259,7 @@ class EditorNewsController extends BaseEditorController
                         ->setDescription($data->get('category-description'));
 
                     $this->em->persist($entity);
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali kategorii článku');
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali záznam');
                     break;
                 }
                 $logger->setOperation("Name of category was empty, name gotta be filled before adding category");
@@ -273,7 +273,7 @@ class EditorNewsController extends BaseEditorController
                         ->setName($data->get('category-name'))
                         ->setDescription($data->get('category-description'))
                     ;
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali kategorii galerie');
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali záznam');
                     break;
                 }
                 $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název kategorie, prosím upravte kategorii znovu se správnými hodnotami');
@@ -284,18 +284,18 @@ class EditorNewsController extends BaseEditorController
 
             case 'hide-category':
                 $entity->hide();
-                $this->addFlash(FLASH_WARNING, 'Skrili jste kategorii novinek');
+                $this->addFlash(FLASH_WARNING, 'Skryli jste záznam');
                 break;
 
             case 'show-category':
                 $entity->show();
-                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste kategorii novinek');
+                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste záznam');
                 break;
 
             case 'remove-category':
                 if ($this->isGranted(self::SUPER_ADMIN)) { // There is an violation because is deleting
                     $this->em->remove($entity);
-                    $this->addFlash(FLASH_WARNING, 'Odstranili jste kategorii');
+                    $this->addFlash(FLASH_WARNING, 'Odstranili jste záznam');
                     break;
                 }
                 $this->addFlash(FLASH_DANGER, NO_RIGHTS);
@@ -312,7 +312,7 @@ class EditorNewsController extends BaseEditorController
                 break;
         }
 
-        $logger = $this->completeLogger($logger, MODULE_NEWS, $entity->getTitle() ." [ ".$entity->getId()." ] ");
+        $logger = $this->completeLogger($logger, MODULE_NEWS, "ID: [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();

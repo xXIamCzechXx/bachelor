@@ -124,7 +124,7 @@ class EditorConstantsController extends BaseEditorController
                 break;
         }
 
-        $logger = $this->completeLogger($logger, MODULE_CONSTANTS, $entity->getName() ." [ ".$entity->getId()." ] ");
+        $logger = $this->completeLogger($logger, MODULE_CONSTANTS, "ID: [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();

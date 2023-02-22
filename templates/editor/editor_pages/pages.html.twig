@@ -25,9 +25,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card" id="myList">
-                        <div class="card-header card-header-primary">
+                        <div class="card-header card-header-success">
                             <h4 class="card-title ">Stránky <small>[ celkem: {{ pages|length }} ]</small></h4>
-                            <p class="card-category">Nastavení SEO a obsahu stránek</p>
                             {% include "editor/utilities/paginator/_controls.html.twig" %}
                         </div>
                         <div class="card-body">
@@ -63,7 +62,7 @@
                                                 <td style="min-width: 80px;" class="td-actions text-right">
                                                     <form action="{{ path('editor_edit_page', { id: page.id }) }}" method="POST">
                                                         <a onclick="showTable({{ page.id }})">
-                                                            <div rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                            <div rel="tooltip" title="Editovat" class="btn btn-link btn-sm">
                                                                 <i class="material-icons">edit</i>
                                                             </div>
                                                         </a>

@@ -1,6 +1,6 @@
 {% if cookie.getCookieForm is defined and cookie.getCookieForm is not null %}
     <div class="cookie-container" id="cookie-cont" data-aos="fade-right" data-aos-duration="2000">
-        <div class="cookie-section">
+        <div class="cookie-section" data-controller="default">
             {% set cookieForm = cookie.getCookieForm %}
             <form action="" method="post">
                 {{ form_start(cookieForm) }}

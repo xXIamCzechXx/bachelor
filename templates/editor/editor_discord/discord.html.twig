@@ -5,10 +5,18 @@
 {% block sidebar %}
     {% embed "editor/utilities/sidebar.html.twig" %}
         {% block discord %}
-            <li class="nav-item active" style="margin-left: 30px;">
+            <li class="nav-item active">
                 <a class="nav-link" href="{{ path('editor_discord') }}">
                     <i class="fa-brands fa-discord"></i>
                     <p class="fa-margin">Discord</p>
+                </a>
+            </li>
+        {% endblock %}
+        {% block synchronization %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('editor_method') }}">
+                    <i class="fa-solid fa-server"></i>
+                    <p class="fa-margin">Synchronizace</p>
                 </a>
             </li>
         {% endblock %}
@@ -20,14 +28,18 @@
 {% endblock %}
 
 {% block body %}
-    <div class="content">
+    <div class="content" data-controller="discord">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card" id="myList">
-                        <div class="card-header card-header-primary">
-                            <h4 class="card-title ">Discord <small>[ Webhooky ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
-                            <p class="card-category">Nastavení Discord webhooku</p>
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title ">
+                                Discord <small>[ Webhooky ]</small>
+                                <a onclick="showTable('add')" class="btn btn-round btn-fill btn-info" style="float: right;">Přidat webhook</a>
+                                <a onclick="showTable('send')" class="btn btn-round btn-fill btn-default" style="float: right;">Poslat zprávu</a>
+                            </h4>
+                            {# <p class="card-category">Nastavení Discord webhooku</p> #}
                             {% include "editor/utilities/paginator/_controls.html.twig" %}
                         </div>
                         <div class="card-body">
@@ -50,7 +62,7 @@
                                                 <td class="td-actions text-right" style="min-width: 100px;">
                                                     <form action="{{ path('editor_edit_webhook', { id: webhook.id }) }}" method="POST">
                                                         <a onclick="showTable({{ webhook.id }})">
-                                                            <button type="button" rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                            <button type="button" rel="tooltip" title="Editovat" class="btn btn-link btn-sm">
                                                                 <i class="material-icons">edit</i>
                                                             </button>
                                                         </a>
@@ -61,15 +73,6 @@
                                                 </td>
                                             </tr>
                                         {% endfor %}
-                                        <tr>
-                                            <td class="text-center"></td>
-                                            <td class="text-center">
-                                                <a onclick="showTable('send')" class="btn btn-round btn-fill btn-default">Poslat zprávu</a>
-                                            </td>
-                                            <td class="text-center">
-                                                <a onclick="showTable('add')" class="btn btn-round btn-fill btn-info">Přidat webhook</a>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

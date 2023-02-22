@@ -361,7 +361,7 @@ class EditorUsersController extends BaseEditorController
                     }
                     $entity->setName($data->get('badge-name'));
                     $this->em->persist($entity);
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali badge');
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali záznam');
                     break;
                 }
                 $entity = null;
@@ -380,7 +380,7 @@ class EditorUsersController extends BaseEditorController
                     }
 
                     $entity->setName($data->get('badge-name'));
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali badge');
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali záznam');
                     break;
                 }
                 $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název badge, prosím upravte badge znovu se správnými hodnotami');
@@ -391,17 +391,17 @@ class EditorUsersController extends BaseEditorController
 
             case 'hide-badge':
                 $entity->hide();
-                $this->addFlash(FLASH_WARNING, 'Skrili jste badge');
+                $this->addFlash(FLASH_WARNING, 'Skryli jste záznam');
                 break;
 
             case 'show-badge':
                 $entity->show();
-                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste badge');
+                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste záznam');
                 break;
 
             case 'remove-badge':
                 $this->em->remove($entity);
-                $this->addFlash(FLASH_WARNING, 'Odstranili jste badge');
+                $this->addFlash(FLASH_WARNING, 'Odstranili jste záznam');
                 break;
 
             case 'add-hdm':
@@ -417,7 +417,7 @@ class EditorUsersController extends BaseEditorController
 
                     $entity->setName($data->get('hdm-name'));
                     $this->em->persist($entity);
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali hdm');
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali záznam');
                     break;
                 }
                 $entity = null;
@@ -438,7 +438,7 @@ class EditorUsersController extends BaseEditorController
                     }
 
                     $entity->setName($data->get('hdm-name'));
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali hdm');
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali záznam');
                     break;
                 }
                 $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název hdm, prosím upravte hdm znovu se správnými hodnotami');
@@ -449,17 +449,17 @@ class EditorUsersController extends BaseEditorController
 
             case 'hide-hdm':
                 $entity->hide();
-                $this->addFlash(FLASH_WARNING, 'Skrili jste hdm');
+                $this->addFlash(FLASH_WARNING, 'Skryli jste záznam');
                 break;
 
             case 'show-hdm':
                 $entity->show();
-                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste badge');
+                $this->addFlash(FLASH_SUCCESS, 'Zviditelnili jste záznam');
                 break;
 
             case 'remove-hdm':
                 $this->em->remove($entity);
-                $this->addFlash(FLASH_WARNING, 'Odstranili jste hdm');
+                $this->addFlash(FLASH_WARNING, 'Odstranili jste záznam');
                 break;
 
             default:
@@ -470,7 +470,7 @@ class EditorUsersController extends BaseEditorController
                 break;
         }
 
-        $logger = $this->completeLogger($logger, MODULE_CONSTANTS, $entity->getName() ." [ ".$entity->getId()." ] ");
+        $logger = $this->completeLogger($logger, MODULE_USERS, "ID: [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();

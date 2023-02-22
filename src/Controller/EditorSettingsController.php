@@ -58,7 +58,7 @@ class EditorSettingsController extends BaseEditorController
                     ->setRecaptchaSecretKey($data->get('settings-recaptcha-secret-key'))
                     ->setRecaptchaSiteKey($data->get('settings-recaptcha-site-key'));
 
-                $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste změnili konstantu');
+                $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste změnili záznam');
                 break;
 
             default:
@@ -69,7 +69,7 @@ class EditorSettingsController extends BaseEditorController
                 break;
         }
 
-        $logger = $this->completeLogger($logger, MODULE_PAGES, $entity->getName() ." [ ".$entity->getId()." ] ");
+        $logger = $this->completeLogger($logger, MODULE_SETTINGS, "ID: [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();

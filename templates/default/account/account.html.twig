@@ -52,7 +52,7 @@
                                 {% if app.user.hdm.imgName is defined and app.user.hdm.imgName is not null %}<img class="profile-hdm" src="{{ asset(app.user.hdm.getImgPath(app.user.hdm.imgName)) }}" alt="{{ app.user.hdm.name }}">{% endif %}
                                 <h3>{{ app.user.nickname }}</h3>
                                 <h4>Player ID: {{ app.user.uniqueId }}</h4>
-{#                                <h4 class="success" style="padding: 10px 0; color: green;">Přihlášen do turnaje</h4>#}
+{#                              <h4 class="success" style="padding: 10px 0; color: green;">Přihlášen do turnaje</h4>#}
                                 <h4 class="warning" style="padding: 10px 0;">Turnaj již brzy</h4>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                             <div class="profile-card-title">
                                 <h3><strong>{{ app.user.nickname }} #{{ app.user.uniqueId }}</strong>
                                     <div class="profile-buttons">
-                                        <button class="btn" onclick="showTable({{ app.user.id }})">Upravit</button>
+                                        <button class="btn" data-action="click->default#showUserSettings" data-user-id="{{ app.user.id }}">Upravit</button>
                                         <form action="{{ path('account_join_tourney', { id: app.user.id }) }}" method="POST" style="margin: 0 !important;">
                                             <input type="submit" name="join-tourney" class="btn btn-success" {% if false != true %}disabled value="Turnaj již brzy"{% else %}value="Vstup do turnaje"{% endif %}>
                                         </form>
@@ -250,10 +250,6 @@
                     </div>
                 </div>
             </form>
-            {#
-            <div class="horizontal-space"></div>
-            <h2 class="text-center">Nadcházející události</h2>
-            #}
         </div>
     </div>
 

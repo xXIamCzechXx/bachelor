@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Connector\ScoresaberApi;
+use App\Entity\Method;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -34,16 +35,21 @@ class SyncScoresaberUsersCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $method = $input->getArgument('method');
+        $methodAlias = $input->getArgument('method');
 
-        if ($method) {
-            $io->note(sprintf('<info>You passed an argument: %s</info>', $method));
+        if ($methodAlias) {
+            $io->note(sprintf('<info>You passed an argument: %s</info>', $methodAlias));
         }
 
-        if ($method = $input->getOption('method')) {
-            $io->note(sprintf('You passed an option (method name): %s', $method));
+        if ($methodAlias = $input->getOption('method')) {
+            $io->note(sprintf('You passed an option (method name): %s', $methodAlias));
         } else {
             $io->note('<info>You did not pass an option (method name)</info>');
+            return Command::INVALID;
+        }
+
+        if (!$method = $this->em->getRepository(Method::class)->findOneBy(['alias' => $methodAlias])) {
+            $io->error(sprintf('Method with alias %s does not exist', $methodAlias));
             return Command::INVALID;
         }
 
@@ -79,6 +85,11 @@ class SyncScoresaberUsersCommand extends Command
                 $io->note(sprintf('User with ID %s does not exist', $key));
             }
         }
+
+        $method->setLog(sprintf('Total users on web: %s. ', count($users)) . sprintf('Total mapped users: %s', array_count_values(array_column($mappedUsers, 'mapped'))[1]));
+        $method->setType(LOGGER_TYPE_SUCCESS);
+        $this->em->persist($method);
+        $this->em->flush();
 
         $io->success(sprintf('Synchronization was successful, ended at: %s', date('Y-m-d H:i:s')));
 

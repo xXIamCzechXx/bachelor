@@ -76,7 +76,7 @@ class EditorPagesController extends BaseEditorController
                     ->setMetaDescription($data->get('page-description'))
                     ->setKeywords($data->get('page-keywords'))
                 ;
-                $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali stránku');
+                $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali záznam');
                 $logger->setType(LOGGER_TYPE_SUCCESS);
                 break;
 
@@ -88,7 +88,7 @@ class EditorPagesController extends BaseEditorController
                 break;
         }
 
-        $logger = $this->completeLogger($logger, MODULE_PAGES, $entity->getName() ." [ ".$entity->getId()." ] ");
+        $logger = $this->completeLogger($logger, MODULE_PAGES, "ID: [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();

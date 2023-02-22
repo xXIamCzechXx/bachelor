@@ -131,11 +131,11 @@ class EditorGalleryController extends BaseEditorController
                             ->setKeywords($data->get('category-keywords'));
 
                         $this->em->persist($entity);
-                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali kategorii galerie');
+                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali záznam');
                         break;
                     }
 
-                    $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název kategorie, prosím založte kategorii znovu se správnými hodnotami');
+                    $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko název, prosím založte kategorii znovu se správnými hodnotami');
                     $logger
                         ->setType(LOGGER_TYPE_FAILED)
                         ->setOperation("Name of category was empty, name gotta be filled before adding category");
@@ -167,7 +167,7 @@ class EditorGalleryController extends BaseEditorController
                         ->setView($data->get('img-view'));
 
                     $this->em->persist($entity);
-                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali obrázek');
+                    $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste přidali záznam');
                     break;
 
                 } else {
@@ -195,7 +195,7 @@ class EditorGalleryController extends BaseEditorController
                             ->setKeywords($data->get('category-keywords'));
 
                         $this->em->persist($entity);
-                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali kategorii galerie');
+                        $this->addFlash(FLASH_SUCCESS, 'Úspěšně jste aktualizovali záznam');
                         break;
                     }
                     $this->addFlash(FLASH_DANGER, 'Není vyplněno políčko Název kategorie, prosím upravte kategorii znovu se správnými hodnotami');
@@ -252,14 +252,14 @@ class EditorGalleryController extends BaseEditorController
 
                     $logger->setOperation($entity->getName()." [ ".$entity->getId()." ] ");
                     $entity->hide();
-                    $this->addFlash(FLASH_WARNING, 'Skrili jste záznam');
+                    $this->addFlash(FLASH_WARNING, 'Skryli jste záznam');
                     break;
 
                 } else if ($entity instanceof GalleryImages) {
 
                     $logger->setOperation($entity->getName()." [ ".$entity->getId()." ] ");
                     $entity->hide();
-                    $this->addFlash(FLASH_WARNING, 'Skrili jste obrázek');
+                    $this->addFlash(FLASH_WARNING, 'Skryli jste záznam');
                     break;
 
                 } else {
@@ -324,7 +324,7 @@ class EditorGalleryController extends BaseEditorController
                 break;
         }
 
-        $logger = $this->completeLogger($logger, MODULE_GALLERY, $entity->getName() ." [ ".$entity->getId()." ] ");
+        $logger = $this->completeLogger($logger, MODULE_GALLERY, "ID: [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();

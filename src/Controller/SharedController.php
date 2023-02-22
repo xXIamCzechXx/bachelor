@@ -43,6 +43,7 @@ define('MODULE_HDMS', 'Hdm');
 define('MODULE_ACCOUNT', 'Account');
 define('MODULE_TOURNAMENT', 'Tournamet');
 define('MODULE_DISCORD_WEBHOOK', 'Discord webhook');
+define('MODULE_SETTINGS', 'Settings');
 
 // Google ReCAPTCHA NENAČÍTÁ SE ODSUD
 define('SITE_KEY', '6Lf7_UwaAAAAANAhJ2-ZHDpsGTikaCilEzWhs7Rt');

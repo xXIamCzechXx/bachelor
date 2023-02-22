@@ -25,10 +25,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card" id="myList">
-                        <div class="card-header card-header-primary">
-                            <h4 class="card-title mt-0">Mapy <small>[ celkem: {{ tournamentsMaps|length }} ]</small>&nbsp<i class="fas fa-plus" onclick="showTable('add')"></i></h4>
-                            <a class="subtitle" style="color: dodgerblue;" href="https://xxiamczechxx.fun/export?method=maps&password=admin" target="_blank">Exportovat</a>
-                            <p class="card-category"> Zde jsou zobrazeny všechny mapy</p>
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title mt-0">
+                                Mapy <small>[ celkem: {{ tournamentsMaps|length }} ]</small>
+                                <a href="https://xxiamczechxx.fun/export?method=maps&password=admin" target="_blank" class="btn btn-round btn-fill btn-primary" style="float: right; color: dodgerblue;"><i class="fa-solid fa-upload"></i> Exportovat</a>
+                                <a onclick="showTable('add')" class="btn btn-round btn-fill btn-info" style="float: right;">Přidat mapu</a>
+                            </h4>
                             {% include "editor/utilities/paginator/_controls.html.twig" %}
                         </div>
                         <div class="card-body" id="demo">
@@ -71,7 +73,7 @@
                                             <td class="td-actions text-right" style="min-width: 100px;">
                                                 <form action="{{ path('editor_edit_tournament_map', { id: tournamentsMap.id }) }}" method="POST">
                                                     <a onclick="showTable({{ tournamentsMap.id }})">
-                                                        <button type="button" rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                        <button type="button" rel="tooltip" title="Editovat" class="btn btn-link btn-sm">
                                                             <i class="material-icons">edit</i>
                                                         </button>
                                                     </a>

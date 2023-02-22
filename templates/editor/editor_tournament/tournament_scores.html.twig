@@ -25,10 +25,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card" id="myList">
-                        <div class="card-header card-header-primary">
-                            <h4 class="card-title mt-0">Log submitů skóre <small>[ celkem: {{ tournamentsScores|length }} ]</small></h4>
-                            <a class="subtitle" style="color: dodgerblue;" href="https://xxiamczechxx.fun/export?method=scores&password=admin" target="_blank">Exportovat</a>
-                            <p class="card-category"> Zde jsou zobrazeny všechny pokusy při kvalifikaci</p>
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title mt-0">
+                                Log submitů skóre <small>[ celkem: {{ tournamentsScores|length }} ]</small>
+                                <a href="https://xxiamczechxx.fun/export?method=scores&password=admin" target="_blank" class="btn btn-round btn-fill btn-primary" style="float: right; color: dodgerblue;"><i class="fa-solid fa-upload"></i> Exportovat</a>
+                            </h4>
                             {% include "editor/utilities/paginator/_controls.html.twig" %}
                         </div>
                         <div class="card-body" id="demo">

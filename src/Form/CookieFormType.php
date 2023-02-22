@@ -39,7 +39,8 @@ class CookieFormType extends AbstractType
                         'style' => 'float: left; margin: 0 !important; padding-bottom: 6px;'
                     ],
                     'attr' => [
-                        'id' => 'agree_butt'
+                        'id' => 'agree_butt',
+                        'data-action' => 'default#setCookie',
                     ]
                 ])
             ->add('discard', ButtonType::class, [
@@ -48,7 +49,8 @@ class CookieFormType extends AbstractType
                     'style' => 'float: left; margin: 0 !important; padding-bottom: 6px;'
                 ],
                 'attr' => [
-                    'id' => 'to_settings_butt'
+                    'id' => 'to_settings_butt',
+                    'data-action' => 'default#setCookie',
                 ]
             ])
             //->getForm()

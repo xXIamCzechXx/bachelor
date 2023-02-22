@@ -26,10 +26,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card" id="myList">
-                        <div class="card-header card-header-primary">
-                            <h4 class="card-title mt-0"> Uživatelé <small>[ celkem: {{ users|length }} ]</small></h4>
-                            <a class="subtitle" style="color: dodgerblue;" href="https://xxiamczechxx.fun/export?method=users&password=admin" target="_blank">Exportovat</a>
-                            <p class="card-category"> Zde jsou zobrazeni všichni zaregistrovaní uživatelé webu</p>
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title mt-0">
+                                Uživatelé <small>[ celkem: {{ users|length }} ]</small>
+                                <a href="https://xxiamczechxx.fun/export?method=users&password=admin" target="_blank" class="btn btn-round btn-fill btn-primary" style="float: right; color: dodgerblue;"><i class="fa-solid fa-upload"></i> Exportovat</a>
+                            </h4>
                             {% include "editor/utilities/paginator/_controls.html.twig" %}
                         </div>
                         <div class="card-body">
@@ -58,17 +59,14 @@
                                                 <td class="td-actions text-right">
                                                     <form action="{{ path('editor_edit_user', { id: user.id }) }}" method="post">
                                                         <a onclick="showTable({{ user.id }})">
-                                                            <button type="button" rel="tooltip" title="Editovat" class="btn btn-primary btn-link btn-sm">
+                                                            <button type="button" rel="tooltip" title="Editovat" class="btn btn-link btn-sm">
                                                                 <i class="material-icons">edit</i>
                                                             </button>
                                                         </a>
                                                         <button name="user-action" value="regenerate-unique-id" type="submit" rel="tooltip" title="Vygenerovat Unique ID" class="btn {{ user.uniqueId == "" ? '' : 'btn-success' }} btn-link btn-sm" {{ user.uniqueId == "" ? '' : 'disabled' }}>
-                                                            <i class="fa fa-id-badge" aria-hidden="true"></i>
+                                                            <i class="fa-solid fa-arrow-up-9-1"></i>
                                                         </button>
-                                                        <button name="user-action" value="recalculate-score" type="submit" rel="tooltip" title="Přepočítat skóre" class="btn" style="background: rgba(0,0,0,0);">
-                                                            <i class="fas fa-star-half-alt"></i>
-                                                        </button>
-                                                        <button name="user-action" value="recalculate-score" type="submit" rel="tooltip" title="Přepočítat skóre" class="btn" style="background: rgba(0,0,0,0);">
+                                                        <button name="user-action" value="recalculate-score" type="submit" rel="tooltip" title="Přepočítat skóre" class="btn btn-link btn-sm" style="background: rgba(0,0,0,0);">
                                                             <i class="fas fa-star-half-alt"></i>
                                                         </button>
                                                         {% if user.active == 1 %}
@@ -84,7 +82,7 @@
                                                             <i class="far fa-trash-alt"></i>
                                                         </button>
                                                         <a onclick="showTable('user'+{{ user.id }})">
-                                                            <button type="button" rel="tooltip" title="Změnit heslo" class="btn btn-primary btn-link btn-sm">
+                                                            <button type="button" rel="tooltip" title="Změnit heslo" class="btn btn-link btn-sm">
                                                                 <i class="fas fa-key"></i>
                                                             </button>
                                                         </a>
@@ -98,7 +96,7 @@
                                             <div class="edit-form-bcg {{ 'user'~user.id }}"></div>
                                             <div class="edit-form {{ 'user'~user.id }}">
                                                 <div class="card">
-                                                    <div class="card-header card-header-primary" style="margin: -20px 15px 15px 15px;">
+                                                    <div class="card-header card-header-success" style="margin: -20px 15px 15px 15px;">
                                                         <h4 class="card-title">Změna hesla uživatele: {{ user.firstName }}</h4>
                                                         <p class="card-category">Važte zvýšené opatrnosti při změně hesla. Po změně budou všichni uživatelé tohoto účtu odhlášeni</p>
                                                     </div>
@@ -117,7 +115,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <button type="submit" name="user-action" value="password" class="btn btn-primary pull-right">Změnit heslo</button>
+                                                        <button type="submit" name="user-action" value="password" class="btn pull-right">Změnit heslo</button>
                                                         <div class="clearfix"></div>
                                                     </div>
                                                 </div>
@@ -125,7 +123,7 @@
                                             <div class="edit-form-bcg {{ user.id }}"></div>
                                             <div class="edit-form {{ user.id }}">
                                                 <div class="card">
-                                                    <div class="card-header card-header-primary" style="margin: -20px 15px 15px 15px;">
+                                                    <div class="card-header card-header-success" style="margin: -20px 15px 15px 15px;">
                                                         <h4 class="card-title">Editace uživatele: {{ user.firstName }}</h4>
                                                         <p class="card-category">Po této úpravě budou všichni uživatelé z tohoto účtu odhlášeni</p>
                                                     </div>

@@ -250,6 +250,18 @@
             "./config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "sensiolabs/ansi-to-html": {
+        "version": "1.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.2",
+            "ref": "d58d11d5b998f39260d387d3a0b50adc342db7e4"
+        },
+        "files": [
+            "./config/packages/ansi_to_html.yaml"
+        ]
+    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.7",
         "recipe": {
@@ -613,6 +625,9 @@
             "./config/packages/twig.yaml",
             "./templates/base.html.twig"
         ]
+    },
+    "symfony/ux-turbo": {
+        "version": "v1.3.0"
     },
     "symfony/validator": {
         "version": "5.3",

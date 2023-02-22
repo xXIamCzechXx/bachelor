@@ -67,7 +67,7 @@ class EditorAnswersController extends BaseEditorController
                 break;
         }
 
-        $logger = $this->completeLogger($logger, MODULE_CONSTANTS, $entity->getName() ." [ ".$entity->getId()." ] ");
+        $logger = $this->completeLogger($logger, MODULE_FORM_ANSWERS, "ID: [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();

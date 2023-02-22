@@ -31,6 +31,11 @@ class Method
     private string $slug;
 
     /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    private $type;
+
+    /**
      * @ORM\Column(type="text")
      */
     private string $log;
@@ -80,5 +85,19 @@ class Method
      */
     public function setSlug(string $slug): void {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void {
+        $this->type = $type;
     }
 }

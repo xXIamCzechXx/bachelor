@@ -1,15 +1,20 @@
 {
     "devDependencies": {
         "@babel/preset-react": "7.0.0",
+        "@fortawesome/fontawesome-free": "^6.3.0",
         "@hotwired/stimulus": "^3.0.0",
+        "@hotwired/turbo": "^7.0.0-beta.5",
         "@symfony/stimulus-bridge": "^3.2.1",
+        "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/Resources/assets",
         "@symfony/webpack-encore": "^1.7.0",
         "core-js": "^3.27.2",
         "file-loader": "6.0.0",
+        "font-awesome": "^4.7.0",
+        "popper.js": "^1.16.1",
         "regenerator-runtime": "^0.13.2",
         "sass": "^1.58.0",
         "sass-loader": "12.0.0",
-        "stimulus": "^3.2.1",
+        "stimulus": "^2.0.0",
         "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",
@@ -21,6 +26,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@popperjs/core": "^2.11.6",
         "jquery": "^3.6.3"
     }
 }

@@ -12,8 +12,9 @@ Encore
     // public path used by the web server to access the output path
     .setPublicPath('/build')
     .copyFiles({from: './assets/images', to: 'images/[path][name].[ext]', to: 'images/[path][name].[ext]', pattern: /\.(png|jpg|jpeg)$/})
-    .copyFiles({from: './assets/controllers/fontawesome', to: 'fontawesome/[path][name].[ext]', to: 'fontawesome/[path][name].[ext]'})
+    .copyFiles({from: './assets/js', to: 'js/[path][name].[ext]', to: 'js/[path][name].[ext]'})
     .copyFiles({from: './assets/controllers', to: 'controllers/[path][name].[ext]', to: 'controllers/[path][name].[ext]'})
+    .copyFiles({from: './assets/styles', to: 'styles/[path][name].[ext]', to: 'styles/[path][name].[ext]'})
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
 

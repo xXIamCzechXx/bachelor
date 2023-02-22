@@ -152,7 +152,7 @@ class EditorTournamentController extends BaseEditorController
                 break;
         }
 
-        $logger = $this->completeLogger($logger, MODULE_PAGES, $entity->getName() ." [ ".$entity->getId()." ] ");
+        $logger = $this->completeLogger($logger, MODULE_TOURNAMENT, "ID: [ ".$entity->getId()." ] ");
 
         $this->em->persist($logger);
         $this->em->flush();
