@@ -1654,7 +1654,7 @@ a .gallery-title {
   margin: 0 auto;
   display: grid;
   grid-gap: 1.1rem;
-  grid-template-columns: repeat(auto-fit, minmax(264px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
 }
 .users-container a .c-btn {
   position: relative;
@@ -1682,7 +1682,7 @@ a .gallery-title {
   background-color: #3B3F6D;
   color: white;
   padding: 1rem;
-  height: 380px;
+  height: 324px;
   transition: 0.2s;
   cursor: pointer;
   clip-path: polygon(12px 0%, calc(100% - 10px) 0%, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0% calc(100% - 10px), 0% 12px);

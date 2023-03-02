@@ -218,7 +218,7 @@ class User implements UserInterface
     /**
      * @param float|null $avgPercentage
      */
-    public function setAvgPercentage($avgPercentage): void {
+    public function setAvgPercentage(?float $avgPercentage): void {
         $this->avgPercentage = $avgPercentage;
     }
 

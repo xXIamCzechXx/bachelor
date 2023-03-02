@@ -29,12 +29,12 @@ class UsersExport
             foreach ($user->getBadges() as $badgeKey => $badge) {
                 $data[$key]['badges'][$badge->getId()] = $badge->getName();
             }
-            foreach ($user->getTournamentsScores() as $scoreKey => $tournamentsScore) {
-                $data[$key]['score']['percentage'] = $tournamentsScore->getPercentage();
-                $data[$key]['score']['score'] = $tournamentsScore->getScore();
-                $data[$key]['score']['map'] = $tournamentsScore->getMap()->getName();
-                $data[$key]['score']['tournament'] = $tournamentsScore->getTournament()->getName();
-            }
+            //foreach ($user->getTournamentsScores() as $scoreKey => $tournamentsScore) {
+            //    $data[$key]['score']['percentage'] = $tournamentsScore->getPercentage();
+            //    $data[$key]['score']['score'] = $tournamentsScore->getScore();
+            //    $data[$key]['score']['map'] = $tournamentsScore->getMap()->getName();
+            //    $data[$key]['score']['tournament'] = $tournamentsScore->getTournament()->getName();
+            //}
             $data[$key]['scoresaber']['averagePercentage'] = $user->getAvgPercentage();
             $data[$key]['scoresaber']['pp'] = $user->getPp();
             $data[$key]['scoresaber']['rank'] = $user->getRank();

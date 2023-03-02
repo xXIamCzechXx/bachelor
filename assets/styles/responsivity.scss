@@ -161,6 +161,25 @@
 }
 
 @media screen and (max-width: 750px) {
+  .grid-table {
+    .grid-header {
+      display: none;
+    }
+    .grid-row {
+      grid-template-rows: auto auto;
+      grid-row-gap: 0.25rem;
+      grid-column-gap: 0.25rem;
+      text-align: center;
+    }
+  }
+
+  .grid-table-leaderboard-qual .grid-row {
+    grid-template-columns: minmax(2.5rem,min-content) auto auto;
+  }
+  .grid-table-leaderboard .grid-row {
+    grid-template-columns: minmax(5.5rem,min-content) auto auto;
+  }
+
   .top-foto-logo {
     width: 500px;
   }

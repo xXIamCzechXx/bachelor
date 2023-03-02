@@ -31,10 +31,8 @@
 {% block body %}
 
     <div class="homepage-wrapper">
-
         <div class="full-screen-video-container">
-{#            <canvas id=c class="particles-canvas" style="min-height: 800px;"></canvas> Uncomment to run AOS -> Moving hexagons #}
-
+{#           <canvas id=c class="particles-canvas" style="min-height: 800px;"></canvas> Uncomment to run AOS -> Moving hexagons #}
             <a href="{{ path('homepage') }}" style="display: block;"><img class="full-wide-logo" src="{{ asset('build/images/logos/full-wide-logo.png') }}" alt="CzechSaber logo"></a>
             <img draggable="false" src="{{ asset('build/images/logos/3cup_text_new.png') }}" alt="{{ page.alt }}" class="top-foto-logo">
             <h2 class="hp-title" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">{{ page.title }}</h2>
@@ -51,8 +49,8 @@
             </a>
         </div>
 
-    <div class="twitch-container" style="min-height: 800px; margin-top: 0;">
-        <div class="pentagon-relief"></div>
+        <div class="default-container">
+            <div class="pentagon-relief"></div>
             <div class="rules-section">
                 <div class="row">
                     <div class="col-md-6">
@@ -64,217 +62,212 @@
                         <p>{{ translator.getValue("CSTS2_TEXT2", "Již brzy dodáme více info")|raw }}</p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h3>{{ translator.getValue("CSTS2_TITLE3", "Nadpis kontejneru")|raw }}</h3>
-                        <p>{{ translator.getValue("CSTS2_TEXT3", "Již brzy dodáme více info")|raw }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h3>{{ translator.getValue("CSTS2_TITLE4", "Nadpis kontejneru")|raw }}</h3>
-                        <p>{{ translator.getValue("CSTS2_TEXT4", "Již brzy dodáme více info")|raw }}</p>
-
-                        <h3>{{ translator.getValue("CSTS2_TITLE5", "Nadpis kontejneru")|raw }}</h3>
-                        <p>{{ translator.getValue("CSTS2_TEXT5", "Již brzy dodáme více info")|raw }}</p>
-                    </div>
-                </div>
             </div>
-        <br>
-    </div>
+        </div>
 
-    <div class="cst-maps-container">
-        <div class="cst-maps-section">
-            <h2 class="text-center white-text" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">Map pooly</h2>
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link bg-dark text-white" id="pills-kvalifikace-tab" data-bs-toggle="pill" data-bs-target="#pills-kvalifikace" type="button" role="tab" aria-controls="pills-kvalifikace" aria-selected="true" style="margin-right: 4px; margin-bottom: 4px;">Kvalifikace</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link bg-dark text-white" id="pills-minifinale-tab" data-bs-toggle="pill" data-bs-target="#pills-minifinale" type="button" role="tab" aria-controls="pills-minifinale" aria-selected="false" style="margin-right: 4px; margin-bottom: 4px;">Minifinále</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link bg-dark text-white" id="pills-semifinale-tab" data-bs-toggle="pill" data-bs-target="#pills-semifinale" type="button" role="tab" aria-controls="pills-semifinale" aria-selected="false" style="margin-right: 4px; margin-bottom: 4px;">Semifinále</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link bg-dark text-white active" id="pills-grandfinale-tab" data-bs-toggle="pill" data-bs-target="#pills-grandfinale" type="button" role="tab" aria-controls="pills-grandfinale" aria-selected="false" style="margin-right: 4px; margin-bottom: 4px;">Grandfinále</button>
-                </li>
-
-            </ul>
-            <div class="tab-content" id="pills-tabContent" style="padding-bottom: 32px;">
-                <div class="tab-pane fade" id="pills-kvalifikace" role="tabpanel" aria-labelledby="pills-kvalifikace-tab">
-                    <table class="table table-dark table-striped">
-                        <thead>
-                            <tr>
-                                <th colspan="100%">
-                                    <small>{{ translator.getValue("MAP_POOL_QUAL_TEXT", "Map pool pro kvalifikace, na každou mapu jsou pouze 2 pokusy")|raw }}</small>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>Název</th>
-                                <th>BSR</th>
-                                <th>Obtížnost</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+        <div class="cst-maps-container">
+            <div class="cst-maps-section">
+                <h2 class="text-center white-text" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">Map pooly</h2>
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-kvalifikace-tab" data-bs-toggle="pill" data-bs-target="#pills-kvalifikace" type="button" role="tab" aria-controls="pills-kvalifikace" aria-selected="true" style="margin-right: 4px; margin-bottom: 4px;">Kvalifikace</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-minifinale-tab" data-bs-toggle="pill" data-bs-target="#pills-minifinale" type="button" role="tab" aria-controls="pills-minifinale" aria-selected="false" style="margin-right: 4px; margin-bottom: 4px;">Minifinále</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-semifinale-tab" data-bs-toggle="pill" data-bs-target="#pills-semifinale" type="button" role="tab" aria-controls="pills-semifinale" aria-selected="false" style="margin-right: 4px; margin-bottom: 4px;">Semifinále</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-grandfinale-tab" data-bs-toggle="pill" data-bs-target="#pills-grandfinale" type="button" role="tab" aria-controls="pills-grandfinale" aria-selected="false" style="margin-right: 4px; margin-bottom: 4px;">Grandfinále</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent" style="padding-bottom: 32px;">
+                    <div class="tab-pane fade" id="pills-kvalifikace" role="tabpanel" aria-labelledby="pills-kvalifikace-tab">
+                        <div class="grid-table grid-table-map-pool">
+                            <div class="grid-header">
+                                <div>#</div>
+                                <div>Název</div>
+                                <div class="text-center">BSR</div>
+                                <div class="text-center">Obtížnost</div>
+                            </div>
                             {% for qualMap in qualMaps %}
-                                <tr>
-                                    <td><a class="link" href="https://bsaber.com/songs/{{ qualMap.bsr }}" target="_blank">{{ qualMap.name }}</a></td>
-                                    <td>{{ qualMap.bsr }}</td>
-                                    <td>{{ qualMap.difficulty == "ExpertPlus" ? "Expert+" : qualMap.difficulty }}</td>
-                                </tr>
+                                <a class="grid-row subline" href="https://bsaber.com/songs/{{ qualMap.bsr }}" target="_blank">
+                                    <div>#{{ loop.index }}</div>
+                                    <div>{{ qualMap.name }}</div>
+                                    <div class="text-center">{{ qualMap.bsr }}</div>
+                                    <div class="text-center">{{ qualMap.difficulty == "ExpertPlus" ? "Expert+" : qualMap.difficulty }}</div>
+                                </a>
                             {% endfor %}
                             {% for i in 0..7-qualMaps|length %}
                                 {% if i > 0 %}
-                                    <tr>
-                                        <td colspan="100%">Volný slot {{ i }}</td>
-                                    </tr>
+                                    <div class="grid-row">
+                                        <div>Volný slot {{ i }}</div>
+                                    </div>
                                 {% endif %}
                             {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade" id="pills-minifinale" role="tabpanel" aria-labelledby="pills-minifinale-tab">
-                    <table class="table table-dark table-striped">
-                        <thead>
-                        <tr>
-                            <th colspan="100%">
-                                <small>{{ translator.getValue("MAP_POOL_MINI_TEXT", "Pool pro finále jednotlivých kategorií [ženy, senioři, bez headsetu]. Hraje se BO3 a banují se celkově 2 mapy")|raw }}</small>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>Název</th>
-                            <th>BSR</th>
-                            <th>Obtížnost</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for miniMap in miniMaps %}
-                            <tr>
-                                <td><a class="link" href="https://bsaber.com/songs/{{ miniMap.bsr }}" target="_blank">{{ miniMap.name }}</a></td>
-                                <td>{{ miniMap.bsr }}</td>
-                                <td>{{ miniMap.difficulty == "ExpertPlus" ? "Expert+" : miniMap.difficulty }}</td>
-                            </tr>
-                        {% endfor %}
-                        {% for i in 0..7-miniMaps|length %}
-                            {% if i > 0 %}
-                                <tr>
-                                    <td colspan="100%">Volný slot {{ i }}</td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade" id="pills-semifinale" role="tabpanel" aria-labelledby="pills-semifinale-tab">
-                    <table class="table table-dark table-striped">
-                        <thead>
-                            <tr>
-                                <th colspan="100%">
-                                    <small>{{ translator.getValue("MAP_POOL_SEMI_TEXT", "Tento pool se bude hrát BO3 a zahraje si ho nejlepší čtyřka a banují se celkově 2 mapy")|raw }}</small>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>Název</th>
-                                <th>BSR</th>
-                                <th>Obtížnost</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                            <div class="grid-footer">
+                                <div>{{ translator.getValue("MAP_POOL_QUAL_TEXT", "Map pool pro kvalifikace, na každou mapu jsou pouze 2 pokusy")|raw }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-minifinale" role="tabpanel" aria-labelledby="pills-minifinale-tab">
+                        <div class="grid-table grid-table-map-pool">
+                            <div class="grid-header">
+                                <div>#</div>
+                                <div>Název</div>
+                                <div class="text-center">BSR</div>
+                                <div class="text-center">Obtížnost</div>
+                            </div>
+                            {% for miniMap in miniMaps %}
+                                <div class="grid-row">
+                                    <div>#{{ loop.index }}</div>
+                                    <div><a class="link subline" href="https://bsaber.com/songs/{{ miniMap.bsr }}" target="_blank">{{ miniMap.name }}</a></div>
+                                    <div class="text-center">{{ miniMap.bsr }}</div>
+                                    <div class="text-center">{{ miniMap.difficulty == "ExpertPlus" ? "Expert+" : miniMap.difficulty }}</div>
+                                </div>
+                            {% endfor %}
+                            {% for i in 0..7-miniMaps|length %}
+                                {% if i > 0 %}
+                                    <div class="grid-row">
+                                        <div>Volný slot {{ i }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <div class="grid-footer">
+                                <div>{{ translator.getValue("MAP_POOL_MINI_TEXT", "Pool pro finále jednotlivých kategorií [ženy, senioři, bez headsetu]. Hraje se BO3 a banují se celkově 2 mapy")|raw }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-semifinale" role="tabpanel" aria-labelledby="pills-semifinale-tab">
+                        <div class="grid-table grid-table-map-pool">
+                            <div class="grid-header">
+                                <div>#</div>
+                                <div>Název</div>
+                                <div class="text-center">BSR</div>
+                                <div class="text-center">Obtížnost</div>
+                            </div>
                             {% for semiMap in semiMaps %}
-                                <tr>
-                                    <td><a class="link" href="https://bsaber.com/songs/{{ semiMap.bsr }}" target="_blank">{{ semiMap.name }}</a></td>
-                                    <td>{{ semiMap.bsr }}</td>
-                                    <td>{{ semiMap.difficulty == "ExpertPlus" ? "Expert+" : semiMap.difficulty }}</td>
-                                </tr>
+                                <a class="grid-row subline" href="https://bsaber.com/songs/{{ semiMap.bsr }}" target="_blank">
+                                    <div>#{{ loop.index }}</div>
+                                    <div><a class="link subline" href="https://bsaber.com/songs/{{ semiMap.bsr }}" target="_blank">{{ semiMap.name }}</a></div>
+                                    <div class="text-center">{{ semiMap.bsr }}</div>
+                                    <div class="text-center">{{ semiMap.difficulty == "ExpertPlus" ? "Expert+" : semiMap.difficulty }}</div>
+                                </a>
                             {% endfor %}
                             {% for i in 0..7-semiMaps|length %}
                                 {% if i > 0 %}
-                                    <tr>
-                                        <td colspan="100%">Volný slot {{ i }}</td>
-                                    </tr>
+                                    <div class="grid-row">
+                                        <div>Volný slot {{ i }}</div>
+                                    </div>
                                 {% endif %}
                             {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade show active" id="pills-grandfinale" role="tabpanel" aria-labelledby="pills-grandfinale-tab">
-                    <table class="table table-dark table-striped">
-                        <thead>
-                        <tr>
-                            <th colspan="100%">
-                                <small>{{ translator.getValue("MAP_POOL_GRAND_TEXT", "Tento pool bude hrát finálová dvojice a bude se hrát BO5 a banují se celkově 2 mapy")|raw }}</small>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>Název</th>
-                            <th>BSR</th>
-                            <th>Obtížnost</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for key, grandMap in grandMaps %}
-                            <tr>
-                                <td><a class="link" href="https://bsaber.com/songs/{{ grandMap.bsr }}" target="_blank">{{ grandMap.name }}</a></td>
-                                <td>{{ grandMap.bsr }}</td>
-                                <td>{{ grandMap.difficulty == "ExpertPlus" ? "Expert+" : grandMap.difficulty }}</td>
-                            </tr>
-                        {% endfor %}
-                        {% for i in 0..7-grandMaps|length %}
-                            {% if i > 0 %}
-                                <tr>
-                                    <td colspan="100%">Volný slot {{ i }}</td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            <div class="grid-footer">
+                                <div>{{ translator.getValue("MAP_POOL_SEMI_TEXT", "Tento pool se bude hrát BO3 a zahraje si ho nejlepší čtyřka a banují se celkově 2 mapy")|raw }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show active" id="pills-grandfinale" role="tabpanel" aria-labelledby="pills-grandfinale-tab">
+                        <div class="grid-table grid-table-map-pool">
+                            <div class="grid-header">
+                                <div>#</div>
+                                <div>Název</div>
+                                <div class="text-center">BSR</div>
+                                <div class="text-center">Obtížnost</div>
+                            </div>
+                            {% for key, grandMap in grandMaps %}
+                                <a class="grid-row subline" href="https://bsaber.com/songs/{{ grandMap.bsr }}" target="_blank">
+                                    <div>#{{ loop.index }}</div>
+                                    <div>{{ grandMap.name }}</div>
+                                    <div class="text-center">{{ grandMap.bsr }}</div>
+                                    <div class="text-center">{{ grandMap.difficulty == "ExpertPlus" ? "Expert+" : grandMap.difficulty }}</div>
+                                </a>
+                            {% endfor %}
+                            {% for i in 0..7-grandMaps|length %}
+                                {% if i > 0 %}
+                                    <div class="grid-row">
+                                        <div>Volný slot {{ i }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <div class="grid-footer">
+                                <div>{{ translator.getValue("MAP_POOL_GRAND_TEXT", "Tento pool bude hrát finálová dvojice a bude se hrát BO5 a banují se celkově 2 mapy")|raw }}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="image-background" style="background-image: url({{ asset('build/images/assets/divka-mcr.jpg') }}) "></div>
         </div>
-        <div class="image-background" style="background-image: url({{ asset('build/images/assets/divka-mcr.jpg') }}) "></div>
-    </div>
 
-    <div class="cst-leaderboard-container">
-        <div class="pentagon-relief"></div>
-        <div class="cst-leaderboard-section">
-            <h2 class="text-center" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">Žebříček kvalifikace</h2>
-            <table class="table table-dark table-striped">
-                <thead>
-                <tr>
-                    <th colspan="100%">
-                        <small>
-                            Bez headsetu -> <i class="fas fa-vr-cardboard"></i>|
-                            30+ -> <i class="fas fa-user-tie"></i>|
-                            Ženy -> <i class="fas fa-venus"></i>
-                        </small>
-                    </th>
-                </tr>
-                <tr>
-                    <th> #</th>
-                    <th> Nickname</th>
-                    <th>Průměrné %</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for key, user in users|slice(0, 10) %}
-                    <tr>
-                        <td>{{ key+1 }}</td>
-                        <td>
-                            {{ user.nickname }}
-                            {% if user.birthdate is not null and date("1992-06-25") > user.birthdate %} <i class="fas fa-user-tie"></i> {% endif %}
-                            {% if user.gender is not null and user.gender == 'Žena' %} <i class="fas fa-venus"></i> {% endif %}
-                            {% if user.hdm is not null and user.hdm.name == 'Nevlastním headset' %} <i class="fas fa-vr-cardboard"></i> {% endif %}
-                        </td>
-                        <td>{{ user.getAvgPercentage|round(2) }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <div class="default-container">
+            <div class="pentagon-relief"></div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h3>{{ translator.getValue("CSTS2_TITLE4", "Nadpis kontejneru")|raw }}</h3>
+                    <p>{{ translator.getValue("CSTS2_TEXT4", "Již brzy dodáme více info")|raw }}</p><br>
+
+                    <h3>{{ translator.getValue("CSTS2_TITLE5", "Nadpis kontejneru")|raw }}</h3>
+                    <p>{{ translator.getValue("CSTS2_TEXT5", "Již brzy dodáme více info")|raw }}</p><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h3>{{ translator.getValue("CSTS2_TITLE3", "Nadpis kontejneru")|raw }}</h3>
+                    <p>{{ translator.getValue("CSTS2_TEXT3", "Již brzy dodáme více info")|raw }}</p>
+                </div>
+            </div>
+            <br>
+            <div class="button-border twitch-button" style="position: relative; z-index: 1; max-width: 400px; text-align: center;">
+                {{ translator.getValue('SHOW_SCOREBOARD', 'Průběžné výsledky - scoreboard')|raw }}
+            </div>
         </div>
-    </div>
-    <div class="cst-maps-container" style="margin: 0; min-height: 100px;">
-        <div class="cst-maps-section" style="padding: 10px 0 0 0;">
-            <h2 class="text-black text-center" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">Bracket</h2>
-            <img draggable="false" src="{{ asset(page.imgPath(page.imgName)) }}" alt="{{ page.alt }}" class="bracket-image">
+
+        <div data-controller="user-card" class="cst-maps-container">
+            <div class="cst-maps-section">
+                <h2 class="text-center white-text" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">Žebříček kvalifikace</h2>
+                <div class="grid-table grid-table-leaderboard-qual">
+                    <div class="grid-header">
+                        <div>#</div>
+                        <div>Nickname</div>
+                        <div class="text-center">Průměrné %</div>
+                    </div>
+                    {% for key, user in users|slice(0, 10) %}
+                        <div class="grid-row" data-action="click->user-card#showModal" data-user-id="{{ user.id() }}">
+                            <div>#{{ loop.index }}</div>
+                            <div><img class="small-user-picture" src="{{ asset(user.imgPath(user.imgName)) }}" alt="{{ user.nickname }}">{{ user.nickname }}</div>
+                            {# <div>
+                                {% if user.birthdate is not null and date("1992-06-25") > user.birthdate %} <i class="fas fa-user-tie"></i> {% endif %}
+                                {% if user.gender is not null and user.gender == 'Žena' %} <i class="fas fa-venus"></i> {% endif %}
+                                {% if user.hdm is not null and user.hdm.name == 'Nevlastním headset' %} <i class="fas fa-vr-cardboard"></i> {% endif %}
+                            </div> #}
+                            <div class="text-center">{{ user.getAvgPercentage|round(2) }} %</div>
+                        </div>
+                    {% endfor %}
+                    {# COMPONENT MODAL - CONTAINER FOR RENDERING CONTENT OF AJAX REQUESTS #}
+                    <div data-user-card-target="modal" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable dark">
+                            <div class="modal-content" data-user-card-target="container">
+                                {# Dinamically rendered from Ajax /detail/users_detail.html.twig #}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {# COMPONENT OVERLAY - CONTAINS SPINNER AND DARKEN BACKGROUND FOR AJAX REQUESTS #}
+            <div data-user-card-target="overlay" data-action="click->user-card#hide" id="overlay">
+                <div class="cv-spinner">
+                    <span class="spinner"></span>
+                </div>
+            </div>
+            <div class="image-background" style="background-image: url({{ asset('build/images/assets/divka-mcr.jpg') }}) "></div>
+        </div>
+        <div class="horizontal-space"></div>
+        <div class="cst-maps-container" style="margin: 0; min-height: 100px;">
+            <div class="cst-maps-section" style="padding: 10px 0 0 0;">
+                <h2 class="text-black text-center" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom">Bracket</h2>
+                <img draggable="false" src="{{ asset(page.imgPath(page.imgName)) }}" alt="{{ page.alt }}" class="bracket-image">
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -20,6 +20,10 @@
   }
 }
 
+.subline {
+  color: $solid_blue;
+}
+
 .right {
   right: 0;
 }
@@ -78,10 +82,6 @@
   webkit-transform: scale(0.5,0.5);
   margin-top: 0.12rem !important;
   margin-left: 0.25rem !important;
-}
-
-.form-check-label {
-
 }
 
 #contact_form_gdpr {
@@ -248,4 +248,59 @@ blockquote {
 }
 .scoreboard-table svg {
   font-size: 12px !important;
+}
+
+#pills-tab .nav-link {
+  background-color: $background_black;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.grid-table-leaderboard {
+  .grid-header, .grid-row {
+    grid-template-columns: 100px 3fr 1fr 2fr 2fr 2fr 3fr;
+  }
+}
+.grid-table-leaderboard-qual {
+  .grid-header, .grid-row {
+    grid-template-columns: 50px 3fr 1fr;
+  }
+}
+.grid-table-map-pool {
+  .grid-header, .grid-row {
+    grid-template-columns: 50px 3fr 1fr 1fr;
+  }
+}
+.grid-table {
+  display: grid;
+  grid-template-columns: 100%;
+
+  .grid-header, .grid-footer {
+    font-weight: 700;
+    //grid-row: 1;
+    padding: 4px 8px;
+    margin: 2.5px 2px;
+    border-radius: 5px;
+    display: grid;
+    background-color: $background_black;
+  }
+
+  .grid-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-row {
+    display: grid;
+    border-radius: 5px;
+    margin: 2px 2px;
+    background-color: $brand_light;
+    color: $text_white;
+    padding: 8px;
+    transition: all .25s ease;
+    grid-column: 1;
+
+    &:hover {
+      filter: brightness(120%);
+    }
+  }
 }

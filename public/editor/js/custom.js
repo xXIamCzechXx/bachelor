@@ -12,6 +12,10 @@ function showTable($value) {
 }
 document.addEventListener('turbo:load', () =>
 {
+    $('.nav-item').on('click', function () {
+        $('.close-layer').trigger('click');
+    })
+
     setTimeout(function()
     {
         $(".alert").animate({opacity: 0}, 750);

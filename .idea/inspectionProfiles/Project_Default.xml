@@ -3,9 +3,11 @@
     <option name="myName" value="Project Default" />
     <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <Languages>
+        <language minSize="339" name="JavaScript" />
         <language minSize="68" name="PHP" />
       </Languages>
     </inspection_tool>
     <inspection_tool class="JSUnresolvedFunction" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="TwigVariablePathInspection" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>
 </component>

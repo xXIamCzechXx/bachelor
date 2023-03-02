@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czechsaber | {{ page.title|raw }}{% endblock %}
+
+{% block meta %}
+    <meta name="keywords" content="{{ page.keywords|raw }}">
+    <meta name="description" content="{{ page.metaDescription|raw }}">
+{% endblock %}
+
+{% block sidebar %}
+    {% embed "default/utilities/sidebar.html.twig" %}
+        {% block scoreboard %}
+            <div class="button-border">
+                <li class="nav-item active  ">
+                    <a class="nav-link" href="{{ path('app_leaderboard') }}">
+                        <i class="fa-solid fa-vr-cardboard"></i>
+                        <p class="fa-margin">Žebříček</p>
+                    </a>
+                </li>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block navbar %}
+    {% embed "default/utilities/navbar.html.twig" %}{% endembed %}
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper-box">
+        <div class="section" style="max-width: 1248px;">
+            <div class="grid-table grid-table-leaderboard">
+                <div class="grid-header">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div class="text-center">Výkonnostní body</div>
+                    <div class="text-center">Celkem odehráno</div>
+                    <div class="text-center">Z toho rankedů</div>
+                    <div class="text-center">Přesnost</div>
+                </div>
+                {% for player in players %}
+                    <a class="grid-row" href="https://scoresaber.com/u/{{ player.id }}" target="_blank">
+                        <div>#{{ loop.index }} <small>(#{{ player.rank }})</small></div>
+                        <div><img class="small-user-picture" src="{{ player.profilePicture }}" alt="{{ player.name }}">{{ player.name }}</div>
+                        <div> Level {{ player.level }}</div>
+                        <div class="text-center subline">{{ player.pp }} pp</div>
+                        <div class="text-center">{{ player.scoreStats.totalPlayCount }}</div>
+                        <div class="text-center">{{ player.scoreStats.rankedPlayCount }}</div>
+                        <div class="text-center">{{ player.scoreStats.averageRankedAccuracy|round(2) }} %</div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -35,7 +35,7 @@
         <div class="section">
             <div class="news-container">
                 <div class="news-section">
-                    <div class="news-left-cont" data-aos="fade-right" data-aos-duration="1000">
+                    <div class="news-left-cont" {# data-aos="fade-right" data-aos-duration="1000" #}>
                       {% for news in topNews %}
                         <a href="{{ path('news_detail', { slug: news.slug}) }}">
                             <div class="news">
@@ -54,7 +54,7 @@
                         {% endfor %}
                     </div>
                     {% for key, news in secNews %}
-                        <div class="{{ key >= 2 ? 'width50' : 'width40'}} news-right-cont" data-aos="fade-left" data-aos-duration="1000">
+                        <div class="{{ key >= 2 ? 'width50' : 'width40'}} news-right-cont" {# data-aos="fade-left" data-aos-duration="1000" #}>
                             <a href="{{ path('news_detail', { slug: news.slug }) }}">
                                 <div class="news">
                                     <img src="{{ asset(news.imgPath(news.imgName)) }}" alt="{{ news.alt }}">

@@ -7,7 +7,7 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
     connect() {
         $('.navbar-toggler, .close-layer').on('click', function () {
-            if ($('html').hasClass("nav-open")) {
+            if ($(document).find('.nav-open')) {
                 $('.main-panel').css('height', '100vh');
                 $('.main-panel').css('overflow', 'hidden');
                 console.log('Nav opened');

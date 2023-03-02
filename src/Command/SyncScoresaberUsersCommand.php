@@ -53,6 +53,10 @@ class SyncScoresaberUsersCommand extends Command
             return Command::INVALID;
         }
 
+        $method->setType('in process');
+        $this->em->persist($method);
+        $this->em->flush();
+
         $users = $this->em->getRepository(User::class)->findAll();
         $scoresaberApi = new ScoresaberApi();
         $mappedUsers = $scoresaberApi->mapUsersData($users);

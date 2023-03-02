@@ -6,8 +6,15 @@
                 <img src="{{ asset(user.imgPath(user.imgName)) }}" alt="{{ user.nickname }}">
             </div>
             <div class="user-info">
-                <h4>{{ user.nickname }}</h4>
-                <p>{{ user.pp }} pp</p>
+                <h5>{{ user.nickname }}</h5>
+                {% if user.pp is not null and user.pp != 0 %}
+                    <p class="subline"><small>{{ user.pp }} pp</small></p>
+                    <p><small>{{ user.avgPercentage }} %</small></p>
+                    <p><small>#{{ user.countryRank }}</small></p>
+                {% else %}
+                    <p><small>Není propojený</small></p>
+                    <p><small>scoresaber</small></p>
+                {% endif %}
             </div>
             <span style="height: 0; width: 0; float: left;"></span>
             <div class="user-icons">

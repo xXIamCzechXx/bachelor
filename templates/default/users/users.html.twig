@@ -29,20 +29,23 @@
 {% block body %}
 
     <div data-controller="user-card" class="wrapper-box" style="overflow: hidden;">
+        {#
         <div data-controller="hello">
             Nějaký počet pokusů: <span data-hello-target="count">0</span> je aktuálně
             <button data-action="hello#increment" class="btn btn-primary btn-sm">Click me!</button>
             <button data-action="hello#decrement" class="btn btn-primary btn-sm">Unclick me!</button>
         </div>
+        #}
         <div class="section">
             <div id="show-more-users-container" class="users-container">
                 {{ include('default/users/components/user_card.html.html.twig') }}
             </div>
-            <div id="show-more-users" data-from="10" data-step="10" class="button-border twitch-button" style="position: relative; z-index: 1; max-width: 300px; text-align: center;">
+            <div id="show-more-users" data-from="{{ limit }}" data-step="{{ limit }}" class="button-border twitch-button" style="position: relative; z-index: 1; max-width: 300px; text-align: center;">
                 {{ translator.getValue('SHOW_MORE', 'Načíst další')|raw }}
             </div>
         </div>
         <!-- Modal -->
+        {# COMPONENT MODAL - CONTAINER FOR RENDERING CONTENT OF AJAX REQUESTS #}
         <div data-user-card-target="modal" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable dark">
                 <div class="modal-content" data-user-card-target="container">
@@ -50,6 +53,7 @@
                 </div>
             </div>
         </div>
+        {# COMPONENT OVERLAY - CONTAINS SPINNER AND DARKEN BACKGROUND FOR AJAX REQUESTS #}
         <div data-user-card-target="overlay" data-action="click->user-card#hide" id="overlay">
             <div class="cv-spinner">
                 <span class="spinner"></span>

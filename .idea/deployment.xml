@@ -247,6 +247,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="ptacek-b2c15">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="reklamace-linde-gas-wa290">
         <serverdata>
           <mappings>
